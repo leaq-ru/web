@@ -58,6 +58,9 @@ export default {
     '@nuxt/content',
     'underscore'
   ],
+  bootstrapVue: {
+    icons: true // Install the IconsPlugin (in addition to BootStrapVue plugin
+  },
   /*
   ** Content module configuration
   ** See https://content.nuxtjs.org/configuration

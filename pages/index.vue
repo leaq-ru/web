@@ -11,53 +11,310 @@
         для интеграции с вашим бизнесом
       </p>
     </b-jumbotron>
-    <b-card bg-variant="default">
-      <b-form-group label="Город">
-        <vue-bootstrap-typeahead
-          v-model="city.search"
-          :data="city.list"
-          :serializer="s => s.title"
-          placeholder="Все"
-          @hit="city.selected = $event"
-        />
-      </b-form-group>
+    <b-card
+      border-variant="primary"
+      class="mb-4"
+    >
+      <b-row>
+        <b-col md="6">
+          <b-form-group label="Город">
+            <vue-bootstrap-typeahead
+              v-model="city.search"
+              :data="city.list"
+              :serializer="s => s.title"
+              placeholder="Можно несколько"
+              @hit="city.selected = $event"
+            />
+            <b-form-text>
+              Все города
+            </b-form-text>
+          </b-form-group>
+        </b-col>
 
-      <b-form-group label="Категория">
-        <vue-bootstrap-typeahead
-          v-model="category.search"
-          :data="category.list"
-          :serializer="s => s.title"
-          placeholder="Все"
-          @hit="category.selected = $event"
-        />
-      </b-form-group>
-
-      <b-form-group>
-        <b-form-checkbox v-model="hasPhone">
-          Телефон указан
-        </b-form-checkbox>
-        <b-form-checkbox v-model="hasEmail">
-          Email указан
-        </b-form-checkbox>
-      </b-form-group>
-
-      <b-button
-        pill
-        block
-        variant="primary"
-        :disabled="searchLoading"
-        @click="methodGetCompanies"
-      >
-        <b-icon
-          v-if="searchLoading"
-          icon="arrow-clockwise"
-          animation="spin"
-        />
-        <template v-else>
-          Найти
-        </template>
-      </b-button>
+        <b-col md="6">
+          <b-form-group label="Категория">
+            <vue-bootstrap-typeahead
+              v-model="category.search"
+              :data="category.list"
+              :serializer="s => s.title"
+              placeholder="Можно несколько"
+              @hit="category.selected = $event"
+            />
+            <b-form-text>
+              Все категории
+            </b-form-text>
+          </b-form-group>
+        </b-col>
+      </b-row>
     </b-card>
+
+    <b-row>
+      <b-col md="6">
+        <b-card
+          class="mb-4"
+          header="Наличие контактов"
+        >
+          <b-form-group>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="Email">
+                  <b-form-select
+                    v-model="query.hasEmail"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="6">
+                <b-form-group label="Телефон">
+                  <b-form-select
+                    v-model="query.hasPhone"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </b-card>
+
+        <b-card
+          header="Наличие приложений"
+          class="mb-4"
+        >
+          <b-form-group>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="iOS">
+                  <b-form-select
+                    v-model="query.hasAppStore"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="6">
+                <b-form-group label="Android">
+                  <b-form-select
+                    v-model="query.hasGooglePlay"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </b-card>
+
+        <b-card
+          header="Наличие реквизитов"
+          class="mb-4"
+        >
+          <b-form-group>
+            <b-row>
+              <b-col md="4">
+                <b-form-group label="ИНН">
+                  <b-form-select
+                    v-model="query.hasInn"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="4">
+                <b-form-group label="КПП">
+                  <b-form-select
+                    v-model="query.hasKpp"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="4">
+                <b-form-group label="ОГРН">
+                  <b-form-select
+                    v-model="query.hasOgrn"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </b-card>
+      </b-col>
+
+      <b-col md="6">
+        <b-card
+          header="Наличие соцсетей"
+          class="mb-4"
+        >
+          <b-form-group>
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="VK">
+                  <b-form-select
+                    v-model="query.hasVk"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="6">
+                <b-form-group label="VK подписчиков">
+                  <b-row>
+                    <b-col md="6">
+                      <b-form-input
+                        v-model="query['vkMembersCount.from']"
+                        :disabled="query.hasVk !== 'YES'"
+                        type="number"
+                        placeholder="От"
+                        min="0"
+                        step="1"
+                      />
+                      <b-form-text>
+                        Не важно
+                      </b-form-text>
+                    </b-col>
+
+                    <b-col md="6">
+                      <b-form-input
+                        v-model="query['vkMembersCount.to']"
+                        :disabled="query.hasVk !== 'YES'"
+                        type="number"
+                        placeholder="До"
+                        min="0"
+                        step="1"
+                      />
+                      <b-form-text>
+                        Не важно
+                      </b-form-text>
+                    </b-col>
+                  </b-row>
+                </b-form-group>
+              </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="Instagram">
+                  <b-form-select
+                    v-model="query.hasInstagram"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="6">
+                <b-form-group label="Twitter">
+                  <b-form-select
+                    v-model="query.hasTwitter"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+
+            <b-row>
+              <b-col md="6">
+                <b-form-group label="YouTube">
+                  <b-form-select
+                    v-model="query.hasYoutube"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="6">
+                <b-form-group label="Facebook">
+                  <b-form-select
+                    v-model="query.hasFacebook"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </b-card>
+
+        <b-card
+          header="Сайт онлайн"
+          class="mb-4"
+        >
+          <b-form-group>
+            <b-row>
+              <b-col md="4">
+                <b-form-group>
+                  <b-form-select
+                    v-model="query.hasOnline"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </b-card>
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col md="4" class="mb-4">
+        <b-button
+          pill
+          block
+          variant="primary"
+          :disabled="searchLoading"
+          @click="methodGetCompanies"
+        >
+          <b-icon
+            v-if="searchLoading"
+            icon="arrow-clockwise"
+            animation="spin"
+          />
+          <template v-else>
+            <b-icon icon="search" />
+            Найти
+          </template>
+        </b-button>
+      </b-col>
+
+      <b-col md="4" class="mb-4">
+        <b-button
+          pill
+          block
+          variant="outline-primary"
+          :disabled="false"
+          @click="methodGetCompanies"
+        >
+          <b-icon
+            v-if="false"
+            icon="arrow-clockwise"
+            animation="spin"
+          />
+          <template v-else>
+            <b-icon icon="envelope" />
+            Скачать email
+          </template>
+        </b-button>
+      </b-col>
+
+      <b-col md="4" class="mb-4">
+        <b-button
+          pill
+          block
+          variant="outline-primary"
+          :disabled="false"
+          @click="methodGetCompanies"
+        >
+          <b-icon
+            v-if="false"
+            icon="arrow-clockwise"
+            animation="spin"
+          />
+          <template v-else>
+            <b-icon icon="telephone" />
+            Скачать телефоны
+          </template>
+        </b-button>
+      </b-col>
+    </b-row>
 
     <h3 class="pt-3 pb-3">
       Найдено
@@ -140,6 +397,11 @@ type data = {
       name: string
     }
   }>
+  selectOptions: Array<{
+    text: string
+    value: string
+  }>
+  query: any
   city: item
   category: item
   hasPhone: boolean
@@ -194,10 +456,16 @@ const getCompanies = async ({
     return result
   } catch {
     return {
-      shortCompanies: [],
+      companies: [],
       totalCount: 0
     }
   }
+}
+
+enum select {
+  any = 'ANY',
+  yes = 'YES',
+  no = 'NO',
 }
 
 export default Vue.extend({
@@ -225,6 +493,33 @@ export default Vue.extend({
           name: 'index'
         }
       }],
+      selectOptions: [{
+        text: 'Не важно',
+        value: select.any
+      }, {
+        text: 'Да',
+        value: select.yes
+      }, {
+        text: 'Нет',
+        value: select.no
+      }],
+      query: {
+        hasEmail: select.yes,
+        hasPhone: select.yes,
+        hasOnline: select.yes,
+        hasInn: select.any,
+        hasKpp: select.any,
+        hasOgrn: select.any,
+        hasAppStore: select.any,
+        hasGooglePlay: select.any,
+        hasVk: select.any,
+        'vkMembersCount.from': null,
+        'vkMembersCount.to': null,
+        hasInstagram: select.any,
+        hasTwitter: select.any,
+        hasYoutube: select.any,
+        hasFacebook: select.any
+      },
       city: {
         list: [],
         search: '',
@@ -313,6 +608,10 @@ export default Vue.extend({
       this.company.totalCount = res.totalCount
     },
     toShowedPhone (phone: number): string {
+      if (!phone) {
+        return '—'
+      }
+
       const str = String(phone)
       if (str.length !== 11) {
         return '+' + str

@@ -73,7 +73,10 @@ export default {
   build: {
     transpile: [
       ({ isServer }) => 'vue-bootstrap-typeahead'
-    ]
+    ],
+    extend (config, ctx) {
+      config.devtool = ctx.isClient ? 'eval-source-map' : 'inline-source-map'
+    }
   },
   env: {
     API_HOST: 'http://localhost:9999'

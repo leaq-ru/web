@@ -53,13 +53,10 @@ export default {
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
-    '@nuxtjs/pwa',
-    // Doc: https://github.com/nuxt/content
-    '@nuxt/content',
     'underscore'
   ],
   bootstrapVue: {
-    icons: true // Install the IconsPlugin (in addition to BootStrapVue plugin
+    icons: true // Install the IconsPlugin (in addition to BootStrapVue plugin)
   },
   /*
   ** Content module configuration
@@ -75,7 +72,9 @@ export default {
       ({ isServer }) => 'vue-bootstrap-typeahead'
     ],
     extend (config, ctx) {
-      config.devtool = ctx.isClient ? 'eval-source-map' : 'inline-source-map'
+      if (process.env.NODE_ENV !== 'production') {
+        config.devtool = ctx.isClient ? 'eval-source-map' : 'inline-source-map'
+      }
     }
   },
   env: {

@@ -18,14 +18,26 @@
       <b-row>
         <b-col md="6">
           <b-form-group label="Город">
+            <b-form-tag
+              v-for="tag in city.tags"
+              :key="tag.id"
+              :title="tag"
+              pill
+              variant="primary"
+              class="mr-1 mb-1"
+              @remove="city.removeTag(tag)"
+            >
+              {{ tag.title }}
+            </b-form-tag>
             <vue-bootstrap-typeahead
+              ref="cityinput"
               v-model="city.search"
               :data="city.list"
               :serializer="s => s.title"
               placeholder="Можно несколько"
-              @hit="city.selected = $event"
+              @hit="city.addTag($event)"
             />
-            <b-form-text>
+            <b-form-text v-if="city.tags.length === 0">
               Все города
             </b-form-text>
           </b-form-group>
@@ -33,14 +45,26 @@
 
         <b-col md="6">
           <b-form-group label="Категория">
+            <b-form-tag
+              v-for="tag in category.tags"
+              :key="tag.id"
+              :title="tag"
+              pill
+              variant="primary"
+              class="mr-1 mb-1"
+              @remove="category.removeTag(tag)"
+            >
+              {{ tag.title }}
+            </b-form-tag>
             <vue-bootstrap-typeahead
+              ref="categoryinput"
               v-model="category.search"
               :data="category.list"
               :serializer="s => s.title"
               placeholder="Можно несколько"
-              @hit="category.selected = $event"
+              @hit="category.addTag($event)"
             />
-            <b-form-text>
+            <b-form-text v-if="category.tags.length === 0">
               Все категории
             </b-form-text>
           </b-form-group>
@@ -168,8 +192,12 @@
                         placeholder="От"
                         min="0"
                         step="1"
+                        :class="query['vkMembersCount.from'] === '' ? '' : 'mb-3'"
                       />
-                      <b-form-text>
+                      <b-form-text
+                        v-if="query['vkMembersCount.from'] === ''"
+                        class="mb-3"
+                      >
                         Не важно
                       </b-form-text>
                     </b-col>
@@ -183,7 +211,7 @@
                         min="0"
                         step="1"
                       />
-                      <b-form-text>
+                      <b-form-text v-if="query['vkMembersCount.to'] === ''">
                         Не важно
                       </b-form-text>
                     </b-col>
@@ -260,11 +288,11 @@
           pill
           block
           variant="primary"
-          :disabled="searchLoading"
-          @click="methodGetCompanies"
+          :disabled="loading.search"
+          @click="methodSearchCompanies"
         >
           <b-icon
-            v-if="searchLoading"
+            v-if="loading.search"
             icon="arrow-clockwise"
             animation="spin"
           />
@@ -281,7 +309,7 @@
           block
           variant="outline-primary"
           :disabled="false"
-          @click="methodGetCompanies"
+          @click="methodSearchCompanies"
         >
           <b-icon
             v-if="false"
@@ -290,7 +318,7 @@
           />
           <template v-else>
             <b-icon icon="envelope" />
-            Скачать email
+            Скачать email-ы
           </template>
         </b-button>
       </b-col>
@@ -301,7 +329,7 @@
           block
           variant="outline-primary"
           :disabled="false"
-          @click="methodGetCompanies"
+          @click="methodSearchCompanies"
         >
           <b-icon
             v-if="false"
@@ -324,47 +352,41 @@
       компаний
     </h3>
 
-    <b-row>
-      <template v-for="(c, index) in company.items">
-        <div
-          v-if="index % 3 === 0"
-          :key="c.id"
-          class="w-100"
-        />
-
-        <b-card
-          :key="c.id"
-          :title="c.title || c.slug"
-          :img-src="c.avatar || 'https://vk.com/images/camera_200.png?ava=1'"
-          img-top
-          class="mb-3 col-md-3"
-        >
-          <b-card-text>
-            <p>
-              <b-icon
-                icon="telephone"
-                aria-hidden="true"
-              />
-              {{ toShowedPhone(c.phone) }}
-            </p>
-
-            <p>
-              <b-icon
-                icon="envelope"
-                aria-hidden="true"
-              />
-              {{ c.email }}
-            </p>
-            url={{ c.url }}
-            online={{ c.online }}
-            desc={{ c.description }}
-            location={{ c.location }}
-          </b-card-text>
-        </b-card>
-      </template>
+    <b-row
+      v-for="c in company.items"
+      :key="c.id"
+    >
+      <Card
+        :url="c.url"
+        :title="c.title"
+        :slug="c.slug"
+        :avatar="c.avatar"
+        :email="c.email"
+        :phone="c.phone"
+        :online="c.online"
+        :inn="c.inn"
+        :kpp="c.kpp"
+        :ogrn="c.ogrn"
+        :app-store-url="safeAppStoreUrl(c)"
+        :google-play-url="safeGooglePlayUrl(c)"
+        :category-id="safeCategoryId(c)"
+        :category-title="safeCategoryTitle(c)"
+        :category-slug="safeCategorySlug(c)"
+        :location-city-id="safeLocationCityId(c)"
+        :location-city-title="safeLocationCityTitle(c)"
+        :location-city-slug="safeLocationCitySlug(c)"
+        :location-address="safeLocationAddress(c)"
+        :social-vk-id="safeSocialVkId(c)"
+        :social-vk-members-count="safeSocialVkMembersCount(c)"
+        :social-instagram-url="safeSocialInstagramUrl(c)"
+        :social-twitter-url="safeSocialTwitterUrl(c)"
+        :social-youtube-url="safeSocialYoutubeUrl(c)"
+        :social-facebook-url="safeSocialFacebookUrl(c)"
+        :updated-at="c.updatedAt"
+      />
     </b-row>
 
-    <b-row v-if="nextLoading" class="text-center">
+    <b-row v-if="loading.next" class="text-center">
       <b-col />
       <b-col>
         <b-icon icon="arrow-clockwise" animation="spin" font-scale="2" />
@@ -380,76 +402,12 @@ import Vue from 'vue'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import { debounce } from 'underscore'
 
-type item = {
-  list: Array<any>
-  search: string
-  selected?: {
-    id: string
-    title: string
-    slug: string
-  }
-}
-
-type data = {
-  breadcrumb: Array<{
-    text: string
-    to: {
-      name: string
-    }
-  }>
-  selectOptions: Array<{
-    text: string
-    value: string
-  }>
-  query: any
-  city: item
-  category: item
-  hasPhone: boolean
-  hasEmail: boolean
-  company?: {
-    items: Array<any>
-    totalCount: number
-  }
-  searchLoading: boolean
-  nextLoading: boolean
-}
-
-const getCompanies = async ({
-  hasPhone,
-  hasEmail,
-  fromId,
-  city,
-  category
-}: {
-  hasPhone: boolean,
-  hasEmail: boolean,
-  fromId?: string,
-  city?: item,
-  category?: item
-}) => {
+const getCompanies = async (querystring: string): Promise<any> => {
   try {
-    const query: any = {
-      hasPhone: String(hasPhone),
-      hasEmail: String(hasEmail),
-      'opts.limit': '20'
-    }
-
-    if (city?.selected?.id) {
-      query.cityId = city.selected.id
-    }
-
-    if (category?.selected?.id) {
-      query.categoryId = category.selected.id
-    }
-
-    if (typeof fromId !== 'undefined') {
-      query.fromId = fromId
-    }
-
     const rawCompanies = await fetch([
       process.env.API_HOST,
       '/v1/company/get?',
-      new URLSearchParams(query).toString()
+      querystring
     ].join(''))
 
     const result = await rawCompanies.json()
@@ -458,6 +416,30 @@ const getCompanies = async ({
     return {
       companies: [],
       totalCount: 0
+    }
+  }
+}
+
+const addCityCategoryTag = (ctx, type, inputRefName) => {
+  return (val) => {
+    ctx.$refs[inputRefName].inputValue = ''
+    for (const tag of ctx[type].tags) {
+      if (tag.id === val.id) {
+        return
+      }
+    }
+    ctx[type].tags.push(val)
+  }
+}
+
+const removeCityCategoryTag = (ctx, type) => {
+  return (val) => {
+    for (let i = 0; i < ctx[type].tags.length; i += 1) {
+      const tag = ctx[type].tags[i]
+      if (tag.id === val.id) {
+        ctx[type].tags.splice(i, 1)
+        return
+      }
     }
   }
 }
@@ -473,19 +455,19 @@ export default Vue.extend({
     VueBootstrapTypeahead
   },
   async asyncData (): Promise<object> {
-    const res = await getCompanies({
-      hasPhone: true,
-      hasEmail: true
-    })
+    const res = await getCompanies(new URLSearchParams({
+      hasEmail: select.yes,
+      'opts.limit': '20'
+    }).toString())
 
     return {
       company: {
-        items: res.shortCompanies,
+        items: res.companies,
         totalCount: res.totalCount
       }
     }
   },
-  data (): data {
+  data (): any {
     return {
       breadcrumb: [{
         text: '🏠',
@@ -505,7 +487,7 @@ export default Vue.extend({
       }],
       query: {
         hasEmail: select.yes,
-        hasPhone: select.yes,
+        hasPhone: select.any,
         hasOnline: select.yes,
         hasInn: select.any,
         hasKpp: select.any,
@@ -513,8 +495,8 @@ export default Vue.extend({
         hasAppStore: select.any,
         hasGooglePlay: select.any,
         hasVk: select.any,
-        'vkMembersCount.from': null,
-        'vkMembersCount.to': null,
+        'vkMembersCount.from': '',
+        'vkMembersCount.to': '',
         hasInstagram: select.any,
         hasTwitter: select.any,
         hasYoutube: select.any,
@@ -522,18 +504,22 @@ export default Vue.extend({
       },
       city: {
         list: [],
+        tags: [],
         search: '',
-        selected: undefined
+        addTag: addCityCategoryTag(this, 'city', 'cityinput'),
+        removeTag: removeCityCategoryTag(this, 'city')
       },
       category: {
         list: [],
+        tags: [],
         search: '',
-        selected: undefined
+        addTag: addCityCategoryTag(this, 'category', 'categoryinput'),
+        removeTag: removeCityCategoryTag(this, 'category')
       },
-      hasPhone: true,
-      hasEmail: true,
-      searchLoading: false,
-      nextLoading: false
+      loading: {
+        search: false,
+        next: false
+      }
     }
   },
   computed: {
@@ -552,7 +538,13 @@ export default Vue.extend({
     'category.search': debounce(function (title: string) {
       // @ts-ignore
       this.getCategoriesHints(title)
-    }, 500)
+    }, 500),
+    'query.hasVk' (val) {
+      if (val !== select.yes) {
+        this.query['vkMembersCount.from'] = ''
+        this.query['vkMembersCount.to'] = ''
+      }
+    }
   },
   methods: {
     async getCitiesHints (title: string) {
@@ -579,64 +571,98 @@ export default Vue.extend({
       const suggs = await rawCategories.json()
       this.category.list = suggs.categories || []
     },
-    async methodGetCompanies () {
-      if (this.city.search === '') {
-        this.city.selected = undefined
-      }
-      if (this.category.search === '') {
-        this.category.selected = undefined
-      }
+    async methodSearchCompanies () {
+      this.loading.search = true
+      const res = await getCompanies(this.buildQuery())
+      this.loading.search = false
 
-      this.searchLoading = true
-      const res = await getCompanies({
-        hasPhone: this.hasPhone,
-        hasEmail: this.hasEmail,
-        city: this.city,
-        category: this.category,
-        fromId: this.fromId
-      })
-      this.searchLoading = false
-
-      if (typeof this.company === 'undefined') {
+      if (!this.company) {
         this.company = {
           items: [],
           totalCount: 0
         }
       }
 
-      this.company.items = res.shortCompanies
+      this.company.items = res.companies
       this.company.totalCount = res.totalCount
     },
-    toShowedPhone (phone: number): string {
-      if (!phone) {
-        return '—'
+    buildQuery (): string {
+      const q: any = {
+        ...this.query,
+        'opts.limit': 20
       }
 
-      const str = String(phone)
-      if (str.length !== 11) {
-        return '+' + str
+      if (q['vkMembersCount.from']) {
+        q['vkMembersCount.from'] = parseInt(q['vkMembersCount.from'], 10)
+      } else {
+        delete q['vkMembersCount.from']
       }
 
-      let r = '+'
-      str.split('').forEach((elem, i) => {
-        switch (i) {
-          case 1:
-            r += ' (' + elem
-            break
-          case 3:
-            r += elem + ') '
-            break
-          case 6:
-            r += elem + '-'
-            break
-          case 8:
-            r += elem + '-'
-            break
-          default:
-            r += elem
-        }
-      })
-      return r
+      if (q['vkMembersCount.to']) {
+        q['vkMembersCount.to'] = parseInt(q['vkMembersCount.to'], 10)
+      } else {
+        delete q['vkMembersCount.to']
+      }
+
+      const params = new URLSearchParams(q)
+
+      if (this.city.tags.length !== 0) {
+        this.city.tags.forEach(({ id }) => {
+          params.append('cityIds', id)
+        })
+      }
+      if (this.category.tags.length !== 0) {
+        this.category.tags.forEach(({ id }) => {
+          params.append('categoryIds', id)
+        })
+      }
+
+      return params.toString()
+    },
+    safeAppStoreUrl (company) {
+      return company.app?.appStore?.url
+    },
+    safeGooglePlayUrl (company) {
+      return company.app?.googlePlay?.url
+    },
+    safeCategoryId (company) {
+      return company.category?.id
+    },
+    safeCategoryTitle (company) {
+      return company.category?.title
+    },
+    safeCategorySlug (company) {
+      return company.category?.slug
+    },
+    safeLocationCityId (company) {
+      return company.location?.city?.id
+    },
+    safeLocationCityTitle (company) {
+      return company.location?.city?.title
+    },
+    safeLocationCitySlug (company) {
+      return company.location?.city?.slug
+    },
+    safeLocationAddress (company) {
+      return company.location?.address
+    },
+    safeSocialVkId (company) {
+      return company.social?.vk?.groupId
+    },
+    safeSocialVkMembersCount (company) {
+      return company.social?.vk?.membersCount
+    },
+    safeSocialInstagramUrl (company) {
+      return company.social?.instagram?.url
+    },
+    safeSocialTwitterUrl (company) {
+      return company.social?.twitter?.url
+    },
+    safeSocialYoutubeUrl (company) {
+      return company.social?.youtube?.url
+    },
+    safeSocialFacebookUrl (company) {
+      return company.social?.facebook?.url
     }
   }
 })

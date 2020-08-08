@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid="lg">
+  <b-container fluid="xl">
     <Header />
     <b-breadcrumb :items="breadcrumb" />
     <b-jumbotron header="Каталог компаний России" lead="Более 4,000,000 фирм доступно для поиска">
@@ -16,33 +16,6 @@
       class="mb-4"
     >
       <b-row>
-        <b-col md="6">
-          <b-form-group label="Город">
-            <b-form-tag
-              v-for="tag in city.tags"
-              :key="tag.id"
-              :title="tag"
-              pill
-              variant="primary"
-              class="mr-1 mb-1"
-              @remove="city.removeTag(tag)"
-            >
-              {{ tag.title }}
-            </b-form-tag>
-            <vue-bootstrap-typeahead
-              ref="cityinput"
-              v-model="city.search"
-              :data="city.list"
-              :serializer="s => s.title"
-              placeholder="Можно несколько"
-              @hit="city.addTag($event)"
-            />
-            <b-form-text v-if="city.tags.length === 0">
-              Все города
-            </b-form-text>
-          </b-form-group>
-        </b-col>
-
         <b-col md="6">
           <b-form-group label="Категория">
             <b-form-tag
@@ -66,6 +39,33 @@
             />
             <b-form-text v-if="category.tags.length === 0">
               Все категории
+            </b-form-text>
+          </b-form-group>
+        </b-col>
+
+        <b-col md="6">
+          <b-form-group label="Город">
+            <b-form-tag
+              v-for="tag in city.tags"
+              :key="tag.id"
+              :title="tag"
+              pill
+              variant="primary"
+              class="mr-1 mb-1"
+              @remove="city.removeTag(tag)"
+            >
+              {{ tag.title }}
+            </b-form-tag>
+            <vue-bootstrap-typeahead
+              ref="cityinput"
+              v-model="city.search"
+              :data="city.list"
+              :serializer="s => s.title"
+              placeholder="Можно несколько"
+              @hit="city.addTag($event)"
+            />
+            <b-form-text v-if="city.tags.length === 0">
+              Все города
             </b-form-text>
           </b-form-group>
         </b-col>
@@ -108,7 +108,7 @@
           <b-form-group>
             <b-row>
               <b-col md="6">
-                <b-form-group label="iOS">
+                <b-form-group label="App Store">
                   <b-form-select
                     v-model="query.hasAppStore"
                     :options="selectOptions"
@@ -117,7 +117,7 @@
               </b-col>
 
               <b-col md="6">
-                <b-form-group label="Android">
+                <b-form-group label="Google Play">
                   <b-form-select
                     v-model="query.hasGooglePlay"
                     :options="selectOptions"
@@ -285,21 +285,25 @@
     <b-row>
       <b-col md="4" class="mb-4">
         <b-button
+          v-if="loading.search"
+          disabled
           pill
           block
           variant="primary"
-          :disabled="loading.search"
           @click="methodSearchCompanies"
         >
-          <b-icon
-            v-if="loading.search"
-            icon="arrow-clockwise"
-            animation="spin"
-          />
-          <template v-else>
-            <b-icon icon="search" />
-            Найти
-          </template>
+          <b-icon-arrow-clockwise animation="spin" />
+          Найти
+        </b-button>
+        <b-button
+          v-else
+          pill
+          block
+          variant="primary"
+          @click="methodSearchCompanies"
+        >
+          <b-icon-search />
+          Найти
         </b-button>
       </b-col>
 
@@ -352,44 +356,34 @@
       компаний
     </h3>
 
-    <b-row
-      v-for="c in company.items"
-      :key="c.id"
-    >
-      <Card
-        :url="c.url"
-        :title="c.title"
-        :slug="c.slug"
-        :avatar="c.avatar"
-        :email="c.email"
-        :phone="c.phone"
-        :online="c.online"
-        :inn="c.inn"
-        :kpp="c.kpp"
-        :ogrn="c.ogrn"
-        :app-store-url="safeAppStoreUrl(c)"
-        :google-play-url="safeGooglePlayUrl(c)"
-        :category-id="safeCategoryId(c)"
-        :category-title="safeCategoryTitle(c)"
-        :category-slug="safeCategorySlug(c)"
-        :location-city-id="safeLocationCityId(c)"
-        :location-city-title="safeLocationCityTitle(c)"
-        :location-city-slug="safeLocationCitySlug(c)"
-        :location-address="safeLocationAddress(c)"
-        :social-vk-id="safeSocialVkId(c)"
-        :social-vk-members-count="safeSocialVkMembersCount(c)"
-        :social-instagram-url="safeSocialInstagramUrl(c)"
-        :social-twitter-url="safeSocialTwitterUrl(c)"
-        :social-youtube-url="safeSocialYoutubeUrl(c)"
-        :social-facebook-url="safeSocialFacebookUrl(c)"
-        :updated-at="c.updatedAt"
-      />
-    </b-row>
+    <template v-for="(_, i) in company.items">
+      <template v-if="i % 2 === 0">
+        <b-card-group
+          :key="company.items[i].id"
+          class="mb-4"
+          deck
+        >
+          <Card :company="company.items[i]" />
 
-    <b-row v-if="loading.next" class="text-center">
+          <Card
+            v-if="company.items[i+1]"
+            :company="company.items[i+1]"
+          />
+        </b-card-group>
+      </template>
+    </template>
+
+    <b-row
+      v-if="loading.next"
+      class="text-center"
+    >
       <b-col />
       <b-col>
-        <b-icon icon="arrow-clockwise" animation="spin" font-scale="2" />
+        <b-icon
+          icon="arrow-clockwise"
+          animation="spin"
+          font-scale="2"
+        />
       </b-col>
       <b-col />
     </b-row>
@@ -618,51 +612,6 @@ export default Vue.extend({
       }
 
       return params.toString()
-    },
-    safeAppStoreUrl (company) {
-      return company.app?.appStore?.url
-    },
-    safeGooglePlayUrl (company) {
-      return company.app?.googlePlay?.url
-    },
-    safeCategoryId (company) {
-      return company.category?.id
-    },
-    safeCategoryTitle (company) {
-      return company.category?.title
-    },
-    safeCategorySlug (company) {
-      return company.category?.slug
-    },
-    safeLocationCityId (company) {
-      return company.location?.city?.id
-    },
-    safeLocationCityTitle (company) {
-      return company.location?.city?.title
-    },
-    safeLocationCitySlug (company) {
-      return company.location?.city?.slug
-    },
-    safeLocationAddress (company) {
-      return company.location?.address
-    },
-    safeSocialVkId (company) {
-      return company.social?.vk?.groupId
-    },
-    safeSocialVkMembersCount (company) {
-      return company.social?.vk?.membersCount
-    },
-    safeSocialInstagramUrl (company) {
-      return company.social?.instagram?.url
-    },
-    safeSocialTwitterUrl (company) {
-      return company.social?.twitter?.url
-    },
-    safeSocialYoutubeUrl (company) {
-      return company.social?.youtube?.url
-    },
-    safeSocialFacebookUrl (company) {
-      return company.social?.facebook?.url
     }
   }
 })

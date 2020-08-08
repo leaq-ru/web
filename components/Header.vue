@@ -1,6 +1,6 @@
 <template>
   <b-navbar toggleable="lg" type="light" variant="light" :sticky="true">
-    <b-navbar-brand href="#">
+    <b-navbar-brand>
       LEAQ
     </b-navbar-brand>
 
@@ -12,10 +12,10 @@
           Главная
         </b-nav-item>
         <b-nav-item href="#">
-          Города
+          Категории
         </b-nav-item>
         <b-nav-item href="#">
-          Категории
+          Города
         </b-nav-item>
         <b-nav-item href="#">
           API

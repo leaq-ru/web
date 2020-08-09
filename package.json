@@ -19,7 +19,8 @@
     "bootstrap-vue": "^2.15.0",
     "nuxt": "^2.14.0",
     "underscore": "^1.10.2",
-    "vue-bootstrap-typeahead": "^0.2.6"
+    "vue-bootstrap-typeahead": "^0.2.6",
+    "vue-infinite-loading": "^2.4.5"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.0",

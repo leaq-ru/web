@@ -1,26 +1,52 @@
 <template>
-  <b-navbar toggleable="lg" type="light" variant="light" :sticky="true">
-    <b-navbar-brand>
+  <b-navbar
+    toggleable="lg"
+    type="light"
+    variant="light"
+    sticky
+  >
+    <ScrollToTop />
+
+    <b-navbar-brand to="/">
       LEAQ
     </b-navbar-brand>
+
+    <b-button
+      target="_blank"
+      to="/#search"
+      pill
+      variant="outline-primary"
+    >
+      <b-icon-search />
+      Поиск
+    </b-button>
 
     <b-navbar-toggle target="nav-collapse" />
 
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
-        <b-nav-item href="#">
-          Главная
-        </b-nav-item>
-        <b-nav-item href="#">
-          Категории
-        </b-nav-item>
-        <b-nav-item href="#">
+        <b-nav-item
+          target="_blank"
+          to="#"
+        >
           Города
         </b-nav-item>
-        <b-nav-item href="#">
+        <b-nav-item
+          target="_blank"
+          to="#"
+        >
+          Категории
+        </b-nav-item>
+        <b-nav-item
+          target="_blank"
+          to="#"
+        >
           API
         </b-nav-item>
-        <b-nav-item href="#">
+        <b-nav-item
+          target="_blank"
+          to="#"
+        >
           Связаться с нами
         </b-nav-item>
       </b-navbar-nav>

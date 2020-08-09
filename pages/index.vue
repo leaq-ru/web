@@ -2,12 +2,14 @@
   <b-container fluid="xl">
     <Header />
     <b-breadcrumb :items="breadcrumb" />
-    <b-jumbotron header="Каталог компаний России" lead="Более 4,000,000 фирм доступно для поиска">
+    <b-jumbotron
+      id="search"
+      header="Каталог компаний России"
+      lead="Более 4,000,000 фирм доступно для поиска"
+    >
       <p>
         Город, сфера деятельности, телефон, email, и многое другое в карточках компаний. Все данные доступны по
-        <a href="https://api.leaq.ru/api/docs" target="_blank">
-          API
-        </a>
+        <a href="https://api.leaq.ru/api/docs" target="_blank">API</a>
         для интеграции с вашим бизнесом
       </p>
     </b-jumbotron>
@@ -16,33 +18,6 @@
       class="mb-4"
     >
       <b-row>
-        <b-col md="6">
-          <b-form-group label="Категория">
-            <b-form-tag
-              v-for="tag in category.tags"
-              :key="tag.id"
-              :title="tag"
-              pill
-              variant="primary"
-              class="mr-1 mb-1"
-              @remove="category.removeTag(tag)"
-            >
-              {{ tag.title }}
-            </b-form-tag>
-            <vue-bootstrap-typeahead
-              ref="categoryinput"
-              v-model="category.search"
-              :data="category.list"
-              :serializer="s => s.title"
-              placeholder="Можно несколько"
-              @hit="category.addTag($event)"
-            />
-            <b-form-text v-if="category.tags.length === 0">
-              Все категории
-            </b-form-text>
-          </b-form-group>
-        </b-col>
-
         <b-col md="6">
           <b-form-group label="Город">
             <b-form-tag
@@ -66,6 +41,33 @@
             />
             <b-form-text v-if="city.tags.length === 0">
               Все города
+            </b-form-text>
+          </b-form-group>
+        </b-col>
+
+        <b-col md="6">
+          <b-form-group label="Категория">
+            <b-form-tag
+              v-for="tag in category.tags"
+              :key="tag.id"
+              :title="tag"
+              pill
+              variant="primary"
+              class="mr-1 mb-1"
+              @remove="category.removeTag(tag)"
+            >
+              {{ tag.title }}
+            </b-form-tag>
+            <vue-bootstrap-typeahead
+              ref="categoryinput"
+              v-model="category.search"
+              :data="category.list"
+              :serializer="s => s.title"
+              placeholder="Можно несколько"
+              @hit="category.addTag($event)"
+            />
+            <b-form-text v-if="category.tags.length === 0">
+              Все категории
             </b-form-text>
           </b-form-group>
         </b-col>
@@ -309,43 +311,68 @@
 
       <b-col md="4" class="mb-4">
         <b-button
+          v-if="loading.downloadEmails"
+          disabled
           pill
           block
           variant="outline-primary"
-          :disabled="false"
-          @click="methodSearchCompanies"
+          @click="methodDownloadEmails"
         >
-          <b-icon
-            v-if="false"
-            icon="arrow-clockwise"
-            animation="spin"
-          />
-          <template v-else>
-            <b-icon icon="envelope" />
-            Скачать email-ы
-          </template>
+          <b-icon-arrow-clockwise animation="spin" />
+          Скачать emails
+        </b-button>
+        <b-button
+          v-else
+          pill
+          block
+          variant="outline-primary"
+          @click="methodDownloadEmails"
+        >
+          <b-icon-envelope />
+          Скачать emails
         </b-button>
       </b-col>
 
       <b-col md="4" class="mb-4">
         <b-button
+          v-if="loading.downloadPhones"
+          disabled
           pill
           block
           variant="outline-primary"
-          :disabled="false"
-          @click="methodSearchCompanies"
+          @click="methodDownloadPhones"
         >
-          <b-icon
-            v-if="false"
-            icon="arrow-clockwise"
-            animation="spin"
-          />
-          <template v-else>
-            <b-icon icon="telephone" />
-            Скачать телефоны
-          </template>
+          <b-icon-arrow-clockwise animation="spin" />
+          Скачать телефоны
+        </b-button>
+        <b-button
+          v-else
+          pill
+          block
+          variant="outline-primary"
+          @click="methodDownloadPhones"
+        >
+          <b-icon-telephone />
+          Скачать телефоны
         </b-button>
       </b-col>
+
+      <b-alert
+        fade
+        :show="downloadAlertCountDown"
+        dismissible
+        variant="success"
+        class="w-100"
+        @dismissed="downloadAlertCountDown=0"
+      >
+        <h6 class="alert-heading">
+          Скачивание началось
+        </h6>
+
+        <p>
+          Файл уже очищен от дубликатов, поэтому строк в нем может быть меньше, чем в результатах поиска
+        </p>
+      </b-alert>
     </b-row>
 
     <h3 class="pt-3 pb-3">
@@ -373,20 +400,12 @@
       </template>
     </template>
 
-    <b-row
-      v-if="loading.next"
-      class="text-center"
-    >
-      <b-col />
-      <b-col>
-        <b-icon
-          icon="arrow-clockwise"
-          animation="spin"
-          font-scale="2"
-        />
-      </b-col>
-      <b-col />
-    </b-row>
+    <client-only v-if="company.items && company.items.length >= 20">
+      <infinite-loading
+        spinner="spiral"
+        @infinite="infiniteScroll"
+      />
+    </client-only>
   </b-container>
 </template>
 
@@ -414,6 +433,30 @@ const getCompanies = async (querystring: string): Promise<any> => {
   }
 }
 
+const downloadEmails = async (querystring: string): Promise<string[]> => {
+  const raw = await fetch([
+    process.env.API_HOST,
+    '/v1/company/getEmailList?',
+    querystring
+  ].join(''))
+
+  const res = await raw.json()
+
+  return res.emails
+}
+
+const downloadPhones = async (querystring: string): Promise<string[]> => {
+  const raw = await fetch([
+    process.env.API_HOST,
+    '/v1/company/getPhoneList?',
+    querystring
+  ].join(''))
+
+  const res = await raw.json()
+
+  return res.phones
+}
+
 const addCityCategoryTag = (ctx, type, inputRefName) => {
   return (val) => {
     ctx.$refs[inputRefName].inputValue = ''
@@ -438,6 +481,23 @@ const removeCityCategoryTag = (ctx, type) => {
   }
 }
 
+const forceTxtDownload = (filename: string, rows: string[] | number[]): void => {
+  let text = ''
+  rows.forEach((row) => {
+    text += `${row.toString().trim()}\n`
+  })
+
+  const url = window.URL.createObjectURL(new Blob([text], {
+    type: 'text/plain;charset=utf-8'
+  }))
+  const link = document.createElement('a')
+  link.href = url
+  link.setAttribute('download', filename + '.txt')
+  document.body.appendChild(link)
+  link.click()
+  link.parentNode.removeChild(link)
+}
+
 enum select {
   any = 'ANY',
   yes = 'YES',
@@ -451,6 +511,7 @@ export default Vue.extend({
   async asyncData (): Promise<object> {
     const res = await getCompanies(new URLSearchParams({
       hasEmail: select.yes,
+      hasOnline: select.yes,
       'opts.limit': '20'
     }).toString())
 
@@ -512,8 +573,11 @@ export default Vue.extend({
       },
       loading: {
         search: false,
-        next: false
-      }
+        downloadEmails: false,
+        downloadPhones: false
+      },
+      downloadAlertCountDown: 0,
+      downloadAlertDismissSecs: 10
     }
   },
   computed: {
@@ -526,11 +590,9 @@ export default Vue.extend({
   },
   watch: {
     'city.search': debounce(function (title: string) {
-      // @ts-ignore
       this.getCitiesHints(title)
     }, 500),
     'category.search': debounce(function (title: string) {
-      // @ts-ignore
       this.getCategoriesHints(title)
     }, 500),
     'query.hasVk' (val) {
@@ -567,7 +629,7 @@ export default Vue.extend({
     },
     async methodSearchCompanies () {
       this.loading.search = true
-      const res = await getCompanies(this.buildQuery())
+      const res = await getCompanies(this.buildSearchQuery())
       this.loading.search = false
 
       if (!this.company) {
@@ -580,10 +642,14 @@ export default Vue.extend({
       this.company.items = res.companies
       this.company.totalCount = res.totalCount
     },
-    buildQuery (): string {
+    buildSearchQuery (withFromId?: boolean): string {
       const q: any = {
         ...this.query,
         'opts.limit': 20
+      }
+
+      if (withFromId) {
+        q['opts.fromId'] = this.fromId
       }
 
       if (q['vkMembersCount.from']) {
@@ -612,6 +678,32 @@ export default Vue.extend({
       }
 
       return params.toString()
+    },
+    async infiniteScroll ($state) {
+      const res = await getCompanies(this.buildSearchQuery(true))
+
+      if (res?.companies?.length) {
+        this.company.items.push(...res.companies)
+      }
+      $state.loaded()
+    },
+    async methodDownloadEmails () {
+      this.downloadAlertCountDown = this.downloadAlertDismissSecs
+
+      this.loading.downloadEmails = true
+      const emails = await downloadEmails(this.buildSearchQuery(false))
+      this.loading.downloadEmails = false
+
+      forceTxtDownload('emails', emails)
+    },
+    async methodDownloadPhones () {
+      this.downloadAlertCountDown = this.downloadAlertDismissSecs
+
+      this.loading.downloadPhones = true
+      const phones = await downloadPhones(this.buildSearchQuery(false))
+      this.loading.downloadPhones = false
+
+      forceTxtDownload('phones', phones)
     }
   }
 })

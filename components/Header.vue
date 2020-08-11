@@ -13,7 +13,7 @@
 
     <b-button
       target="_blank"
-      to="/#search"
+      to="/"
       pill
       variant="outline-primary"
     >

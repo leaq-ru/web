@@ -1,17 +1,17 @@
 <template>
   <b-card
-      no-body
+    no-body
     :header="company.title || company.slug"
   >
     <b-card-body>
       <b-row>
         <b-col xs="6" class="mb-3">
           <b-avatar
-              badge
-              :src="company.avatar"
-              :alt="`Логотип ${company.title || company.slug}`"
-              :badge-variant="company.online ? 'success' : 'danger'"
-              size="5em"
+            badge
+            :src="company.avatar"
+            :alt="`Логотип ${company.title || company.slug}`"
+            :badge-variant="company.online ? 'success' : 'danger'"
+            size="5em"
           />
 
           <b-row class="mb-3" />
@@ -39,10 +39,10 @@
           <b-row class="mb-3" />
 
           <b-link
-              v-if="company.url"
-              :href="company.url"
-              target="_blank"
-              rel="nofollow"
+            v-if="company.url"
+            :href="company.url"
+            target="_blank"
+            rel="nofollow"
           >
             <b-icon-globe variant="primary" />
             {{ company.url }}
@@ -54,15 +54,15 @@
 
           <b-row class="mb-3" />
 
-          <b-icon-arrow-clockwise />
+          <b-icon-clock />
           {{ toShowedDate(company.updatedAt) }}
         </b-col>
 
         <b-col xs="6" class="mb-3">
           <b-link
-              v-if="company.email"
-              :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
-              target="_blank"
+            v-if="company.email"
+            :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
+            target="_blank"
           >
             <b-icon-envelope variant="primary" />
             {{ company.email }}
@@ -75,9 +75,9 @@
           <b-row />
 
           <b-link
-              v-if="company.phone"
-              :href="`tel:${company.phone}`"
-              target="_blank"
+            v-if="company.phone"
+            :href="`tel:${company.phone}`"
+            target="_blank"
           >
             <b-icon-telephone variant="primary" />
             {{ toShowedPhone(company.phone) }}
@@ -90,14 +90,14 @@
           <b-row class="mb-3" />
 
           <b-link
-              v-if="safeSocialVkId(company)"
-              :href="`https://vk.com/club${safeSocialVkId(company)}`"
-              target="_blank"
-              rel="nofollow"
+            v-if="safeSocialVkId(company)"
+            :href="`https://vk.com/club${safeSocialVkId(company)}`"
+            target="_blank"
+            rel="nofollow"
           >
             <fa
-                color="#007bff"
-                :icon="['fab', 'vk']"
+              color="#007bff"
+              :icon="['fab', 'vk']"
             />
             {{ safeSocialVkScreenName(company) }}
 
@@ -108,8 +108,8 @@
           </b-link>
           <template v-else>
             <fa
-                color="#212529"
-                :icon="['fab', 'vk']"
+              color="#212529"
+              :icon="['fab', 'vk']"
             />
             {{ none }}
 
@@ -122,107 +122,107 @@
           <b-row class="mb-3" />
 
           <b-link
-              v-if="safeSocialInstagramUrl(company)"
-              :href="safeSocialInstagramUrl(company)"
-              target="_blank"
-              rel="nofollow"
+            v-if="safeSocialInstagramUrl(company)"
+            :href="safeSocialInstagramUrl(company)"
+            target="_blank"
+            rel="nofollow"
           >
             <fa
-                color="#007bff"
-                :icon="['fab', 'instagram']"
-            />
-          </b-link>
-          <fa
-              v-else
-              color="#212529"
+              color="#007bff"
               :icon="['fab', 'instagram']"
-          />
-
-          <b-link
-              v-if="safeSocialYoutubeUrl(company)"
-              :href="safeSocialYoutubeUrl(company)"
-              target="_blank"
-              rel="nofollow"
-          >
-            <fa
-                color="#007bff"
-                :icon="['fab', 'youtube']"
             />
           </b-link>
           <fa
-              v-else
-              color="#212529"
+            v-else
+            color="#212529"
+            :icon="['fab', 'instagram']"
+          />
+
+          <b-link
+            v-if="safeSocialYoutubeUrl(company)"
+            :href="safeSocialYoutubeUrl(company)"
+            target="_blank"
+            rel="nofollow"
+          >
+            <fa
+              color="#007bff"
               :icon="['fab', 'youtube']"
-          />
-
-          <b-link
-              v-if="safeSocialFacebookUrl(company)"
-              :href="safeSocialFacebookUrl(company)"
-              target="_blank"
-              rel="nofollow"
-          >
-            <fa
-                color="#007bff"
-                :icon="['fab', 'facebook']"
             />
           </b-link>
           <fa
-              v-else
-              color="#212529"
+            v-else
+            color="#212529"
+            :icon="['fab', 'youtube']"
+          />
+
+          <b-link
+            v-if="safeSocialFacebookUrl(company)"
+            :href="safeSocialFacebookUrl(company)"
+            target="_blank"
+            rel="nofollow"
+          >
+            <fa
+              color="#007bff"
               :icon="['fab', 'facebook']"
-          />
-
-          <b-link
-              v-if="safeSocialTwitterUrl(company)"
-              :href="safeSocialTwitterUrl(company)"
-              target="_blank"
-              rel="nofollow"
-          >
-            <fa
-                color="#007bff"
-                :icon="['fab', 'twitter']"
             />
           </b-link>
           <fa
-              v-else
-              color="#212529"
+            v-else
+            color="#212529"
+            :icon="['fab', 'facebook']"
+          />
+
+          <b-link
+            v-if="safeSocialTwitterUrl(company)"
+            :href="safeSocialTwitterUrl(company)"
+            target="_blank"
+            rel="nofollow"
+          >
+            <fa
+              color="#007bff"
               :icon="['fab', 'twitter']"
+            />
+          </b-link>
+          <fa
+            v-else
+            color="#212529"
+            :icon="['fab', 'twitter']"
           />
 
           <b-row class="mb-3" />
 
           <b-link
-              v-if="safeAppStoreUrl(company)"
-              :href="safeAppStoreUrl(company)"
-              target="_blank"
-              rel="nofollow"
+            v-if="safeAppStoreUrl(company)"
+            :href="safeAppStoreUrl(company)"
+            target="_blank"
+            rel="nofollow"
           >
             <fa
-                color="#007bff"
-                :icon="['fab', 'app-store']"
+              color="#007bff"
+              :icon="['fab', 'app-store']"
             />
           </b-link>
           <fa
-              v-else
-              color="#212529"
-              :icon="['fab', 'app-store']"
+            v-else
+            color="#212529"
+            :icon="['fab', 'app-store']"
           />
 
           <b-link
-              v-if="safeGooglePlayUrl(company)"
-              :href="safeGooglePlayUrl(company)"
-              target="_blank"
-              rel="nofollow"
+            v-if="safeGooglePlayUrl(company)"
+            :href="safeGooglePlayUrl(company)"
+            target="_blank"
+            rel="nofollow"
           >
             <fa
-                color="#007bff"
-                :icon="['fab', 'google-play']"
+              color="#007bff"
+              :icon="['fab', 'google-play']"
             />
           </b-link>
           <fa
-              v-else
-              color="#212529"
-              :icon="['fab', 'google-play']"
+            v-else
+            color="#212529"
+            :icon="['fab', 'google-play']"
           />
 
           <b-row class="mb-3" />
@@ -238,9 +238,9 @@
 
     <b-card-footer footer-bg-variant="white">
       <b-button
-          href="#"
-          variant="primary"
-          pill
+        href="#"
+        variant="primary"
+        pill
       >
         Подробнее
       </b-button>

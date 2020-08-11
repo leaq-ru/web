@@ -1,30 +1,28 @@
 <template>
-  <client-only>
-    <b-button
-      v-if="up"
-      size="lg"
-      pill
-      variant="primary"
-      class="fixed-bottom mb-3 ml-3"
-      @click="scrollUp"
-    >
-      <b-icon-arrow-up-circle
-        variant="light"
-      />
-    </b-button>
-    <b-button
-      v-else
-      size="lg"
-      pill
-      variant="primary"
-      class="fixed-bottom mb-3 ml-3"
-      @click="scrollDown"
-    >
-      <b-icon-arrow-down-circle
-        variant="light"
-      />
-    </b-button>
-  </client-only>
+  <b-button
+    v-if="up"
+    size="lg"
+    pill
+    variant="primary"
+    class="fixed-bottom mb-3 ml-3"
+    @click="scrollUp"
+  >
+    <b-icon-arrow-up-circle
+      variant="light"
+    />
+  </b-button>
+  <b-button
+    v-else
+    size="lg"
+    pill
+    variant="primary"
+    class="fixed-bottom mb-3 ml-3"
+    @click="scrollDown"
+  >
+    <b-icon-arrow-down-circle
+      variant="light"
+    />
+  </b-button>
 </template>
 
 <script lang="ts">

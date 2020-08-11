@@ -482,6 +482,10 @@ const removeCityCategoryTag = (ctx, type) => {
 }
 
 const forceTxtDownload = (filename: string, rows: string[] | number[]): void => {
+  if (!rows?.length) {
+    return
+  }
+
   let text = ''
   rows.forEach((row) => {
     text += `${row.toString().trim()}\n`

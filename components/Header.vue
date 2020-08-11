@@ -27,7 +27,7 @@
       <b-navbar-nav>
         <b-nav-item
           target="_blank"
-          to="#"
+          to="cities"
         >
           Города
         </b-nav-item>

@@ -5,11 +5,13 @@
     <b-jumbotron
       id="search"
       header="Каталог компаний России"
-      lead="Более 4,000,000 фирм доступно для поиска"
+      :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
     >
       <p>
         Город, сфера деятельности, телефон, email, и многое другое в карточках компаний. Все данные доступны по
-        <a href="https://api.leaq.ru/api/docs" target="_blank">API</a>
+        <b-link href="https://api.leaq.ru/docs" target="_blank">
+          API
+        </b-link>
         для интеграции с вашим бизнесом
       </p>
     </b-jumbotron>
@@ -406,6 +408,8 @@
         @infinite="infiniteScroll"
       />
     </client-only>
+
+    <Footer />
   </b-container>
 </template>
 
@@ -502,6 +506,20 @@ const forceTxtDownload = (filename: string, rows: string[] | number[]): void => 
   link.parentNode.removeChild(link)
 }
 
+const toTitleCompaniesCount = (num: number): string => {
+  if (!num) {
+    return '—'
+  }
+
+  const str = String(num).split('').reverse()
+  str.forEach((elem, i) => {
+    if (i % 3 === 0 && i !== 0) {
+      str[i] = elem + ','
+    }
+  })
+  return str.reverse().join('')
+}
+
 enum select {
   any = 'ANY',
   yes = 'YES',
@@ -523,7 +541,8 @@ export default Vue.extend({
       company: {
         items: res.companies,
         totalCount: res.totalCount
-      }
+      },
+      titleCompaniesCount: toTitleCompaniesCount(res.totalCount)
     }
   },
   data (): any {

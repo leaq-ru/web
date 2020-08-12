@@ -12,7 +12,6 @@
     </b-navbar-brand>
 
     <b-button
-      target="_blank"
       to="/"
       pill
       variant="outline-primary"
@@ -26,26 +25,24 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item
-          target="_blank"
           to="cities"
         >
           Города
         </b-nav-item>
         <b-nav-item
-          target="_blank"
-          to="#"
+          to="categories"
         >
           Категории
         </b-nav-item>
         <b-nav-item
           target="_blank"
-          to="#"
+          href="https://api.leaq.ru/docs"
         >
           API
         </b-nav-item>
         <b-nav-item
           target="_blank"
-          to="#"
+          href="https://vk.me/leaq_ru"
         >
           Связаться с нами
         </b-nav-item>

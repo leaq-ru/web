@@ -77,7 +77,6 @@
           <b-link
             v-if="company.phone"
             :href="`tel:${company.phone}`"
-            target="_blank"
           >
             <b-icon-telephone variant="primary" />
             {{ toShowedPhone(company.phone) }}
@@ -242,6 +241,7 @@
         variant="primary"
         pill
       >
+        <b-icon-box-arrow-up-right />
         Подробнее
       </b-button>
     </b-card-footer>

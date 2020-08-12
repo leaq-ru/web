@@ -6,9 +6,9 @@
     <h2 class="mb-4">
       Всего
       <span class="text-muted">
-        {{ cities.length }}
+        {{ categories.length }}
       </span>
-      городов
+      категорий
     </h2>
 
     <b-form-input
@@ -19,13 +19,13 @@
     />
 
     <template
-      v-for="c in cities"
+      v-for="c in categories"
     >
       <b-link
         v-if="!c.hidden"
         :key="c.id"
         class="mr-4"
-        :to="`${c.slug}/all`"
+        :to="`all/${c.slug}`"
       >
         {{ c.title }}
       </b-link>
@@ -43,16 +43,16 @@ export default Vue.extend({
     try {
       const raw = await fetch([
         process.env.API_HOST,
-        '/v1/city/getAll'
+        '/v1/category/getAll'
       ].join(''))
 
       const result = await raw.json()
-      result.cities.sort((a, b) => a.title.localeCompare(b.title))
+      result.categories.sort((a, b) => a.title.localeCompare(b.title))
 
       return result
     } catch {
       return {
-        cities: []
+        categories: []
       }
     }
   },
@@ -64,9 +64,9 @@ export default Vue.extend({
           name: 'index'
         }
       }, {
-        text: 'Города',
+        text: 'Категории',
         to: {
-          name: 'cities'
+          name: 'categories'
         }
       }],
       filter: ''
@@ -74,13 +74,13 @@ export default Vue.extend({
   },
   watch: {
     filter (val) {
-      if (!this.cities.length) {
+      if (!this.categories.length) {
         return
       }
       const lowVal = val.toLowerCase()
 
-      this.cities.forEach((city) => {
-        city.hidden = !city.title.toLowerCase().includes(lowVal)
+      this.categories.forEach((category) => {
+        category.hidden = !category.title.toLowerCase().includes(lowVal)
       })
     }
   }

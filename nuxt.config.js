@@ -97,5 +97,9 @@ export default {
   },
   env: {
     API_HOST: 'http://localhost:9999'
+  },
+  router: {
+    prefetchLinks: true,
+    trailingSlash: false
   }
 }

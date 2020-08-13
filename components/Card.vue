@@ -8,6 +8,8 @@
         <b-col xs="6" class="mb-3">
           <b-avatar
             badge
+            :to="`/company/${company.slug}`"
+            target="_blank"
             :src="company.avatar"
             :alt="`Логотип ${company.title || company.slug}`"
             :badge-variant="company.online ? 'success' : 'danger'"
@@ -16,23 +18,31 @@
 
           <b-row class="mb-3" />
 
-          <b-link v-if="safeCategoryTitle(company)">
-            <b-icon-grid variant="primary" />
-            {{ safeCategoryTitle(company) }}
-          </b-link>
-          <template v-else>
-            <b-icon-grid />
-            {{ none }}
-          </template>
-
-          <b-row />
-
-          <b-link v-if="safeLocationCityTitle(company)">
+          <b-link
+            v-if="safeLocationCityTitle(company)"
+            target="_blank"
+            :to="`/${safeLocationCitySlug(company)}/all`"
+          >
             <b-icon-building variant="primary" />
             {{ safeLocationCityTitle(company) }}
           </b-link>
           <template v-else>
             <b-icon-building />
+            {{ none }}
+          </template>
+
+          <b-row />
+
+          <b-link
+            v-if="safeCategoryTitle(company)"
+            target="_blank"
+            :to="`/all/${safeCategorySlug(company)}`"
+          >
+            <b-icon-grid variant="primary" />
+            {{ safeCategoryTitle(company) }}
+          </b-link>
+          <template v-else>
+            <b-icon-grid />
             {{ none }}
           </template>
 
@@ -236,14 +246,31 @@
     </b-card-body>
 
     <b-card-footer footer-bg-variant="white">
-      <b-button
-        href="#"
-        variant="primary"
-        pill
-      >
-        <b-icon-box-arrow-up-right />
-        Подробнее
-      </b-button>
+      <b-row>
+        <b-col md="6" class="mb-3 mb-md-0">
+          <b-button
+            target="_blank"
+            :to="`/company/${company.slug}`"
+            variant="primary"
+            pill
+          >
+            <b-icon-info-circle />
+            Подробнее
+          </b-button>
+        </b-col>
+
+        <b-col md="6">
+          <b-button
+            target="_blank"
+            :to="relatedLink(company)"
+            variant="outline-primary"
+            pill
+          >
+            <b-icon-share />
+            Найти похожие
+          </b-button>
+        </b-col>
+      </b-row>
     </b-card-footer>
   </b-card>
 </template>
@@ -316,9 +343,6 @@ export default Vue.extend({
     safeCategorySlug (company) {
       return company.category?.slug
     },
-    safeLocationCityId (company) {
-      return company.location?.city?.id
-    },
     safeLocationCityTitle (company) {
       return company.location?.city?.title
     },
@@ -348,6 +372,16 @@ export default Vue.extend({
     },
     safeSocialFacebookUrl (company) {
       return company.social?.facebook?.url
+    },
+    relatedLink (company) {
+      const result = ['all', 'all']
+      if (this.safeLocationCitySlug(company)) {
+        result[0] = this.safeLocationCitySlug(company)
+      }
+      if (this.safeCategorySlug(company)) {
+        result[1] = this.safeCategorySlug(company)
+      }
+      return '/' + result.join('/')
     }
   }
 })

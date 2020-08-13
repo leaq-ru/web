@@ -61,12 +61,12 @@ export default Vue.extend({
       breadcrumb: [{
         text: '🏠',
         to: {
-          name: 'index'
+          path: '/'
         }
       }, {
         text: 'Города',
         to: {
-          name: 'cities'
+          path: '/cities'
         }
       }],
       filter: ''

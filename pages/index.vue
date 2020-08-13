@@ -550,7 +550,7 @@ export default Vue.extend({
       breadcrumb: [{
         text: '🏠',
         to: {
-          name: 'index'
+          path: '/'
         }
       }],
       selectOptions: [{

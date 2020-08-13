@@ -25,12 +25,12 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item
-          to="cities"
+          to="/cities"
         >
           Города
         </b-nav-item>
         <b-nav-item
-          to="categories"
+          to="/categories"
         >
           Категории
         </b-nav-item>

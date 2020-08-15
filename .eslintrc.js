@@ -11,5 +11,7 @@ module.exports = {
   plugins: [
   ],
   // add your custom rules here
-  rules: {}
+  rules: {
+    'nuxt/no-this-in-fetch-data': 'off'
+  }
 }

@@ -402,7 +402,7 @@
       </template>
     </template>
 
-    <client-only v-if="company.items && company.items.length >= 20">
+    <client-only v-if="company.totalCount > 20 && !scrollDone">
       <infinite-loading
         spinner="spiral"
         @infinite="infiniteScroll"
@@ -418,24 +418,8 @@ import Vue from 'vue'
 // @ts-ignore - no types for this module
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import { debounce } from 'underscore'
-
-const getCompanies = async (querystring: string): Promise<any> => {
-  try {
-    const rawCompanies = await fetch([
-      process.env.API_HOST,
-      '/v1/company/get?',
-      querystring
-    ].join(''))
-
-    const result = await rawCompanies.json()
-    return result
-  } catch {
-    return {
-      companies: [],
-      totalCount: 0
-    }
-  }
-}
+import select from '~/helpers/select'
+import getCompanies from '~/helpers/getCompanies'
 
 const downloadEmails = async (querystring: string): Promise<string[]> => {
   const raw = await fetch([
@@ -520,20 +504,12 @@ const toTitleCompaniesCount = (num: number): string => {
   return str.reverse().join('')
 }
 
-enum select {
-  any = 'ANY',
-  yes = 'YES',
-  no = 'NO',
-}
-
 export default Vue.extend({
   components: {
     VueBootstrapTypeahead
   },
   async asyncData (): Promise<object> {
     const res = await getCompanies(new URLSearchParams({
-      hasEmail: select.yes,
-      hasOnline: select.yes,
       'opts.limit': '20'
     }).toString())
 
@@ -564,9 +540,9 @@ export default Vue.extend({
         value: select.no
       }],
       query: {
-        hasEmail: select.yes,
+        hasEmail: select.any,
         hasPhone: select.any,
-        hasOnline: select.yes,
+        hasOnline: select.any,
         hasInn: select.any,
         hasKpp: select.any,
         hasOgrn: select.any,
@@ -600,7 +576,8 @@ export default Vue.extend({
         downloadPhones: false
       },
       downloadAlertCountDown: 0,
-      downloadAlertDismissSecs: 10
+      downloadAlertDismissSecs: 10,
+      scrollDone: false
     }
   },
   computed: {
@@ -651,6 +628,7 @@ export default Vue.extend({
       this.category.list = suggs.categories || []
     },
     async methodSearchCompanies () {
+      this.scrollDone = false
       this.loading.search = true
       const res = await getCompanies(this.buildSearchQuery())
       this.loading.search = false
@@ -707,6 +685,8 @@ export default Vue.extend({
 
       if (res?.companies?.length) {
         this.company.items.push(...res.companies)
+      } else {
+        this.scrollDone = true
       }
       $state.loaded()
     },

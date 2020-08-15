@@ -1,20 +1,59 @@
 <template>
-  <div>
-    <b-container fluid="xl">
-      <Header />
-      <b-breadcrumb :items="breadcrumb" />
+  <b-container fluid="xl">
+    <Header />
+    <b-breadcrumb :items="breadcrumb" />
 
-      {{ city }}
+    <h1>
+      {{ category.header }} в {{ city.header }}
+    </h1>
 
-      {{ category }}
+    <p>
+      Список компаний {{ category.description }} {{ city.description }}. Это подборка, изменить условия поиска и скачать список email и телефонов можно на
+      <b-link to="/">
+        главной странице
+      </b-link>
+    </p>
 
-      <Footer />
-    </b-container>
-  </div>
+    <h3 class="pt-3 pb-3">
+      Всего
+      <span class="text-muted">
+        {{ company.totalCount || 0 }}
+      </span>
+      компаний
+    </h3>
+
+    <template v-for="(_, i) in company.items">
+      <template v-if="i % 2 === 0">
+        <b-card-group
+          :key="company.items[i].id"
+          class="mb-4"
+          deck
+        >
+          <Card :company="company.items[i]" />
+
+          <Card
+            v-if="company.items[i+1]"
+            :company="company.items[i+1]"
+          />
+        </b-card-group>
+      </template>
+    </template>
+
+    <client-only v-if="company.totalCount > 20 && !scrollDone">
+      <infinite-loading
+        spinner="spiral"
+        @infinite="collectionInfiniteScroll"
+      />
+    </client-only>
+
+    <Footer />
+  </b-container>
 </template>
 
 <script lang="ts">
 import Vue from 'vue'
+import { cityIn } from 'lvovich'
+import getCompanies from '~/helpers/getCompanies'
 
 export default Vue.extend({
   async asyncData ({ error, params }): Promise<any> {
@@ -71,17 +110,7 @@ export default Vue.extend({
 
       const [city, category] = await Promise.all(unmarshal)
 
-      const result = {
-        city: {
-          id: '',
-          title: 'во всех городах России',
-          slug: ''
-        },
-        category: {
-          id: '',
-          title: 'во всех категорях',
-          slug: ''
-        },
+      const data = {
         breadcrumb: [{
           text: '🏠',
           to: {
@@ -97,40 +126,107 @@ export default Vue.extend({
           to: {
             path: '/all/all'
           }
-        }]
+        }],
+        city: {
+          id: '',
+          header: 'России',
+          description: 'во всех городах России'
+        },
+        category: {
+          id: '',
+          header: 'Все компании',
+          description: 'во всех категориях'
+        },
+        company: {
+          items: [],
+          totalCount: 0
+        }
       }
 
       if (city) {
-        result.city.id = city.id
-        result.city.title = `в г.${city.title}`
-        result.city.slug = city.slug
+        data.city.id = city.id
+        data.city.header = cityIn(city.title)
+        data.city.description = `в городе ${city.title}`
 
-        result.breadcrumb[1].text = city.title
+        data.breadcrumb[1].text = city.title
 
-        const toElems = result.breadcrumb[1].to.path.split('/')
+        const toElems = data.breadcrumb[1].to.path.split('/')
         toElems[1] = city.slug
 
-        result.breadcrumb[1].to.path = toElems.join('/')
+        data.breadcrumb[1].to.path = toElems.join('/')
       }
       if (category) {
-        result.category.id = category.id
-        result.category.title = `в категории ${category.title}`
-        result.category.slug = category.slug
+        data.category.id = category.id
+        data.category.header = category.title
+        data.category.description = `в категории «${category.title}»`
 
-        result.breadcrumb[2].text = category.title
+        data.breadcrumb[2].text = category.title
 
-        const toElems = result.breadcrumb[1].to.path.split('/')
+        const toElems = data.breadcrumb[1].to.path.split('/')
         toElems[1] = city?.slug || 'all'
         toElems[2] = category.slug
 
-        result.breadcrumb[2].to.path = toElems.join('/')
+        data.breadcrumb[2].to.path = toElems.join('/')
       }
 
-      return result
+      const query: any = {
+        'opts.limit': '20'
+      }
+      if (data.city.id) {
+        query.cityIds = [data.city.id]
+      }
+      if (data.category.id) {
+        query.categoryIds = [data.category.id]
+      }
+
+      const res = await getCompanies(new URLSearchParams(query).toString())
+      data.company.items = res.companies
+      data.company.totalCount = res.totalCount
+
+      return data
     } catch {
       return error({
         statusCode: 500
       })
+    }
+  },
+  data () {
+    return {
+      scrollDone: false
+    }
+  },
+  computed: {
+    fromId (): string | undefined {
+      if (this.company?.items?.length) {
+        return this.company.items[this.company.items.length - 1].id
+      }
+      return undefined
+    }
+  },
+  methods: {
+    async collectionInfiniteScroll ($state) {
+      const query: any = {
+        'opts.limit': '20'
+      }
+
+      if (this.city?.id) {
+        query.cityIds = this.city.id
+      }
+      if (this.category?.id) {
+        query.categoryIds = this.category.id
+      }
+      if (this.fromId) {
+        query['opts.fromId'] = this.fromId
+      }
+
+      const res = await getCompanies(new URLSearchParams(query).toString())
+
+      if (res?.companies?.length) {
+        this.company.items.push(...res.companies)
+      } else {
+        this.scrollDone = true
+      }
+      $state.loaded()
     }
   }
 })

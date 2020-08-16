@@ -406,7 +406,7 @@
       </b-card>
     </b-card-group>
 
-    <h2 class="mt-3">
+    <h2 class="mt-5">
       Похожие компании (показать другие)
     </h2>
     <template v-for="(_, i) in related">
@@ -426,7 +426,7 @@
       </template>
     </template>
 
-    <h2 class="mt-3">
+    <h2 class="mt-5">
       Комментарии
     </h2>
     <script type="text/javascript" src="https://vk.com/js/api/openapi.js?168" />

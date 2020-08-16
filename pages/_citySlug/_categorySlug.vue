@@ -42,6 +42,7 @@
     <client-only v-if="company.totalCount > 20 && !scrollDone">
       <infinite-loading
         spinner="spiral"
+        distance="2000"
         @infinite="collectionInfiniteScroll"
       />
     </client-only>

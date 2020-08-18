@@ -83,6 +83,11 @@ export default Vue.extend({
         category.hidden = !category.title.toLowerCase().includes(lowVal)
       })
     }
+  },
+  head () {
+    return {
+      title: 'Все категории каталога компаний LEAQ'
+    }
   }
 })
 </script>

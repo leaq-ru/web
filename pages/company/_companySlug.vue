@@ -119,6 +119,11 @@
         {{ safeLocationAddress(company) || none }},
 
         {{ safeLocationAddressTitle(company) || none }}
+
+        <b-row />
+
+        <b-icon-clock />
+        Обновлено: {{ new Date(company.updatedAt).toLocaleDateString() }}
       </b-card>
 
       <b-card title="Приложения">
@@ -320,7 +325,10 @@
       </b-card>
     </b-card-group>
 
-    <b-card-group deck>
+    <b-card-group
+      class="mb-3"
+      deck
+    >
       <b-card title="Соцсети">
         <fa
           color="#212529"
@@ -406,9 +414,73 @@
       </b-card>
     </b-card-group>
 
-    <h2 class="mt-5">
-      Похожие компании (показать другие)
-    </h2>
+    <b-card-group deck>
+      <b-card title="Реквизиты">
+        ИНН: {{ company.inn || none }}
+        <b-row />
+        КПП: {{ company.kpp || none }}
+        <b-row />
+        ОГРН: {{ company.ogrn || none }}
+      </b-card>
+
+      <b-card title="Домен">
+        <b-icon-cloud />
+        Регистратор: {{ company.domain.registrar || none }}
+
+        <b-row />
+
+        <b-icon-clock />
+        Дата регистрации: {{ new Date(company.domain.registrationDate).toLocaleDateString() || none }}
+
+        <b-row />
+
+        <b-icon-hdd />
+        Адрес сервера: {{ company.domain.address || none }}
+
+        <b-row />
+
+        <template v-if="company.online">
+          <b-icon-circle-fill variant="success" />
+          Сайт онлайн
+        </template>
+        <template v-else>
+          <b-icon-circle-fill variant="danger" />
+          Сайт офлайн
+        </template>
+      </b-card>
+    </b-card-group>
+
+    <b-row class="mt-5 mb-3">
+      <b-col md="6">
+        <h2>
+          Похожие компании
+        </h2>
+      </b-col>
+
+      <b-col md="6" class="mt-1 mb-3 mb-md-0">
+        <b-button
+          v-if="!loading.refreshRelated"
+          pill
+          variant="outline-primary"
+          size="sm"
+          @click="refreshRelated"
+        >
+          <b-icon-arrow-clockwise />
+          Показать другие
+        </b-button>
+
+        <b-button
+          v-else
+          pill
+          variant="outline-primary"
+          size="sm"
+          disabled
+        >
+          <b-icon-arrow-clockwise animation="spin" />
+          Показать другие
+        </b-button>
+      </b-col>
+    </b-row>
     <template v-for="(_, i) in related">
       <template v-if="i % 2 === 0">
         <b-card-group
@@ -446,6 +518,40 @@
 import Vue from 'vue'
 import companyGetters from '~/helpers/companyGetters'
 
+const getRelated = async (company: any): Promise<any> => {
+  const queryRelated: any = {
+    limit: '5'
+  }
+  if (company.location?.city?.id) {
+    queryRelated.cityId = company.location.city.id
+  }
+  if (company.category?.id) {
+    queryRelated.categoryId = company.category.id
+  }
+
+  const rawRelated = await fetch([
+    process.env.API_HOST,
+    '/v1/company/getRelated?',
+    new URLSearchParams(queryRelated).toString()
+  ].join(''))
+
+  const resRelated = await rawRelated.json()
+
+  let relatedWithoutSelf = resRelated.companies.filter(({ id }) => id !== company.id)
+
+  if (relatedWithoutSelf.length > 4) {
+    relatedWithoutSelf = relatedWithoutSelf.slice(0, 4)
+  }
+
+  return relatedWithoutSelf
+}
+
+const makeTitle = (company: any): string => {
+  const elems = [company.title || company.slug]
+  elems.push('Каталог компаний LEAQ')
+  return elems.join(' / ')
+}
+
 export default Vue.extend({
   async asyncData ({ error, params }): Promise<any> {
     try {
@@ -465,29 +571,7 @@ export default Vue.extend({
 
       const resCompany = await rawCompany.json()
 
-      const queryRelated: any = {
-        limit: '5'
-      }
-      if (resCompany.location?.city?.id) {
-        queryRelated.cityId = resCompany.location.city.id
-      }
-      if (resCompany.category?.id) {
-        queryRelated.categoryId = resCompany.category.id
-      }
-
-      const rawRelated = await fetch([
-        process.env.API_HOST,
-        '/v1/company/getRelated?',
-        new URLSearchParams(queryRelated).toString()
-      ].join(''))
-
-      const resRelated = await rawRelated.json()
-
-      let relatedWithoutSelf = resRelated.companies.filter(({ id }) => id !== resCompany.id)
-
-      if (relatedWithoutSelf.length > 4) {
-        relatedWithoutSelf = relatedWithoutSelf.slice(0, 4)
-      }
+      const relatedWithoutSelf = await getRelated(resCompany)
 
       const data = {
         breadcrumb: [{
@@ -513,7 +597,7 @@ export default Vue.extend({
         }],
         company: resCompany,
         related: relatedWithoutSelf,
-        none: '—'
+        title: makeTitle(resCompany)
       }
 
       if (resCompany.location?.city) {
@@ -537,6 +621,26 @@ export default Vue.extend({
       })
     }
   },
-  methods: companyGetters
+  data () {
+    return {
+      none: '—',
+      loading: {
+        refreshRelated: false
+      }
+    }
+  },
+  methods: {
+    ...companyGetters,
+    async refreshRelated (): Promise<void> {
+      this.loading.refreshRelated = true
+      this.related = await getRelated(this.company)
+      this.loading.refreshRelated = false
+    }
+  },
+  head () {
+    return {
+      title: this.title
+    }
+  }
 })
 </script>

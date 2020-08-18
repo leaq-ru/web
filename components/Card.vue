@@ -249,6 +249,7 @@
       <b-row>
         <b-col md="6" class="mb-3 mb-md-0">
           <b-button
+            size="sm"
             target="_blank"
             :to="`/company/${company.slug}`"
             variant="primary"
@@ -261,6 +262,7 @@
 
         <b-col md="6">
           <b-button
+            size="sm"
             target="_blank"
             :to="relatedLink(company)"
             variant="outline-primary"

@@ -83,6 +83,11 @@ export default Vue.extend({
         city.hidden = !city.title.toLowerCase().includes(lowVal)
       })
     }
+  },
+  head () {
+    return {
+      title: 'Все города каталога компаний LEAQ'
+    }
   }
 })
 </script>

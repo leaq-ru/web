@@ -8,7 +8,7 @@
     </h1>
 
     <p>
-      Список компаний {{ category.description }} {{ city.description }}. Это подборка, изменить условия поиска и скачать список email и телефонов можно на
+      Список организаций {{ category.description }} {{ city.description }}. Это подборка, изменить условия поиска и скачать список email и телефонов можно на
       <b-link to="/">
         главной странице
       </b-link>
@@ -141,7 +141,8 @@ export default Vue.extend({
         company: {
           items: [],
           totalCount: 0
-        }
+        },
+        title: ''
       }
 
       if (city) {
@@ -169,6 +170,7 @@ export default Vue.extend({
 
         data.breadcrumb[2].to.path = toElems.join('/')
       }
+      data.title = `${data.category.header} в ${data.city.header} / Каталог организаций LEAQ`
 
       const query: any = {
         'opts.limit': '20'
@@ -228,6 +230,11 @@ export default Vue.extend({
         this.scrollDone = true
       }
       $state.loaded()
+    }
+  },
+  head () {
+    return {
+      title: this.title
     }
   }
 })

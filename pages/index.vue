@@ -505,6 +505,10 @@ const toTitleCompaniesCount = (num: number): string => {
   return str.reverse().join('')
 }
 
+const makeTitle = (companiesCount: string) => {
+  return `Каталог компаний LEAQ, доступно более ${companiesCount} фирм для поиска. Можно найти компании из конкретных городов России и категорий, затем скачать базу email и телефонов`
+}
+
 export default Vue.extend({
   components: {
     VueBootstrapTypeahead
@@ -514,12 +518,15 @@ export default Vue.extend({
       'opts.limit': '20'
     }).toString())
 
+    const countWithCommas = toTitleCompaniesCount(res.totalCount)
+
     return {
       company: {
         items: res.companies,
         totalCount: res.totalCount
       },
-      titleCompaniesCount: toTitleCompaniesCount(res.totalCount)
+      titleCompaniesCount: countWithCommas,
+      title: makeTitle(countWithCommas)
     }
   },
   data (): any {
@@ -587,6 +594,11 @@ export default Vue.extend({
         return this.company.items[this.company.items.length - 1].id
       }
       return undefined
+    }
+  },
+  head () {
+    return {
+      title: this.title
     }
   },
   watch: {

@@ -268,7 +268,7 @@
             variant="outline-primary"
             pill
           >
-            <b-icon-share />
+            <b-icon-tags />
             Найти похожие
           </b-button>
         </b-col>

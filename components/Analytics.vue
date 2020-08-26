@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <client-only>
     <!-- VK Messages Widget -->
     <script type="text/javascript" src="https://vk.com/js/api/openapi.js?168" />
     <div id="vk_community_messages" />
@@ -40,7 +40,7 @@
       gtag('config', 'UA-175908787-1');
     </script>
     <!-- /Global site tag (gtag.js) - Google Analytics -->
-  </div>
+  </client-only>
 </template>
 
 <script lang="ts">

@@ -48,11 +48,11 @@ spec:
                   - sleep 5
           livenessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: 80
           readinessProbe:
             httpGet:
-              path: /
+              path: /healthz
               port: 80
           ports:
             - containerPort: 80

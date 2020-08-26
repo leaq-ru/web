@@ -61,6 +61,11 @@ export default Vue.extend({
         text: 'Ошибка'
       }]
     }
+  },
+  head () {
+    return {
+      title: 'Ошибка'
+    }
   }
 })
 </script>

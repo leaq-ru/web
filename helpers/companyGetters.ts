@@ -1,3 +1,5 @@
+import unifyDate from '~/helpers/unifyDate'
+
 export default {
   toShowedPhone (phone: number): string {
     if (!phone) {
@@ -31,8 +33,7 @@ export default {
     return r
   },
   toShowedDate (date: string): string {
-    const d = new Date(date)
-    return d.toLocaleDateString()
+    return unifyDate(date).toLocaleDateString()
   },
   safeAppStoreUrl (company) {
     return company.app?.appStore?.url

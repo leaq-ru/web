@@ -96,7 +96,7 @@ export default {
     }
   },
   env: {
-    API_HOST: 'http://localhost:9999'
+    API_HOST: 'https://api.leaq.ru'
   },
   router: {
     prefetchLinks: true,

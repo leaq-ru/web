@@ -4,7 +4,7 @@
     size="lg"
     pill
     variant="primary"
-    class="fixed-bottom mb-3 ml-3"
+    class="fixed-bottom mb-3 ml-3 fixed-btn"
     @click="scrollUp"
   >
     <b-icon-arrow-up-circle
@@ -16,7 +16,7 @@
     size="lg"
     pill
     variant="primary"
-    class="fixed-bottom mb-3 ml-3"
+    class="fixed-bottom mb-3 ml-3 fixed-btn"
     @click="scrollDown"
   >
     <b-icon-arrow-down-circle
@@ -48,3 +48,9 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style scoped>
+.fixed-btn {
+  width: 60px
+}
+</style>

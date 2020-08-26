@@ -123,7 +123,7 @@
         <b-row />
 
         <b-icon-clock />
-        Обновлено: {{ new Date(company.updatedAt).toLocaleDateString() }}
+        Обновлено: {{ toShowedDate(company.updatedAt) }}
       </b-card>
 
       <b-card title="Приложения">
@@ -430,7 +430,7 @@
         <b-row />
 
         <b-icon-clock />
-        Дата регистрации: {{ new Date(company.domain.registrationDate).toLocaleDateString() || none }}
+        Дата регистрации: {{ toShowedDate(company.domain.registrationDate) || none }}
 
         <b-row />
 
@@ -517,6 +517,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import companyGetters from '~/helpers/companyGetters'
+import unifyDate from '~/helpers/unifyDate'
 
 const getRelated = async (company: any): Promise<any> => {
   const queryRelated: any = {
@@ -635,7 +636,7 @@ export default Vue.extend({
       this.loading.refreshRelated = true
       this.related = await getRelated(this.company)
       this.loading.refreshRelated = false
-    }
+    },
   },
   head () {
     return {

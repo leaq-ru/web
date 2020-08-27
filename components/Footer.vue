@@ -6,7 +6,7 @@
       Каталог компаний LEAQ / {{ new Date().getFullYear() }}
     </div>
 
-    <Analytics />
+    <div id="vk_community_messages" />
   </div>
 </template>
 

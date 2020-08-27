@@ -38,6 +38,10 @@ export default {
     src: '~/plugins/vue-infinite-loading',
     mode: 'client',
     ssr: false
+  }, {
+    src: '~/plugins/vk-widgets',
+    mode: 'client',
+    ssr: false
   }],
   /*
   ** Auto import components
@@ -57,7 +61,9 @@ export default {
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
-    'underscore'
+    'underscore',
+    '@nuxtjs/yandex-metrika',
+    '@nuxtjs/google-analytics'
   ],
   bootstrapVue: {
     icons: true // Install the IconsPlugin (in addition to BootStrapVue plugin)
@@ -76,6 +82,20 @@ export default {
       ]
     }
   },
+  yandexMetrika: {
+    id: '66609163',
+    webvisor: true,
+    clickmap: true,
+    useCDN: false,
+    trackLinks: true,
+    accurateTrackBounce: true,
+    trustedDomains: [
+      'leaq.ru'
+    ]
+  },
+  googleAnalytics: {
+    id: 'UA-175908787-1'
+  },
   /*
   ** Content module configuration
   ** See https://content.nuxtjs.org/configuration
@@ -86,6 +106,20 @@ export default {
   ** See https://nuxtjs.org/api/configuration-build/
   */
   build: {
+    html: {
+      minify: {
+        collapseBooleanAttributes: true,
+        decodeEntities: true,
+        minifyCSS: true,
+        minifyJS: true,
+        processConditionalComments: true,
+        removeEmptyAttributes: true,
+        removeRedundantAttributes: true,
+        trimCustomFragments: true,
+        useShortDoctype: true
+      }
+    },
+    extractCSS: true,
     transpile: [
       ({ isServer }) => 'vue-bootstrap-typeahead'
     ],

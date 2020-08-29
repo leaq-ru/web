@@ -54,7 +54,8 @@
 <script lang="ts">
 import Vue from 'vue'
 import { cityIn } from 'lvovich'
-import getCompanies from '~/helpers/getCompanies'
+import getCompanies from '~/helpers/company/getCompanies'
+import apiAddr from '~/helpers/const/apiAddr'
 
 export default Vue.extend({
   async asyncData ({ error, params }): Promise<any> {
@@ -72,7 +73,7 @@ export default Vue.extend({
 
       if (params.citySlug && params.citySlug !== 'all') {
         promises[0] = fetch([
-          process.env.API_HOST,
+          apiAddr,
           '/v1/city/getBySlug?',
           new URLSearchParams({
             slug: params.citySlug
@@ -81,7 +82,7 @@ export default Vue.extend({
       }
       if (params.categorySlug && params.categorySlug !== 'all') {
         promises[1] = fetch([
-          process.env.API_HOST,
+          apiAddr,
           '/v1/category/getBySlug?',
           new URLSearchParams({
             slug: params.categorySlug
@@ -182,7 +183,9 @@ export default Vue.extend({
         query.categoryIds = [data.category.id]
       }
 
-      const res = await getCompanies(new URLSearchParams(query).toString())
+      const res = await getCompanies({
+        querystring: new URLSearchParams(query).toString()
+      })
       data.company.items = res.companies
       data.company.totalCount = res.totalCount
 
@@ -222,7 +225,10 @@ export default Vue.extend({
         query['opts.fromId'] = this.fromId
       }
 
-      const res = await getCompanies(new URLSearchParams(query).toString())
+      const res = await getCompanies({
+        addr: process.env.API_HOST,
+        querystring: new URLSearchParams(query).toString()
+      })
 
       if (res?.companies?.length) {
         this.company.items.push(...res.companies)

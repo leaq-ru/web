@@ -419,8 +419,8 @@ import Vue from 'vue'
 // @ts-ignore - no types for this module
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import { debounce } from 'underscore'
-import select from '~/helpers/select'
-import getCompanies from '~/helpers/getCompanies'
+import select from '~/helpers/const/select'
+import getCompanies from '~/helpers/company/getCompanies'
 
 const downloadEmails = async (querystring: string): Promise<string[]> => {
   const raw = await fetch([
@@ -514,9 +514,11 @@ export default Vue.extend({
     VueBootstrapTypeahead
   },
   async asyncData (): Promise<object> {
-    const res = await getCompanies(new URLSearchParams({
-      'opts.limit': '20'
-    }).toString())
+    const res = await getCompanies({
+      querystring: new URLSearchParams({
+        'opts.limit': '20'
+      }).toString()
+    })
 
     const countWithCommas = toTitleCompaniesCount(res.totalCount)
 
@@ -643,7 +645,10 @@ export default Vue.extend({
     async methodSearchCompanies () {
       this.scrollDone = false
       this.loading.search = true
-      const res = await getCompanies(this.buildSearchQuery())
+      const res = await getCompanies({
+        addr: process.env.API_HOST,
+        querystring: this.buildSearchQuery()
+      })
       this.loading.search = false
 
       if (!this.company) {
@@ -694,7 +699,10 @@ export default Vue.extend({
       return params.toString()
     },
     async infiniteScroll ($state) {
-      const res = await getCompanies(this.buildSearchQuery(true))
+      const res = await getCompanies({
+        addr: process.env.API_HOST,
+        querystring: this.buildSearchQuery(true)
+      })
 
       if (res?.companies?.length) {
         this.company.items.push(...res.companies)

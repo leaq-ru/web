@@ -37,12 +37,13 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import apiAddr from '~/helpers/const/apiAddr'
 
 export default Vue.extend({
   async asyncData () {
     try {
       const raw = await fetch([
-        process.env.API_HOST,
+        apiAddr,
         '/v1/category/getAll'
       ].join(''))
 

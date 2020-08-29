@@ -1,7 +1,15 @@
-export default async (querystring: string): Promise<any> => {
+import apiAddr from '~/helpers/const/apiAddr'
+
+export default async ({
+  addr = apiAddr,
+  querystring
+}: {
+  addr?: string
+  querystring: string
+}): Promise<any> => {
   try {
     const rawCompanies = await fetch([
-      process.env.API_HOST,
+      addr,
       '/v1/company/get?',
       querystring
     ].join(''))

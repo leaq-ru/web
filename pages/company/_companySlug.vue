@@ -503,9 +503,16 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import companyGetters from '~/helpers/companyGetters'
+import companyGetters from '~/helpers/company/companyGetters'
+import apiAddr from '~/helpers/const/apiAddr'
 
-const getRelated = async (company: any): Promise<any> => {
+const getRelated = async ({
+  addr = apiAddr,
+  company
+}: {
+  addr?: string
+  company: any
+}): Promise<any> => {
   const queryRelated: any = {
     limit: '5'
   }
@@ -517,7 +524,7 @@ const getRelated = async (company: any): Promise<any> => {
   }
 
   const rawRelated = await fetch([
-    process.env.API_HOST,
+    addr,
     '/v1/company/getRelated?',
     new URLSearchParams(queryRelated).toString()
   ].join(''))
@@ -549,7 +556,7 @@ export default Vue.extend({
       }
 
       const rawCompany = await fetch([
-        process.env.API_HOST,
+        apiAddr,
         '/v1/company/getBySlug?',
         new URLSearchParams({
           slug: params.companySlug
@@ -558,7 +565,9 @@ export default Vue.extend({
 
       const resCompany = await rawCompany.json()
 
-      const relatedWithoutSelf = await getRelated(resCompany)
+      const relatedWithoutSelf = await getRelated({
+        company: resCompany
+      })
 
       const data = {
         breadcrumb: [{
@@ -620,9 +629,12 @@ export default Vue.extend({
     ...companyGetters,
     async refreshRelated (): Promise<void> {
       this.loading.refreshRelated = true
-      this.related = await getRelated(this.company)
+      this.related = await getRelated({
+        addr: process.env.API_HOST,
+        company: this.company
+      })
       this.loading.refreshRelated = false
-    },
+    }
   },
   head () {
     return {

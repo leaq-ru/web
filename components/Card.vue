@@ -279,7 +279,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import companyGetters from '~/helpers/companyGetters'
+import companyGetters from '~/helpers/company/companyGetters'
 
 export default Vue.extend({
   props: {

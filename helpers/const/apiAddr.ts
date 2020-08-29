@@ -1,1 +1,1 @@
-export default 'api:80'
+export default 'http://api:80'

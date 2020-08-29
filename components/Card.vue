@@ -9,7 +9,6 @@
           <b-avatar
             badge
             :to="`/company/${company.slug}`"
-            target="_blank"
             :src="company.avatar"
             :alt="`Логотип ${company.url}`"
             :badge-variant="company.online ? 'success' : 'danger'"
@@ -20,7 +19,6 @@
 
           <b-link
             v-if="safeLocationCityTitle(company)"
-            target="_blank"
             :to="`/${safeLocationCitySlug(company)}/all`"
           >
             <b-icon-building variant="primary" />
@@ -35,7 +33,6 @@
 
           <b-link
             v-if="safeCategoryTitle(company)"
-            target="_blank"
             :to="`/all/${safeCategorySlug(company)}`"
           >
             <b-icon-grid variant="primary" />
@@ -250,7 +247,6 @@
         <b-col md="6" class="mb-3 mb-md-0">
           <b-button
             size="sm"
-            target="_blank"
             :to="`/company/${company.slug}`"
             variant="primary"
             pill
@@ -263,7 +259,6 @@
         <b-col md="6">
           <b-button
             size="sm"
-            target="_blank"
             :to="relatedLink(company)"
             variant="outline-primary"
             pill

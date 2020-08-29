@@ -133,7 +133,7 @@ export default {
     API_HOST: 'https://api.leaq.ru'
   },
   router: {
-    prefetchLinks: false,
+    prefetchLinks: true,
     trailingSlash: false
   }
 }

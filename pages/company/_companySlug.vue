@@ -542,6 +542,15 @@ const getRelated = async ({
 
 const makeTitle = (company: any): string => {
   const elems = [company.title || company.slug]
+
+  if (companyGetters.safeLocationCityTitle(company)) {
+    elems.push(companyGetters.safeLocationCityTitle(company))
+  }
+
+  if (companyGetters.safeCategoryTitle(company)) {
+    elems.push(companyGetters.safeCategoryTitle(company))
+  }
+
   elems.push('Каталог компаний LEAQ')
   return elems.join(' / ')
 }

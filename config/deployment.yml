@@ -62,6 +62,9 @@ spec:
             requests:
               cpu: 10m
               memory: 110Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
           env:
             - name: NUXT_HOST
               value: 0.0.0.0

@@ -60,7 +60,8 @@ spec:
               protocol: TCP
           resources:
             requests:
-              memory: 75Mi
+              cpu: 10m
+              memory: 110Mi
           env:
             - name: NUXT_HOST
               value: 0.0.0.0

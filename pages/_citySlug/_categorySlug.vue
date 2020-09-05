@@ -16,6 +16,9 @@
 
     <h3 class="pt-3 pb-3">
       Всего
+      <template v-if="company.totalCount === 100000">
+        более
+      </template>
       <span class="text-muted">
         {{ company.totalCount || 0 }}
       </span>

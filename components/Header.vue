@@ -25,6 +25,11 @@
     <b-collapse id="nav-collapse" is-nav>
       <b-navbar-nav>
         <b-nav-item
+          to="/about"
+        >
+          О сервисе
+        </b-nav-item>
+        <b-nav-item
           to="/cities"
         >
           Города

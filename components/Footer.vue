@@ -5,8 +5,6 @@
     >
       Каталог компаний LEAQ / {{ new Date().getFullYear() }}
     </div>
-
-    <div id="vk_community_messages" />
   </div>
 </template>
 

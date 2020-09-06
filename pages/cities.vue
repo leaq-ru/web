@@ -87,7 +87,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'Все города каталога компаний LEAQ'
+      title: 'Все города / Каталог компаний LEAQ'
     }
   }
 })

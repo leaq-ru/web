@@ -87,7 +87,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'Все категории каталога компаний LEAQ'
+      title: 'Все категории / Каталог компаний LEAQ'
     }
   }
 })

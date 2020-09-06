@@ -174,7 +174,7 @@ export default Vue.extend({
 
         data.breadcrumb[2].to.path = toElems.join('/')
       }
-      data.title = `${data.category.header} в ${data.city.header} / Каталог организаций LEAQ`
+      data.title = `${data.category.header} в ${data.city.header} / Каталог компаний LEAQ`
 
       const query: any = {
         'opts.limit': '20'

@@ -523,7 +523,7 @@ export default Vue.extend({
       }).toString()
     })
 
-    const countWithCommas = toTitleCompaniesCount(res.totalCount)
+    const countWithCommas = toTitleCompaniesCount(5000000)
 
     return {
       company: {
@@ -599,11 +599,6 @@ export default Vue.extend({
         return this.company.items[this.company.items.length - 1].id
       }
       return undefined
-    }
-  },
-  head () {
-    return {
-      title: this.title
     }
   },
   watch: {
@@ -731,6 +726,11 @@ export default Vue.extend({
       this.loading.downloadPhones = false
 
       forceTxtDownload('phones', phones)
+    }
+  },
+  head () {
+    return {
+      title: this.title
     }
   }
 })

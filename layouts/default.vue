@@ -1,6 +1,7 @@
 <template>
   <div>
     <Nuxt />
+    <div id="vk_community_messages" />
   </div>
 </template>
 

@@ -513,7 +513,7 @@ const toTitleCompaniesCount = (num: number): string => {
 }
 
 const makeTitle = (companiesCount: string) => {
-  return `Каталог компаний LEAQ, доступно более ${companiesCount} фирм из разных городов России и категорий. Бесплатное скачивание базы email и телефонов`
+  return `Более ${companiesCount} фирм из разных городов России и категорий. Бесплатное скачивание базы email и телефонов / Каталог компаний LEAQ`
 }
 
 export default Vue.extend({

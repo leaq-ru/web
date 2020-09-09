@@ -16,11 +16,11 @@
 
     <h3 class="pt-3 pb-3">
       Всего
-      <template v-if="!(company.items.length < 20)">
+      <template v-if="company.items && company.items.length >= 20">
         более
       </template>
       <span class="text-muted">
-        {{ company.items.length || 0 }}
+        {{ (company.items && company.items.length) || 0 }}
       </span>
       компаний
     </h3>
@@ -42,7 +42,7 @@
       </template>
     </template>
 
-    <client-only v-if="!(company.items.length < 20) && !scrollDone">
+    <client-only v-if="company.items && company.items.length >= 20 && !scrollDone">
       <infinite-loading
         spinner="spiral"
         distance="2000"

@@ -731,7 +731,12 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: this.title
+      title: this.title,
+      meta: [{
+        hid: 'yandex-verification',
+        name: 'yandex-verification',
+        content: 'f8923590e69aa284'
+      }]
     }
   }
 })

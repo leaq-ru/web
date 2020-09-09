@@ -735,7 +735,7 @@ export default Vue.extend({
       meta: [{
         hid: 'yandex-verification',
         name: 'yandex-verification',
-        content: 'f8923590e69aa284'
+        content: '76edae62e49e83d0'
       }]
     }
   }

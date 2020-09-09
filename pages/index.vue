@@ -374,16 +374,20 @@
         <p>
           Файл уже очищен от дубликатов, поэтому строк в нем может быть меньше, чем в результатах поиска
         </p>
+
+        <p>
+          Будет скачано не более 100000 результатов. Хотете скачать все? Скачайте данные порционно через наш бесплатный API
+        </p>
       </b-alert>
     </b-row>
 
     <h3 class="pt-3 pb-3">
       Найдено
-      <template v-if="company.totalCount === 100000">
+      <template v-if="!(company.items.length < 20)">
         более
       </template>
       <span class="text-muted">
-        {{ company.totalCount || 0 }}
+        {{ company.items.length || 0 }}
       </span>
       компаний
     </h3>
@@ -405,7 +409,7 @@
       </template>
     </template>
 
-    <client-only v-if="company.totalCount > 20 && !scrollDone">
+    <client-only v-if="!(company.items.length < 20) && !scrollDone">
       <infinite-loading
         spinner="spiral"
         distance="2000"
@@ -527,8 +531,7 @@ export default Vue.extend({
 
     return {
       company: {
-        items: res.companies,
-        totalCount: res.totalCount
+        items: res.companies
       },
       titleCompaniesCount: countWithCommas,
       title: makeTitle(countWithCommas)
@@ -651,13 +654,11 @@ export default Vue.extend({
 
       if (!this.company) {
         this.company = {
-          items: [],
-          totalCount: 0
+          items: []
         }
       }
 
       this.company.items = res.companies
-      this.company.totalCount = res.totalCount
     },
     buildSearchQuery (withFromId?: boolean): string {
       const q: any = {

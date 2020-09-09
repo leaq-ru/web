@@ -18,8 +18,7 @@ export default async ({
     return result
   } catch {
     return {
-      companies: [],
-      totalCount: 0
+      companies: []
     }
   }
 }

@@ -16,7 +16,7 @@ spec:
       annotations:
         linkerd.io/inject: enabled
         config.linkerd.io/skip-outbound-ports: "4222"
-        config.linkerd.io/proxy-cpu-request: 50m
+        config.linkerd.io/proxy-cpu-request: 5m
     spec:
       imagePullSecrets:
         - name: regcred

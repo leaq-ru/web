@@ -47,7 +47,7 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 500m
+              cpu: 100m
               memory: 110Mi
             limits:
               cpu: "1"
@@ -79,7 +79,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 100
+          averageUtilization: 500
 
 ---
 apiVersion: v1

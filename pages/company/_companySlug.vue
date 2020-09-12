@@ -425,7 +425,7 @@
 
       <b-card title="Домен">
         <b-icon-cloud />
-        Регистратор: {{ company.domain.registrar || none }}
+        Регистратор: {{ (company.domain && company.domain.registrar) || none }}
 
         <b-row />
 
@@ -435,7 +435,7 @@
         <b-row />
 
         <b-icon-hdd />
-        Адрес сервера: {{ company.domain.address || none }}
+        Адрес сервера: {{ (company.domain && company.domain.address) || none }}
 
         <b-row />
 

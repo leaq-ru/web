@@ -430,7 +430,7 @@
         <b-row />
 
         <b-icon-clock />
-        Дата регистрации: {{ toShowedDate(company.domain.registrationDate) || none }}
+        Дата регистрации: {{ toShowedDate(company.domain && company.domain.registrationDate) || none }}
 
         <b-row />
 

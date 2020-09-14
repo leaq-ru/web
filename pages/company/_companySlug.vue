@@ -572,6 +572,12 @@ export default Vue.extend({
         }).toString()
       ].join(''))
 
+      if (!rawCompany.ok) {
+        return error({
+          statusCode: 404
+        })
+      }
+
       const resCompany = await rawCompany.json()
 
       const relatedWithoutSelf = await getRelated({

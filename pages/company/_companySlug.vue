@@ -451,9 +451,11 @@
     </b-card-group>
 
     <b-row class="mt-5 mb-3">
-      <h2>
-        Похожие компании
-      </h2>
+      <b-col>
+        <h2>
+          Похожие компании
+        </h2>
+      </b-col>
     </b-row>
 
     <template v-for="(_, i) in related">
@@ -488,8 +490,10 @@ const getRelated = async ({
   addr?: string
   company: any
 }): Promise<any> => {
+  const relatedCount = 6
+
   const queryRelated: any = {
-    limit: '5'
+    limit: (relatedCount + 1).toString()
   }
   if (company.location?.city?.id) {
     queryRelated.cityId = company.location.city.id
@@ -508,8 +512,8 @@ const getRelated = async ({
 
   let relatedWithoutSelf = resRelated.companies.filter(({ id }) => id !== company.id)
 
-  if (relatedWithoutSelf.length > 4) {
-    relatedWithoutSelf = relatedWithoutSelf.slice(0, 4)
+  if (relatedWithoutSelf.length > relatedCount) {
+    relatedWithoutSelf = relatedWithoutSelf.slice(0, relatedCount)
   }
 
   return relatedWithoutSelf

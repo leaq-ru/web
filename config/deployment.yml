@@ -16,7 +16,7 @@ spec:
       annotations:
         linkerd.io/inject: enabled
         config.linkerd.io/skip-outbound-ports: "4222"
-        config.linkerd.io/proxy-cpu-request: 5m
+        config.linkerd.io/proxy-cpu-request: 10m
     spec:
       imagePullSecrets:
         - name: regcred
@@ -47,8 +47,8 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 10m
-              memory: 100Mi
+              cpu: 490m
+              memory: 130Mi
             limits:
               cpu: "1"
               memory: 1Gi
@@ -61,25 +61,25 @@ spec:
                   key: port
                   name: http
 
-#---
-#apiVersion: autoscaling/v2beta2
-#kind: HorizontalPodAutoscaler
-#metadata:
-#  name: web
-#spec:
-#  scaleTargetRef:
-#    apiVersion: apps/v1
-#    kind: Deployment
-#    name: web
-#  minReplicas: 1
-#  maxReplicas: 5
-#  metrics:
-#    - type: Resource
-#      resource:
-#        name: cpu
-#        target:
-#          type: Utilization
-#          averageUtilization: 500
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: web
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: web
+  minReplicas: 1
+  maxReplicas: 5
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 100
 
 ---
 apiVersion: v1

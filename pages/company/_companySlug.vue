@@ -451,36 +451,11 @@
     </b-card-group>
 
     <b-row class="mt-5 mb-3">
-      <b-col md="6">
-        <h2>
-          Похожие компании
-        </h2>
-      </b-col>
-
-      <b-col md="6" class="mt-1 mb-3 mb-md-0">
-        <b-button
-          v-if="!loading.refreshRelated"
-          pill
-          variant="outline-primary"
-          size="sm"
-          @click="refreshRelated"
-        >
-          <b-icon-arrow-clockwise />
-          Показать другие
-        </b-button>
-
-        <b-button
-          v-else
-          pill
-          variant="outline-primary"
-          size="sm"
-          disabled
-        >
-          <b-icon-arrow-clockwise animation="spin" />
-          Показать другие
-        </b-button>
-      </b-col>
+      <h2>
+        Похожие компании
+      </h2>
     </b-row>
+
     <template v-for="(_, i) in related">
       <template v-if="i % 2 === 0">
         <b-card-group
@@ -634,22 +609,11 @@ export default Vue.extend({
   },
   data () {
     return {
-      none: '—',
-      loading: {
-        refreshRelated: false
-      }
+      none: '—'
     }
   },
   methods: {
-    ...companyGetters,
-    async refreshRelated (): Promise<void> {
-      this.loading.refreshRelated = true
-      this.related = await getRelated({
-        addr: process.env.API_HOST,
-        company: this.company
-      })
-      this.loading.refreshRelated = false
-    }
+    ...companyGetters
   },
   head () {
     return {

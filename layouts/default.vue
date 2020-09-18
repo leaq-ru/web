@@ -3,7 +3,6 @@
     <Nuxt />
 
     <client-only>
-      <script type="text/javascript" src="https://vk.com/js/api/openapi.js?168" />
       <script type="text/javascript">
         VK.Widgets.CommunityMessages('vk_community_messages', 197531682, {
         disableExpandChatSound: '1',

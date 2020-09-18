@@ -372,11 +372,7 @@
         </h6>
 
         <p>
-          Файл уже очищен от дубликатов, поэтому строк в нем может быть меньше, чем в результатах поиска
-        </p>
-
-        <p>
-          Будет скачано не более 100000 результатов. Хотете скачать все? Скачайте данные порционно через наш бесплатный API
+          Наберитесь терпения, скачивание может идти ~1 минуту. Кстати, файл уже очищен от дубликатов
         </p>
       </b-alert>
     </b-row>
@@ -429,28 +425,33 @@ import { debounce } from 'underscore'
 import select from '~/helpers/const/select'
 import getCompanies from '~/helpers/company/getCompanies'
 
-const downloadEmails = async (querystring: string): Promise<string[]> => {
-  const raw = await fetch([
-    process.env.API_HOST,
-    '/v1/company/getEmailList?',
-    querystring
-  ].join(''))
-
-  const res = await raw.json()
-
-  return res.emails
+enum downloadType {
+  email = 'email',
+  phone = 'phone',
 }
 
-const downloadPhones = async (querystring: string): Promise<string[]> => {
+const download = async (querystring: string, type: downloadType): Promise<void> => {
+  let apiPath
+  switch (type) {
+    case downloadType.email:
+      apiPath = 'getEmailList'
+      break
+    case downloadType.phone:
+      apiPath = 'getPhoneList'
+      break
+    default:
+      throw new Error('unknown downloadType')
+  }
+
   const raw = await fetch([
     process.env.API_HOST,
-    '/v1/company/getPhoneList?',
+    `/v1/company/${apiPath}?`,
     querystring
   ].join(''))
 
   const res = await raw.json()
 
-  return res.phones
+  window.open(res.downloadUrl, '_blank')
 }
 
 const addCityCategoryTag = (ctx, type, inputRefName) => {
@@ -475,27 +476,6 @@ const removeCityCategoryTag = (ctx, type) => {
       }
     }
   }
-}
-
-const forceTxtDownload = (filename: string, rows: string[] | number[]): void => {
-  if (!rows?.length) {
-    return
-  }
-
-  let text = ''
-  rows.forEach((row) => {
-    text += `${row.toString().trim()}\n`
-  })
-
-  const url = window.URL.createObjectURL(new Blob([text], {
-    type: 'text/plain;charset=utf-8'
-  }))
-  const link = document.createElement('a')
-  link.href = url
-  link.setAttribute('download', filename + '.txt')
-  document.body.appendChild(link)
-  link.click()
-  link.parentNode.removeChild(link)
 }
 
 const toTitleCompaniesCount = (num: number): string => {
@@ -714,19 +694,15 @@ export default Vue.extend({
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       this.loading.downloadEmails = true
-      const emails = await downloadEmails(this.buildSearchQuery(false))
+      await download(this.buildSearchQuery(false), downloadType.email)
       this.loading.downloadEmails = false
-
-      forceTxtDownload('emails', emails)
     },
     async methodDownloadPhones () {
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       this.loading.downloadPhones = true
-      const phones = await downloadPhones(this.buildSearchQuery(false))
+      await download(this.buildSearchQuery(false), downloadType.phone)
       this.loading.downloadPhones = false
-
-      forceTxtDownload('phones', phones)
     }
   },
   head () {

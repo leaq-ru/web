@@ -38,10 +38,6 @@ export default {
     src: '~/plugins/vue-infinite-loading',
     mode: 'client',
     ssr: false
-  }, {
-    src: '~/plugins/vk-widgets',
-    mode: 'client',
-    ssr: false
   }],
   /*
   ** Auto import components
@@ -121,7 +117,7 @@ export default {
     },
     extractCSS: true,
     transpile: [
-      ({ isServer }) => 'vue-bootstrap-typeahead'
+      () => 'vue-bootstrap-typeahead'
     ],
     extend (config, ctx) {
       if (process.env.NODE_ENV !== 'production') {

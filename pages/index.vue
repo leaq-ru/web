@@ -408,7 +408,7 @@
     <client-only v-if="company.items && company.items.length >= 20 && !scrollDone">
       <infinite-loading
         spinner="spiral"
-        distance="2000"
+        :distance="2000"
         @infinite="infiniteScroll"
       />
     </client-only>
@@ -451,7 +451,7 @@ const download = async (querystring: string, type: downloadType): Promise<void> 
 
   const res = await raw.json()
 
-  window.open(res.downloadUrl, '_blank')
+  window.open(res.downloadUrl, '_self')
 }
 
 const addCityCategoryTag = (ctx, type, inputRefName) => {

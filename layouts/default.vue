@@ -2,20 +2,20 @@
   <div>
     <Nuxt />
 
-    <script type="text/javascript" src="https://vk.com/js/api/openapi.js?168" />
-
-    <script type="text/javascript">
-      VK.Widgets.CommunityMessages('vk_community_messages', 197531682, {
-      disableExpandChatSound: '1',
-      disableNewMessagesSound: '1',
-      tooltipButtonText: 'Есть вопрос?',
-      })
-    </script>
-    <div id="vk_community_messages" />
-
-    <script type="text/javascript">
-      !function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?168",t.onload=function(){VK.Retargeting.Init("VK-RTRG-518954-fF7rQ"),VK.Retargeting.Hit()},document.head.appendChild(t)}();
-    </script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-518954-fF7rQ" style="position:fixed; left:-999px;" alt=""/></noscript>
+    <client-only>
+      <script type="text/javascript" src="https://vk.com/js/api/openapi.js?168" />
+      <script type="text/javascript">
+        VK.Widgets.CommunityMessages('vk_community_messages', 197531682, {
+        disableExpandChatSound: '1',
+        disableNewMessagesSound: '1',
+        tooltipButtonText: 'Есть вопрос?',
+        })
+      </script>
+      <script type="text/javascript">
+        !function(){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src="https://vk.com/js/api/openapi.js?168",t.onload=function(){VK.Retargeting.Init("VK-RTRG-518954-fF7rQ"),VK.Retargeting.Hit()},document.head.appendChild(t)}();
+      </script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-518954-fF7rQ" style="position:fixed; left:-999px;" alt=""/></noscript>
+      <div id="vk_community_messages" />
+    </client-only>
   </div>
 </template>
 

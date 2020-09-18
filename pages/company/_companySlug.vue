@@ -678,7 +678,7 @@ export default Vue.extend({
           }
         }, {
           id: 4,
-          text: resCompany.title,
+          text: resCompany.title || resCompany.slug,
           to: {
             path: `/company/${resCompany.slug}`
           }

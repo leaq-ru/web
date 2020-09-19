@@ -1,7 +1,7 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <b-breadcrumb :items="breadcrumb" />
+    <Breadcrumb :items="breadcrumb" />
 
     <h1>
       {{ category.header }} в {{ city.header }}
@@ -117,16 +117,19 @@ export default Vue.extend({
 
       const data = {
         breadcrumb: [{
+          id: 1,
           text: '🏠',
           to: {
             path: '/'
           }
         }, {
+          id: 2,
           text: 'Все города',
           to: {
             path: '/all/all'
           }
         }, {
+          id: 3,
           text: 'Все категории',
           to: {
             path: '/all/all'

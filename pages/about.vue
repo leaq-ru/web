@@ -1,7 +1,8 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <b-breadcrumb :items="breadcrumb" />
+    <Breadcrumb :items="breadcrumb" />
+
     <h2>
       О сервисе
     </h2>
@@ -54,11 +55,13 @@ export default Vue.extend({
   data (): any {
     return {
       breadcrumb: [{
+        id: 1,
         text: '🏠',
         to: {
           path: '/'
         }
       }, {
+        id: 2,
         text: 'О сервисе',
         to: {
           path: '/about'

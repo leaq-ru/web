@@ -1,7 +1,8 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <b-breadcrumb :items="breadcrumb" />
+    <Breadcrumb :items="breadcrumb" />
+
     <b-jumbotron
       id="search"
       header="Каталог компаний России"
@@ -520,6 +521,7 @@ export default Vue.extend({
   data (): any {
     return {
       breadcrumb: [{
+        id: 1,
         text: '🏠',
         to: {
           path: '/'

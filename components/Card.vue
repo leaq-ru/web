@@ -3,7 +3,15 @@
     no-body
     :header="company.title || company.slug"
   >
-    <b-card-body>
+    <b-card-body
+      itemscope
+      itemtype="http://schema.org/Organization"
+    >
+      <meta
+        itemprop="name"
+        :content="company.title || company.slug"
+      >
+
       <b-row>
         <b-col xs="6" class="mb-3">
           <b-avatar
@@ -14,6 +22,10 @@
             :badge-variant="company.online ? 'success' : 'danger'"
             size="5em"
           />
+          <meta
+            :content="company.avatar"
+            itemprop="logo"
+          >
 
           <b-row class="mb-3" />
 
@@ -22,7 +34,9 @@
             :to="`/${safeLocationCitySlug(company)}/all`"
           >
             <b-icon-building variant="primary" />
-            {{ safeLocationCityTitle(company) }}
+            <span itemprop="address">
+              {{ safeLocationCityTitle(company) }}
+            </span>
           </b-link>
           <template v-else>
             <b-icon-building />
@@ -47,6 +61,7 @@
 
           <b-link
             v-if="company.url"
+            itemprop="url"
             :href="company.url"
             target="_blank"
             rel="nofollow"
@@ -66,14 +81,19 @@
         </b-col>
 
         <b-col xs="6" class="mb-3">
-          <b-link
-            v-if="company.email"
-            :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
-            target="_blank"
-          >
-            <b-icon-envelope variant="primary" />
-            {{ company.email }}
-          </b-link>
+          <template v-if="company.email">
+            <b-link
+              :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
+              target="_blank"
+            >
+              <b-icon-envelope variant="primary" />
+              {{ company.email }}
+            </b-link>
+            <meta
+              :content="company.email"
+              itemprop="email"
+            >
+          </template>
           <template v-else>
             <b-icon-envelope />
             {{ none }}
@@ -86,7 +106,9 @@
             :href="`tel:${company.phone}`"
           >
             <b-icon-telephone variant="primary" />
-            {{ toShowedPhone(company.phone) }}
+            <span itemprop="telephone">
+              {{ toShowedPhone(company.phone) }}
+            </span>
           </b-link>
           <template v-else>
             <b-icon-telephone />

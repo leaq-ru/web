@@ -252,14 +252,6 @@
             color="#212529"
             :icon="['fab', 'google-play']"
           />
-
-          <b-row class="mb-3" />
-
-          ИНН: {{ company.inn || none }}
-          <b-row />
-          КПП: {{ company.kpp || none }}
-          <b-row />
-          ОГРН: {{ company.ogrn || none }}
         </b-col>
       </b-row>
     </b-card-body>

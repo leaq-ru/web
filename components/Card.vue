@@ -13,15 +13,15 @@
       >
 
       <b-row>
-        <b-col xs="6" class="mb-3">
+        <b-col md="5" class="mb-3">
           <b-avatar
-            badge
             :to="`/company/${company.slug}`"
             :src="company.avatar"
             :alt="`Логотип ${company.url}`"
-            :badge-variant="company.online ? 'success' : 'danger'"
-            size="5em"
+            size="120px"
+            rounded="lg"
           />
+
           <meta
             :content="company.avatar"
             itemprop="logo"
@@ -29,6 +29,12 @@
 
           <b-row class="mb-3" />
 
+          <span class="d-none d-md-block">
+            <SocialIcons :company="company" />
+          </span>
+        </b-col>
+
+        <b-col md="7" class="mb-3">
           <b-link
             v-if="safeLocationCityTitle(company)"
             :to="`/${safeLocationCitySlug(company)}/all`"
@@ -38,10 +44,10 @@
               {{ safeLocationCityTitle(company) }}
             </span>
           </b-link>
-          <template v-else>
+          <span v-else class="text-muted">
             <b-icon-building />
             {{ none }}
-          </template>
+          </span>
 
           <b-row />
 
@@ -52,10 +58,10 @@
             <b-icon-grid variant="primary" />
             {{ safeCategoryTitle(company) }}
           </b-link>
-          <template v-else>
+          <span v-else class="text-muted">
             <b-icon-grid />
             {{ none }}
-          </template>
+          </span>
 
           <b-row class="mb-3" />
 
@@ -76,11 +82,6 @@
 
           <b-row class="mb-3" />
 
-          <b-icon-clock />
-          {{ toShowedDate(company.updatedAt) }}
-        </b-col>
-
-        <b-col xs="6" class="mb-3">
           <template v-if="company.email">
             <b-link
               :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
@@ -94,10 +95,10 @@
               itemprop="email"
             >
           </template>
-          <template v-else>
+          <span v-else class="text-muted">
             <b-icon-envelope />
             {{ none }}
-          </template>
+          </span>
 
           <b-row />
 
@@ -110,155 +111,28 @@
               {{ toShowedPhone(company.phone) }}
             </span>
           </b-link>
-          <template v-else>
+          <span v-else class="text-muted">
             <b-icon-telephone />
             {{ none }}
-          </template>
+          </span>
 
           <b-row class="mb-3" />
 
-          <b-link
-            v-if="safeSocialVkId(company)"
-            :href="`https://vk.com/club${safeSocialVkId(company)}`"
-            target="_blank"
-            rel="nofollow"
-          >
-            <fa
-              color="#007bff"
-              :icon="['fab', 'vk']"
-            />
-            {{ safeSocialVkScreenName(company) }}
-
-            <b-row />
-
-            <b-icon-people variant="primary" />
-            {{ safeSocialVkMembersCount(company) || none }}
-          </b-link>
-          <template v-else>
-            <fa
-              color="#212529"
-              :icon="['fab', 'vk']"
-            />
-            {{ none }}
-
-            <b-row />
-
-            <b-icon-people />
-            {{ none }}
-          </template>
+          <span class="d-md-none">
+            <SocialIcons :company="company" />
+          </span>
 
           <b-row class="mb-3" />
 
-          <b-link
-            v-if="safeSocialInstagramUrl(company)"
-            :href="safeSocialInstagramUrl(company)"
-            target="_blank"
-            rel="nofollow"
-          >
-            <fa
-              color="#007bff"
-              :icon="['fab', 'instagram']"
-            />
-          </b-link>
-          <fa
-            v-else
-            color="#212529"
-            :icon="['fab', 'instagram']"
-          />
-
-          <b-link
-            v-if="safeSocialYoutubeUrl(company)"
-            :href="safeSocialYoutubeUrl(company)"
-            target="_blank"
-            rel="nofollow"
-          >
-            <fa
-              color="#007bff"
-              :icon="['fab', 'youtube']"
-            />
-          </b-link>
-          <fa
-            v-else
-            color="#212529"
-            :icon="['fab', 'youtube']"
-          />
-
-          <b-link
-            v-if="safeSocialFacebookUrl(company)"
-            :href="safeSocialFacebookUrl(company)"
-            target="_blank"
-            rel="nofollow"
-          >
-            <fa
-              color="#007bff"
-              :icon="['fab', 'facebook']"
-            />
-          </b-link>
-          <fa
-            v-else
-            color="#212529"
-            :icon="['fab', 'facebook']"
-          />
-
-          <b-link
-            v-if="safeSocialTwitterUrl(company)"
-            :href="safeSocialTwitterUrl(company)"
-            target="_blank"
-            rel="nofollow"
-          >
-            <fa
-              color="#007bff"
-              :icon="['fab', 'twitter']"
-            />
-          </b-link>
-          <fa
-            v-else
-            color="#212529"
-            :icon="['fab', 'twitter']"
-          />
-
-          <b-row class="mb-3" />
-
-          <b-link
-            v-if="safeAppStoreUrl(company)"
-            :href="safeAppStoreUrl(company)"
-            target="_blank"
-            rel="nofollow"
-          >
-            <fa
-              color="#007bff"
-              :icon="['fab', 'app-store']"
-            />
-          </b-link>
-          <fa
-            v-else
-            color="#212529"
-            :icon="['fab', 'app-store']"
-          />
-
-          <b-link
-            v-if="safeGooglePlayUrl(company)"
-            :href="safeGooglePlayUrl(company)"
-            target="_blank"
-            rel="nofollow"
-          >
-            <fa
-              color="#007bff"
-              :icon="['fab', 'google-play']"
-            />
-          </b-link>
-          <fa
-            v-else
-            color="#212529"
-            :icon="['fab', 'google-play']"
-          />
+          <b-icon-clock class="text-muted" />
+          {{ toShowedDate(company.updatedAt) }}
         </b-col>
       </b-row>
     </b-card-body>
 
     <b-card-footer footer-bg-variant="white">
       <b-row>
-        <b-col md="6" class="mb-3 mb-md-0">
+        <b-col md="5" class="mb-3 mb-md-0">
           <b-button
             size="sm"
             :to="`/company/${company.slug}`"
@@ -270,7 +144,7 @@
           </b-button>
         </b-col>
 
-        <b-col md="6">
+        <b-col md="7">
           <b-button
             size="sm"
             :to="relatedLink(company)"

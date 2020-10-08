@@ -25,22 +25,7 @@
       компаний
     </h3>
 
-    <template v-for="(_, i) in company.items">
-      <template v-if="i % 2 === 0">
-        <b-card-group
-          :key="company.items[i].id"
-          class="mb-4"
-          deck
-        >
-          <Card :company="company.items[i]" />
-
-          <Card
-            v-if="company.items[i+1]"
-            :company="company.items[i+1]"
-          />
-        </b-card-group>
-      </template>
-    </template>
+    <CardDeck :items="company.items" />
 
     <client-only v-if="company.items && company.items.length >= 20 && !scrollDone">
       <infinite-loading

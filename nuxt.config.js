@@ -55,13 +55,63 @@ export default {
   */
   modules: [
     // Doc: https://bootstrap-vue.js.org
-    'bootstrap-vue/nuxt',
-    'underscore',
-    '@nuxtjs/yandex-metrika',
-    '@nuxtjs/google-analytics'
+    'bootstrap-vue/nuxt'
   ],
   bootstrapVue: {
-    icons: true // Install the IconsPlugin (in addition to BootStrapVue plugin)
+    components: [
+      'BIconArrowClockwise',
+      'BIconSearch',
+      'BIconEnvelope',
+      'BIconTelephone',
+      'BIconGlobe',
+      'BIconBuilding',
+      'BIconGrid',
+      'BIconMap',
+      'BIconClock',
+      'BIconPeople',
+      'BIconPersonCircle',
+      'BIconInfoCircle',
+      'BIconCloud',
+      'BIconHdd',
+      'BIconCircleFill',
+      'BIconArrowUpCircle',
+      'BIconArrowDownCircle',
+      'BIconTags',
+      'BIconArrowLeftCircle',
+      'BIconEmojiFrown',
+      'BIconCardHeading',
+      'BIconList',
+      'BIcon',
+
+      'BContainer',
+      'BRow',
+      'BCol',
+      'BButton',
+      'BJumbotron',
+      'BLink',
+      'BFormGroup',
+      'BFormTag',
+      'BFormText',
+      'BFormInput',
+      'BFormSelect',
+      'BCard',
+      'BCardBody',
+      'BCardGroup',
+      'BCardFooter',
+      'BAlert',
+      'BImgLazy',
+      'BCollapse',
+      'BListGroup',
+      'BListGroupItem',
+      'BAvatar',
+      'BBreadcrumb',
+      'BBreadcrumbItem',
+      'BNavbar',
+      'BNavbarBrand',
+      'BNavbarToggle',
+      'BNavbarNav',
+      'BNavItem'
+    ]
   },
   fontawesome: {
     component: 'fa',
@@ -76,20 +126,6 @@ export default {
         'faGooglePlay'
       ]
     }
-  },
-  yandexMetrika: {
-    id: '66609163',
-    webvisor: true,
-    clickmap: true,
-    useCDN: false,
-    trackLinks: true,
-    accurateTrackBounce: true,
-    trustedDomains: [
-      'leaq.ru'
-    ]
-  },
-  googleAnalytics: {
-    id: 'UA-175908787-1'
   },
   /*
   ** Content module configuration

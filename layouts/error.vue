@@ -1,7 +1,7 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <b-breadcrumb :items="breadcrumb" />
+    <Breadcrumb :items="breadcrumb" />
 
     <div class="text-center">
       <h1
@@ -58,7 +58,10 @@ export default Vue.extend({
           path: '/'
         }
       }, {
-        text: 'Ошибка'
+        text: 'Ошибка',
+        to: {
+          path: '/'
+        }
       }]
     }
   },

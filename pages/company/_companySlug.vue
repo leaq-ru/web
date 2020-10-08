@@ -19,7 +19,7 @@
               thumbnail
               :alt="`Логотип ${company.url}`"
               :src="company.avatar"
-              style="max-height: 200px; max-width: 200px"
+              class="mw-mh-200"
             />
             <meta
               :content="company.avatar"
@@ -29,45 +29,62 @@
         </b-col>
 
         <b-col cols="6">
-          <b-icon-globe />
-          Сайт:
-          <b-link
-            itemprop="url"
-            :href="company.url"
-            target="_blank"
-            rel="nofollow"
-          >
-            {{ company.url }}
-          </b-link>
+          <span class="text-muted">
+            <b-icon-building />
+            Город
+          </span>
 
-          <b-row class="mb-3" />
+          <div class="ml-21">
+            <b-link
+              v-if="safeLocationCityTitle(company)"
+              :to="`/${safeLocationCitySlug(company)}/all`"
+            >
+              {{ safeLocationCityTitle(company) }}
+            </b-link>
+            <template v-else>
+              {{ none }}
+            </template>
+          </div>
 
-          <b-icon-building />
-          Город:
-          <b-link
-            v-if="safeLocationCityTitle(company)"
-            :to="`/${safeLocationCitySlug(company)}/all`"
-          >
-            {{ safeLocationCityTitle(company) }}
-          </b-link>
-          <template v-else>
-            {{ none }}
-          </template>
+          <b-row class="mb-1" />
+
+          <span class="text-muted">
+            <b-icon-grid />
+            Категория
+          </span>
+
+          <div class="ml-21">
+            <b-link
+              v-if="safeCategoryTitle(company)"
+              :to="`/all/${safeCategorySlug(company)}`"
+            >
+              {{ safeCategoryTitle(company) }}
+            </b-link>
+            <template v-else>
+              <b-icon-grid />
+              {{ none }}
+            </template>
+          </div>
+
+          <b-row class="mb-1" />
+
+          <span class="text-muted">
+            <b-icon-globe />
+            Сайт
+          </span>
 
           <b-row />
 
-          <b-icon-grid />
-          Категория:
-          <b-link
-            v-if="safeCategoryTitle(company)"
-            :to="`/all/${safeCategorySlug(company)}`"
-          >
-            {{ safeCategoryTitle(company) }}
-          </b-link>
-          <template v-else>
-            <b-icon-grid />
-            {{ none }}
-          </template>
+          <div class="ml-21">
+            <b-link
+              itemprop="url"
+              :href="company.url"
+              target="_blank"
+              rel="nofollow"
+            >
+              {{ company.url }}
+            </b-link>
+          </div>
 
           <b-row class="mb-3" />
 
@@ -77,7 +94,8 @@
             variant="primary"
             size="sm"
           >
-            Найти похожие компании
+            <b-icon-tags />
+            Найти похожие
           </b-button>
         </b-col>
       </b-row>
@@ -87,101 +105,129 @@
         deck
       >
         <b-card title="Контакты">
-          <b-icon-envelope />
-          Email:
-          <template v-if="company.email">
-            <b-link
-              :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
-              target="_blank"
+          <b-row>
+            <b-col
+              md="6"
+              class="mb-1"
             >
-              {{ company.email }}
-            </b-link>
-            <meta
-              :content="company.email"
-              itemprop="email"
+              <span class="text-muted">
+                <b-icon-envelope />
+                Email
+              </span>
+
+              <b-row />
+
+              <div
+                v-if="company.email"
+                class="ml-21"
+              >
+                <b-link
+                  :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
+                  target="_blank"
+                >
+                  {{ company.email }}
+                </b-link>
+                <meta
+                  :content="company.email"
+                  itemprop="email"
+                >
+              </div>
+              <div
+                v-else
+                class="ml-21"
+              >
+                {{ none }}
+              </div>
+            </b-col>
+
+            <b-col
+              md="6"
+              class="mb-1"
             >
-          </template>
-          <template v-else>
-            {{ none }}
-          </template>
+              <span class="text-muted">
+                <b-icon-telephone />
+                Телефон
+              </span>
 
-          <b-row />
+              <b-row />
 
-          <b-icon-telephone />
-          Телефон:
-          <b-link
-            v-if="company.phone"
-            :href="`tel:${company.phone}`"
-          >
-            <span itemprop="telephone">
-              {{ toShowedPhone(company.phone) }}
-            </span>
-          </b-link>
-          <template v-else>
-            {{ none }}
-          </template>
+              <div
+                v-if="company.phone"
+                class="ml-21"
+              >
+                <b-link
+                  :href="`tel:${company.phone}`"
+                >
+                  <span itemprop="telephone">
+                    {{ toShowedPhone(company.phone) }}
+                  </span>
+                </b-link>
+              </div>
+              <div
+                v-else
+                class="ml-21"
+              >
+                {{ none }}
+              </div>
+            </b-col>
+          </b-row>
 
-          <b-row />
-
-          <b-icon-map />
-          Адрес:
-          <span itemprop="address">
-            <b-link
-              v-if="safeLocationCityTitle(company)"
-              :to="`/${safeLocationCitySlug(company)}/all`"
+          <b-row>
+            <b-col
+              md="6"
+              class="mb-1"
             >
-              {{ safeLocationCityTitle(company) }},
-            </b-link>
-            <template v-else>
-              {{ none }},
-            </template>
+              <span class="text-muted">
+                <b-icon-map />
+                Адрес
+              </span>
 
-            {{ safeLocationAddress(company) || none }},
+              <b-row />
 
-            {{ safeLocationAddressTitle(company) || none }}
-          </span>
+              <div
+                class="ml-21"
+                itemprop="address"
+              >
+                <b-link
+                  v-if="safeLocationCityTitle(company)"
+                  :to="`/${safeLocationCitySlug(company)}/all`"
+                >
+                  {{ safeLocationCityTitle(company) }},
+                </b-link>
+                <template v-else>
+                  {{ none }},
+                </template>
 
-          <b-row />
+                {{ safeLocationAddress(company) || none }},
 
-          <b-icon-clock />
-          Обновлено: {{ toShowedDate(company.updatedAt) }}
+                {{ safeLocationAddressTitle(company) || none }}
+              </div>
+            </b-col>
+
+            <b-col
+              md="6"
+              class="mb-1"
+            >
+              <span class="text-muted">
+                <b-icon-clock />
+                Обновлено
+              </span>
+
+              <b-row />
+
+              <div class="ml-21">{{ toShowedDate(company.updatedAt) }}</div>
+            </b-col>
+          </b-row>
         </b-card>
 
-        <b-card title="Приложения">
-          <fa
-            color="#212529"
-            :icon="['fab', 'app-store']"
-          />
-          App Store:
-          <template v-if="safeAppStoreUrl(company)">
-            <b-link
-              :href="safeAppStoreUrl(company)"
-              target="_blank"
-              rel="nofollow"
-            >
-              {{ safeAppStoreUrl(company) }}
-            </b-link>
-          </template>
-          <template v-else>
-            {{ none }}
-          </template>
+        <b-card title="Описание">
+          <span
+            v-if="company.description"
+            itemprop="description"
+          >
+            {{ company.description }}
+          </span>
 
-          <b-row />
-
-          <fa
-            color="#212529"
-            :icon="['fab', 'google-play']"
-          />
-          Google Play:
-          <template v-if="safeGooglePlayUrl(company)">
-            <b-link
-              :href="safeGooglePlayUrl(company)"
-              target="_blank"
-              rel="nofollow"
-            >
-              {{ safeGooglePlayUrl(company) }}
-            </b-link>
-          </template>
           <template v-else>
             {{ none }}
           </template>
@@ -194,23 +240,40 @@
       >
         <b-card title="ВКонтакте">
           <template v-if="safeSocialVkId(company)">
-            <b-row>
-              <b-col cols="2">
+            <b-row class="mb-3">
+              <b-col md="5">
                 <b-avatar
                   :href="`https://vk.com/club${safeSocialVkId(company)}`"
                   target="_blank"
                   rel="nofollow"
-                  :src="company.social.vk.photo200"
+                  size="120px"
+                  rounded="lg"
+                  class="mb-3"
                 />
               </b-col>
 
-              <b-col cols="10">
-                <fa
-                  color="#212529"
-                  :icon="['fab', 'vk']"
-                />
-                Группа:
-                <template v-if="safeSocialVkId(company)">
+              <b-col md="7">
+                <span class="text-muted">
+                  <b-icon-card-heading />
+                  Название
+                </span>
+
+                <b-row />
+
+                <div class="ml-21">
+                  {{ company.social.vk.name }}
+                </div>
+
+                <b-row class="mt-1" />
+
+                <span class="text-muted">
+                  <fa :icon="['fab', 'vk']" />
+                  Группа
+                </span>
+
+                <b-row />
+
+                <div class="ml-21">
                   <b-link
                     :href="`https://vk.com/club${safeSocialVkId(company)}`"
                     target="_blank"
@@ -218,44 +281,32 @@
                   >
                     https://vk.com/{{ safeSocialVkScreenName(company) }}
                   </b-link>
+                </div>
 
-                  <b-row />
+                <b-row class="mt-1" />
 
+                <span class="text-muted">
                   <b-icon-people />
-                  Подписчиков:
-                  {{ safeSocialVkMembersCount(company) || none }}
-                </template>
-                <template v-else>
-                  {{ none }}
+                  Подписчиков
+                </span>
 
-                  <b-row />
+                <b-row />
 
-                  <b-icon-people />
-                  Подписчиков:
-                  {{ none }}
-                </template>
-
-                <b-row class="mb-3" />
-
-                <b-icon-card-heading />
-                Название:
-                {{ company.social.vk.name }}
-
-                <b-row class="mb-3" />
-
-                <b-button
-                  v-b-toggle.collapse-1
-                  pill
-                  variant="outline-primary"
-                  size="sm"
-                >
-                  Раскрыть описание
-                </b-button>
-                <b-collapse id="collapse-1" class="mt-2">
-                  {{ company.social.vk.description }}
-                </b-collapse>
+                <div class="ml-21">
+                  {{ safeSocialVkMembersCount(company) || 0 }}
+                </div>
+                <b-row />
               </b-col>
             </b-row>
+
+            <span class="text-muted">
+              <b-icon-list />
+              Описание
+            </span>
+
+            <b-row />
+
+            {{ company.social.vk.description }}
           </template>
           <template v-else>
             {{ none }}
@@ -270,21 +321,21 @@
             <b-list-group-item
               v-for="(p, index) in company.people"
               :key="index"
-              class="d-flex align-items-center"
               itemscope
               itemtype="http://schema.org/Person"
               itemprop="employee"
             >
-              <b-avatar
-                itemprop="image"
-                :href="p.vkId ? `https://vk.com/id${p.vkId}` : ''"
-                :src="p.photo200"
-                class="mr-3"
-                target="_blank"
-                rel="nofollow"
-              />
-              <span class="mr-auto">
-                <b-icon-person-circle />
+              <div class="mb-3">
+                <b-avatar
+                  itemprop="image"
+                  :href="p.vkId ? `https://vk.com/id${p.vkId}` : ''"
+                  :src="p.photo200"
+                  class="mr-3"
+                  target="_blank"
+                  rel="nofollow"
+                />
+
+                <b-icon-person-circle class="text-muted" />
                 <span
                   v-if="p.firstName"
                   itemprop="givenName"
@@ -304,74 +355,74 @@
                 <span v-else>
                   {{ none }}
                 </span>
+              </div>
 
-                <b-row />
+              <b-row />
 
-                <fa
-                  color="#212529"
-                  :icon="['fab', 'vk']"
-                />
+              <fa
+                class="text-muted"
+                :icon="['fab', 'vk']"
+              />
+              <b-link
+                v-if="p.vkId"
+                itemprop="url"
+                :href="`https://vk.com/id${p.vkId}`"
+                target="_blank"
+                rel="nofollow"
+              >
+                {{ `https://vk.com/id${p.vkId}` }}
+              </b-link>
+              <template v-else>
+                {{ none }}
+              </template>
+
+              <b-row />
+
+              <b-icon-envelope class="text-muted" />
+              <template v-if="p.email">
                 <b-link
-                  v-if="p.vkId"
-                  itemprop="url"
-                  :href="`https://vk.com/id${p.vkId}`"
-                  target="_blank"
-                  rel="nofollow"
-                >
-                  {{ `https://vk.com/id${p.vkId}` }}
-                </b-link>
-                <template v-else>
-                  {{ none }}
-                </template>
-
-                <b-row />
-
-                <b-icon-envelope />
-                <template v-if="p.email">
-                  <b-link
-                    :href="`mailto:${p.email}?Subject=Вопрос с сайта https://leaq.ru`"
-                    target="_blank"
-                  >
-                    {{ p.email }}
-                  </b-link>
-                  <meta
-                    itemprop="email"
-                    :content="p.email"
-                  >
-                </template>
-                <template v-else>
-                  {{ none }}
-                </template>
-
-                <b-row />
-
-                <b-icon-telephone />
-                <b-link
-                  v-if="p.phone"
-                  :href="`tel:${p.phone}`"
+                  :href="`mailto:${p.email}?Subject=Вопрос с сайта https://leaq.ru`"
                   target="_blank"
                 >
-                  <span itemprop="telephone">
-                    {{ toShowedPhone(p.phone) }}
-                  </span>
+                  {{ p.email }}
                 </b-link>
-                <template v-else>
-                  {{ none }}
-                </template>
-
-                <b-row />
-
-                <b-icon-info-circle />
-                <span
-                  v-if="p.description"
-                  itemprop="description"
+                <meta
+                  itemprop="email"
+                  :content="p.email"
                 >
-                  {{ p.description }}
+              </template>
+              <template v-else>
+                {{ none }}
+              </template>
+
+              <b-row />
+
+              <b-icon-telephone class="text-muted" />
+              <b-link
+                v-if="p.phone"
+                :href="`tel:${p.phone}`"
+                target="_blank"
+              >
+                <span itemprop="telephone">
+                  {{ toShowedPhone(p.phone) }}
                 </span>
-                <template v-else>
-                  {{ none }}
-                </template>
+              </b-link>
+              <template v-else>
+                {{ none }}
+              </template>
+
+              <b-row />
+
+              <b-icon-info-circle class="text-muted" />
+              <span
+                v-if="p.description"
+                itemprop="description"
+              >
+                {{ p.description }}
               </span>
+              <template v-else>
+                {{ none }}
+              </template>
             </b-list-group-item>
           </b-list-group>
         </b-card>
@@ -382,132 +433,264 @@
         deck
       >
         <b-card title="Соцсети">
-          <fa
-            color="#212529"
-            :icon="['fab', 'instagram']"
-          />
-          Instagram:
-          <template v-if="safeSocialInstagramUrl(company)">
-            <b-link
-              :href="safeSocialInstagramUrl(company)"
-              target="_blank"
-              rel="nofollow"
+          <b-row>
+            <b-col
+              class="mb-1"
+              md="6"
             >
-              {{ safeSocialInstagramUrl(company) }}
-            </b-link>
-          </template>
-          <template v-else>
-            {{ none }}
-          </template>
+              <span class="text-muted">
+                <fa :icon="['fab', 'instagram']" />
+                Instagram
+              </span>
 
-          <b-row />
+              <b-row />
 
-          <fa
-            color="#212529"
-            :icon="['fab', 'youtube']"
-          />
-          YouTube:
-          <template v-if="safeSocialYoutubeUrl(company)">
-            <b-link
-              :href="safeSocialYoutubeUrl(company)"
-              target="_blank"
-              rel="nofollow"
+              <div
+                v-if="safeSocialInstagramUrl(company)"
+                class="ml-21"
+              >
+                <b-link
+                  :href="safeSocialInstagramUrl(company)"
+                  target="_blank"
+                  rel="nofollow"
+                >
+                  {{ safeSocialInstagramUrl(company) }}
+                </b-link>
+              </div>
+              <div
+                v-else
+                class="ml-21"
+              >
+                {{ none }}
+              </div>
+            </b-col>
+
+            <b-col
+              class="mb-1"
+              md="6"
             >
-              {{ safeSocialYoutubeUrl(company) }}
-            </b-link>
-          </template>
-          <template v-else>
-            {{ none }}
-          </template>
+              <span class="text-muted">
+                <fa :icon="['fab', 'youtube']" />
+                YouTube
+              </span>
 
-          <b-row />
+              <b-row />
 
-          <fa
-            color="#212529"
-            :icon="['fab', 'facebook']"
-          />
-          Facebook:
-          <template v-if="safeSocialFacebookUrl(company)">
-            <b-link
-              :href="safeSocialFacebookUrl(company)"
-              target="_blank"
-              rel="nofollow"
+              <div
+                v-if="safeSocialYoutubeUrl(company)"
+                class="ml-21"
+              >
+                <b-link
+                  :href="safeSocialYoutubeUrl(company)"
+                  target="_blank"
+                  rel="nofollow"
+                >
+                  {{ safeSocialYoutubeUrl(company) }}
+                </b-link>
+              </div>
+              <div
+                v-else
+                class="ml-21"
+              >
+                {{ none }}
+              </div>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <b-col
+              class="mb-1"
+              md="6"
             >
-              {{ safeSocialFacebookUrl(company) }}
-            </b-link>
-          </template>
-          <template v-else>
-            {{ none }}
-          </template>
+              <span class="text-muted">
+                <fa :icon="['fab', 'facebook']" />
+                Facebook
+              </span>
 
-          <b-row />
+              <b-row />
 
-          <fa
-            color="#212529"
-            :icon="['fab', 'twitter']"
-          />
-          Twitter:
-          <template v-if="safeSocialTwitterUrl(company)">
-            <b-link
-              :href="safeSocialTwitterUrl(company)"
-              target="_blank"
-              rel="nofollow"
+              <div
+                v-if="safeSocialFacebookUrl(company)"
+                class="ml-21"
+              >
+                <b-link
+                  :href="safeSocialFacebookUrl(company)"
+                  target="_blank"
+                  rel="nofollow"
+                >
+                  {{ safeSocialFacebookUrl(company) }}
+                </b-link>
+              </div>
+              <div
+                v-else
+                class="ml-21"
+              >
+                {{ none }}
+              </div>
+            </b-col>
+
+            <b-col
+              class="mb-1"
+              md="6"
             >
-              {{ safeSocialTwitterUrl(company) }}
-            </b-link>
-          </template>
-          <template v-else>
-            {{ none }}
-          </template>
+              <span class="text-muted">
+                <fa :icon="['fab', 'twitter']" />
+                Twitter
+              </span>
+
+              <b-row />
+
+              <div
+                v-if="safeSocialTwitterUrl(company)"
+                class="ml-21"
+              >
+                <b-link
+                  :href="safeSocialTwitterUrl(company)"
+                  target="_blank"
+                  rel="nofollow"
+                >
+                  {{ safeSocialTwitterUrl(company) }}
+                </b-link>
+              </div>
+              <div
+                v-else
+                class="ml-21"
+              >
+                {{ none }}
+              </div>
+            </b-col>
+          </b-row>
+
         </b-card>
 
-        <b-card title="Описание">
-          <span
-            v-if="company.description"
-            itemprop="description"
-          >
-            {{ company.description }}
-          </span>
+        <b-card title="Приложения">
+          <b-row>
+            <b-col
+              class="mb-1"
+              md="6"
+            >
+              <span class="text-muted">
+                <fa :icon="['fab', 'app-store']" />
+                App Store
+              </span>
 
-          <template v-else>
-            {{ none }}
-          </template>
+              <b-row />
+
+              <div
+                v-if="safeAppStoreUrl(company)"
+                class="ml-21"
+              >
+                <b-link
+                  :href="safeAppStoreUrl(company)"
+                  target="_blank"
+                  rel="nofollow"
+                >
+                  {{ safeAppStoreUrl(company) }}
+                </b-link>
+              </div>
+              <div
+                v-else
+                class="ml-21"
+              >
+                {{ none }}
+              </div>
+            </b-col>
+
+            <b-col
+              class="mb-1"
+              md="6"
+            >
+              <span class="text-muted">
+                <fa :icon="['fab', 'google-play']" />
+                Google Play:
+              </span>
+
+              <b-row />
+
+              <div
+                v-if="safeGooglePlayUrl(company)"
+                class="ml-21"
+              >
+                <b-link
+                  :href="safeGooglePlayUrl(company)"
+                  target="_blank"
+                  rel="nofollow"
+                >
+                  {{ safeGooglePlayUrl(company) }}
+                </b-link>
+              </div>
+              <div
+                v-else
+                class="ml-21"
+              >
+                {{ none }}
+              </div>
+            </b-col>
+          </b-row>
         </b-card>
       </b-card-group>
 
       <b-card-group deck>
         <b-card title="Реквизиты">
-          ИНН: {{ company.inn || none }}
-          <b-row />
-          КПП: {{ company.kpp || none }}
-          <b-row />
-          ОГРН: {{ company.ogrn || none }}
+          <b-row>
+            <IconHeader
+              icon="info-circle"
+              header="ИНН"
+              :body="company.inn"
+            />
+
+            <IconHeader
+              icon="info-circle"
+              header="КПП"
+              :body="company.kpp"
+            />
+          </b-row>
+
+          <b-row>
+            <IconHeader
+              icon="info-circle"
+              header="ОГРН"
+              :body="company.ogrn"
+            />
+          </b-row>
         </b-card>
 
         <b-card title="Домен">
-          <b-icon-cloud />
-          Регистратор: {{ (company.domain && company.domain.registrar) || none }}
+          <b-row>
+            <IconHeader
+              icon="cloud"
+              header="Регистратор"
+              :body="(company.domain && company.domain.registrar) || none"
+            />
 
-          <b-row />
+            <IconHeader
+              icon="clock"
+              header="Дата регистрации"
+              :body="toShowedDate(company.domain && company.domain.registrationDate) || none"
+            />
+          </b-row>
 
-          <b-icon-clock />
-          Дата регистрации: {{ toShowedDate(company.domain && company.domain.registrationDate) || none }}
+          <b-row>
+            <IconHeader
+              icon="hdd"
+              header="Адрес сервера"
+              :body="(company.domain && company.domain.address) || none"
+            />
 
-          <b-row />
-
-          <b-icon-hdd />
-          Адрес сервера: {{ (company.domain && company.domain.address) || none }}
-
-          <b-row />
-
-          <template v-if="company.online">
-            <b-icon-circle-fill variant="success" />
-            Сайт онлайн
-          </template>
-          <template v-else>
-            <b-icon-circle-fill variant="danger" />
-            Сайт офлайн
-          </template>
+            <b-col
+              class="mb-1"
+              md="6"
+            >
+              <template v-if="company.online">
+                <b-icon-circle-fill variant="success" />
+                Сайт онлайн
+              </template>
+              <template v-else>
+                <b-icon-circle-fill variant="danger" />
+                Сайт офлайн
+              </template>
+            </b-col>
+          </b-row>
         </b-card>
       </b-card-group>
     </span>
@@ -520,22 +703,7 @@
       </b-col>
     </b-row>
 
-    <template v-for="(_, i) in related">
-      <template v-if="i % 2 === 0">
-        <b-card-group
-          :key="related[i].id"
-          class="mb-4"
-          deck
-        >
-          <Card :company="related[i]" />
-
-          <Card
-            v-if="related[i+1]"
-            :company="related[i+1]"
-          />
-        </b-card-group>
-      </template>
-    </template>
+    <CardDeck :items="related" />
     <Footer />
   </b-container>
 </template>
@@ -682,9 +850,7 @@ export default Vue.extend({
       none: '—'
     }
   },
-  methods: {
-    ...companyGetters
-  },
+  methods: companyGetters,
   head () {
     return {
       title: this.title
@@ -692,3 +858,14 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style>
+.ml-21 {
+  margin-left: 21px;
+}
+
+.mw-mh-200 {
+  max-width: 200px;
+  max-height: 200px;
+}
+</style>

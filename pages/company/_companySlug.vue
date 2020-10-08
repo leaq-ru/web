@@ -243,6 +243,7 @@
             <b-row class="mb-3">
               <b-col md="5">
                 <b-avatar
+                  :src="safeSocialVkPhoto200(company)"
                   :href="`https://vk.com/club${safeSocialVkId(company)}`"
                   target="_blank"
                   rel="nofollow"

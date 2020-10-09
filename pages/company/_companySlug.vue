@@ -307,7 +307,9 @@
 
             <b-row />
 
-            {{ company.social.vk.description }}
+            <div class="ml-21">
+              {{ company.social.vk.description }}
+            </div>
           </template>
           <template v-else>
             {{ none }}

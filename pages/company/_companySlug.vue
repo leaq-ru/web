@@ -333,12 +333,11 @@
                   itemprop="image"
                   :href="p.vkId ? `https://vk.com/id${p.vkId}` : ''"
                   :src="p.photo200"
-                  class="mr-3"
+                  class="mr-2"
                   target="_blank"
                   rel="nofollow"
                 />
 
-                <b-icon-person-circle class="text-muted" />
                 <span
                   v-if="p.firstName"
                   itemprop="givenName"

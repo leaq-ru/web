@@ -707,6 +707,15 @@
     </b-row>
 
     <CardDeck :items="related" />
+
+    <client-only v-if="related.length >= 6 && !scrollDone">
+      <infinite-loading
+        spinner="spiral"
+        :distance="1000"
+        @infinite="collectionInfiniteScroll"
+      />
+    </client-only>
+
     <Footer />
   </b-container>
 </template>
@@ -718,38 +727,37 @@ import apiAddr from '~/helpers/const/apiAddr'
 
 const getRelated = async ({
   addr = apiAddr,
-  company
+  company,
+  limit,
+  fromId
 }: {
   addr?: string
   company: any
+  limit: number
+  fromId?: string
 }): Promise<any> => {
-  const relatedCount = 6
-
-  const queryRelated: any = {
-    limit: (relatedCount + 1).toString()
-  }
+  const queryRelated = new URLSearchParams()
+  queryRelated.append('opts.limit', limit.toString())
+  queryRelated.append('excludeIds', company.id)
   if (company.location?.city?.id) {
-    queryRelated.cityId = company.location.city.id
+    queryRelated.append('cityIds', company.location.city.id)
   }
   if (company.category?.id) {
-    queryRelated.categoryId = company.category.id
+    queryRelated.append('categoryIds', company.category.id)
+  }
+  if (fromId) {
+    queryRelated.append('opts.fromId', fromId)
   }
 
   const rawRelated = await fetch([
     addr,
-    '/v1/company/getRelated?',
-    new URLSearchParams(queryRelated).toString()
+    '/v1/company/get?',
+    queryRelated.toString()
   ].join(''))
 
   const resRelated = await rawRelated.json()
 
-  let relatedWithoutSelf = resRelated.companies.filter(({ id }) => id !== company.id)
-
-  if (relatedWithoutSelf.length > relatedCount) {
-    relatedWithoutSelf = relatedWithoutSelf.slice(0, relatedCount)
-  }
-
-  return relatedWithoutSelf
+  return resRelated.companies
 }
 
 const makeTitle = (company: any): string => {
@@ -792,7 +800,8 @@ export default Vue.extend({
 
       const resCompany = await rawCompany.json()
 
-      const relatedWithoutSelf = await getRelated({
+      const related = await getRelated({
+        limit: 6,
         company: resCompany
       })
 
@@ -823,7 +832,7 @@ export default Vue.extend({
           }
         }],
         company: resCompany,
-        related: relatedWithoutSelf,
+        related,
         title: makeTitle(resCompany)
       }
 
@@ -850,10 +859,35 @@ export default Vue.extend({
   },
   data () {
     return {
-      none: '—'
+      none: '—',
+      scrollDone: false
     }
   },
-  methods: companyGetters,
+  computed: {
+    fromId (): string | undefined {
+      if (this.related?.length) {
+        return this.related[this.related.length - 1].id
+      }
+      return undefined
+    }
+  },
+  methods: {
+    ...companyGetters,
+    async collectionInfiniteScroll ($state) {
+      const res = await getRelated({
+        company: this.company,
+        limit: 20,
+        fromId: this.fromId
+      })
+
+      if (res?.length) {
+        this.related.push(...res)
+      } else {
+        this.scrollDone = true
+      }
+      $state.loaded()
+    }
+  },
   head () {
     return {
       title: this.title

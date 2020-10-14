@@ -14,6 +14,7 @@
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^5.14.0",
     "@nuxt/typescript-runtime": "^1.0.0",
+    "@nuxtjs/component-cache": "^1.1.6",
     "@nuxtjs/fontawesome": "^1.1.2",
     "bootstrap": "^4.5.2",
     "bootstrap-vue": "^2.17.3",

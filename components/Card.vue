@@ -165,6 +165,11 @@ import Vue from 'vue'
 import companyGetters from '~/helpers/company/companyGetters'
 
 export default Vue.extend({
+  name: 'Card',
+  // @ts-ignore
+  serverCacheKey (props) {
+    return `${props.company.id}::${props.company.updatedAt}`
+  },
   props: {
     company: {
       type: Object,

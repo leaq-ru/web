@@ -308,7 +308,7 @@
             <b-row />
 
             <div class="ml-21">
-              {{ company.social.vk.description }}
+              {{ company.social.vk.description || none }}
             </div>
           </template>
           <template v-else>
@@ -756,7 +756,7 @@ const getRelated = async ({
 
   const resRelated = await rawRelated.json()
 
-  return resRelated.companies
+  return resRelated.companies || []
 }
 
 const makeTitle = (company: any): string => {

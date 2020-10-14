@@ -10,5 +10,3 @@ WORKDIR /app
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/static /app/static
 COPY --from=build /app/.nuxt /app/.nuxt
-COPY --from=build /app/package.json /app
-COPY --from=build /app/tsconfig.json /app

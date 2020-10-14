@@ -24,7 +24,7 @@ spec:
         - name: web
           image: busybox
           command:
-            - /app/node_modules/.bin/nuxt-ts
+            - /app/node_modules/.bin/nuxt
             - start
           lifecycle:
             preStop:

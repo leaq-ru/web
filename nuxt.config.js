@@ -51,7 +51,10 @@ export default {
   modules: [
     // Doc: https://bootstrap-vue.js.org
     'bootstrap-vue/nuxt',
-    '@nuxtjs/component-cache'
+    ['@nuxtjs/component-cache', {
+      max: 500,
+      maxAge: 1000 * 60 // 1 minute
+    }]
   ],
   bootstrapVue: {
     components: [

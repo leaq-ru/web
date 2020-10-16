@@ -1,4 +1,8 @@
 const isBot = (header) => {
+  if (!header) {
+    return false
+  }
+
   const lowHeader = header.toLowerCase()
   const bots = ['bot', 'google', 'baidu', 'bing', 'msn', 'teoma', 'slurp', 'yandex']
 

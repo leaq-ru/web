@@ -56,6 +56,7 @@ export default {
   ],
   bootstrapVue: {
     components: [
+      'BIcon',
       'BIconArrowClockwise',
       'BIconSearch',
       'BIconEnvelope',
@@ -78,7 +79,8 @@ export default {
       'BIconEmojiFrown',
       'BIconCardHeading',
       'BIconList',
-      'BIcon',
+      'BIconGear',
+      'BIconCloudDownload',
 
       'BContainer',
       'BRow',

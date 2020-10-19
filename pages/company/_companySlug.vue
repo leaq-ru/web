@@ -238,6 +238,120 @@
         class="mb-3"
         deck
       >
+        <b-card title="Технологии на сайте">
+          <template v-if="technologyCategories">
+            <span
+              v-for="(c, index) in technologyCategories"
+              :key="c.id"
+            >
+              <b-row v-if="index % 2 === 0">
+                <b-col
+                  sm="6"
+                  class="mb-1"
+                >
+                  <span class="text-muted">
+                    <b-icon-gear />
+                    {{ technologyCategories[index].name }}
+                  </span>
+
+                  <b-row />
+
+                  <div class="ml-21">
+                    <b-link
+                      v-for="t in technologyCategories[index].technologies"
+                      :key="t.id"
+                      pill
+                      variant="link"
+                      :to="`/technology/${t.slug}`"
+                    >
+                      {{ t.version ? `${t.name} ${t.version}` : t.name }},
+                    </b-link>
+                  </div>
+                </b-col>
+
+                <b-col
+                  v-if="technologyCategories[index+1]"
+                  sm="6"
+                  class="mb-1"
+                >
+                  <span class="text-muted">
+                    <b-icon-gear />
+                    {{ technologyCategories[index+1].name }}
+                  </span>
+
+                  <b-row />
+
+                  <div class="ml-21">
+                    <b-link
+                      v-for="t in technologyCategories[index+1].technologies"
+                      :key="t.id"
+                      pill
+                      variant="link"
+                      :to="`/technology/${t.slug}`"
+                    >
+                      {{ t.version ? `${t.name} ${t.version}` : t.name }},
+                    </b-link>
+                  </div>
+                </b-col>
+              </b-row>
+            </span>
+          </template>
+          <template v-else>
+            {{ none }}
+          </template>
+        </b-card>
+
+        <b-card title="Домен">
+          <b-row>
+            <IconHeader
+              icon="cloud"
+              header="Регистратор"
+              :body="(company.domain && company.domain.registrar) || none"
+            />
+
+            <IconHeader
+              icon="clock"
+              header="Дата регистрации"
+              :body="toShowedDate(company.domain && company.domain.registrationDate) || none"
+            />
+          </b-row>
+
+          <b-row>
+            <IconHeader
+              icon="hdd"
+              header="Адрес сервера"
+              :body="(company.domain && company.domain.address) || none"
+            />
+
+            <b-col
+              class="mb-1"
+              md="6"
+            >
+              <template v-if="company.online">
+                <b-icon-circle-fill variant="success" />
+                Сайт онлайн
+              </template>
+              <template v-else>
+                <b-icon-circle-fill variant="danger" />
+                Сайт офлайн
+              </template>
+            </b-col>
+          </b-row>
+
+          <b-row>
+            <IconHeader
+              icon="cloud-download"
+              header="Скорость загрузки"
+              :body="pageSpeed ? `${pageSpeed} сек` : none"
+            />
+          </b-row>
+        </b-card>
+      </b-card-group>
+
+      <b-card-group
+        class="mb-3"
+        deck
+      >
         <b-card title="ВКонтакте">
           <template v-if="safeSocialVkId(company)">
             <b-row class="mb-3">
@@ -656,44 +770,6 @@
             />
           </b-row>
         </b-card>
-
-        <b-card title="Домен">
-          <b-row>
-            <IconHeader
-              icon="cloud"
-              header="Регистратор"
-              :body="(company.domain && company.domain.registrar) || none"
-            />
-
-            <IconHeader
-              icon="clock"
-              header="Дата регистрации"
-              :body="toShowedDate(company.domain && company.domain.registrationDate) || none"
-            />
-          </b-row>
-
-          <b-row>
-            <IconHeader
-              icon="hdd"
-              header="Адрес сервера"
-              :body="(company.domain && company.domain.address) || none"
-            />
-
-            <b-col
-              class="mb-1"
-              md="6"
-            >
-              <template v-if="company.online">
-                <b-icon-circle-fill variant="success" />
-                Сайт онлайн
-              </template>
-              <template v-else>
-                <b-icon-circle-fill variant="danger" />
-                Сайт офлайн
-              </template>
-            </b-col>
-          </b-row>
-        </b-card>
       </b-card-group>
     </span>
 
@@ -774,6 +850,19 @@ const makeTitle = (company: any): string => {
   return elems.join(' / ')
 }
 
+const makePageSpeed = (num: number): string => {
+  if (!num) {
+    return ''
+  }
+
+  const strNum = num.toString()
+
+  if (strNum.length > 4) {
+    return `${strNum[0]}.${strNum.slice(1)}`
+  }
+  return `0.${strNum.slice(1)}`
+}
+
 export default Vue.extend({
   async asyncData ({ error, params }): Promise<any> {
     try {
@@ -783,25 +872,25 @@ export default Vue.extend({
         })
       }
 
-      const rawCompany = await fetch([
+      const raw = await fetch([
         apiAddr,
-        '/v1/company/getBySlug?',
+        '/v2/company/getBySlug?',
         new URLSearchParams({
           slug: params.companySlug
         }).toString()
       ].join(''))
 
-      if (!rawCompany.ok) {
+      if (!raw.ok) {
         return error({
           statusCode: 404
         })
       }
 
-      const resCompany = await rawCompany.json()
+      const { fullCompany, pageSpeed, technologyCategories } = await raw.json()
 
       const related = await getRelated({
         limit: 6,
-        company: resCompany
+        company: fullCompany
       })
 
       const data = {
@@ -825,27 +914,29 @@ export default Vue.extend({
           }
         }, {
           id: 4,
-          text: resCompany.title || resCompany.slug,
+          text: fullCompany.title || fullCompany.slug,
           to: {
-            path: `/company/${resCompany.slug}`
+            path: `/company/${fullCompany.slug}`
           }
         }],
-        company: resCompany,
+        title: makeTitle(fullCompany),
+        company: fullCompany,
         related,
-        title: makeTitle(resCompany)
+        pageSpeed: makePageSpeed(pageSpeed),
+        technologyCategories
       }
 
-      if (resCompany.location?.city) {
-        data.breadcrumb[1].text = resCompany.location.city.title
+      if (fullCompany.location?.city) {
+        data.breadcrumb[1].text = fullCompany.location.city.title
         const toElems = data.breadcrumb[1].to.path.split('/')
-        toElems[1] = resCompany.location.city.slug
+        toElems[1] = fullCompany.location.city.slug
         data.breadcrumb[1].to.path = toElems.join('/')
       }
-      if (resCompany.category) {
-        data.breadcrumb[2].text = resCompany.category.title
+      if (fullCompany.category) {
+        data.breadcrumb[2].text = fullCompany.category.title
         const toElems = data.breadcrumb[1].to.path.split('/')
-        toElems[1] = resCompany.location?.city?.slug || 'all'
-        toElems[2] = resCompany.category.slug
+        toElems[1] = fullCompany.location?.city?.slug || 'all'
+        toElems[2] = fullCompany.category.slug
         data.breadcrumb[2].to.path = toElems.join('/')
       }
 

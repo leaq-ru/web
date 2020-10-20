@@ -89,7 +89,12 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'Все категории / Каталог компаний LEAQ'
+      title: 'Все категории / Каталог компаний LEAQ',
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: 'Список категорий доступных для поиска'
+      }]
     }
   }
 })

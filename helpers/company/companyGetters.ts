@@ -65,6 +65,9 @@ export default {
   safeSocialVkId (company) {
     return company.social?.vk?.groupId
   },
+  safeSocialVkDescription (company) {
+    return company.social?.vk?.description
+  },
   safeSocialVkPhoto200 (company) {
     return company.social?.vk?.photo200
   },

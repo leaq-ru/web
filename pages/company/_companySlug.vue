@@ -854,6 +854,33 @@ const makeTitle = (company: any): string => {
   return elems.join(' / ')
 }
 
+const makeDescription = (company: any): string => {
+  if (!company) {
+    return ''
+  }
+
+  const result = 'Контакты компании: '
+  let desc = ''
+  const contacts = []
+  if (company.phone) {
+    contacts.push(`телефон ${companyGetters.toShowedPhone(company.phone)}`)
+  }
+  if (company.email) {
+    contacts.push(`email ${company.email}`)
+  }
+  if (companyGetters.safeSocialVkDescription(company)) {
+    desc = companyGetters.safeSocialVkDescription(company)
+  }
+  if (!desc && company.description) {
+    desc = company.description
+  }
+  if (!desc) {
+    desc = 'самая подробная информация о компании, сотрудниках, адрес и контакты'
+  }
+
+  return result.concat(contacts.join(', '), '. ', `${desc}`)
+}
+
 const makePageSpeed = (num: number): string => {
   if (!num) {
     return ''
@@ -924,6 +951,7 @@ export default Vue.extend({
           }
         }],
         title: makeTitle(fullCompany),
+        description: makeDescription(fullCompany),
         company: fullCompany,
         related,
         pageSpeed: makePageSpeed(pageSpeed),
@@ -984,7 +1012,12 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: this.title
+      title: this.title,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.description
+      }]
     }
   }
 })

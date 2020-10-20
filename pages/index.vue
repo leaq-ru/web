@@ -789,6 +789,10 @@ export default Vue.extend({
         hid: 'yandex-verification',
         name: 'yandex-verification',
         content: '76edae62e49e83d0'
+      }, {
+        hid: 'description',
+        name: 'description',
+        content: 'Каталог компаний из разных городов от Москвы до Владивостока, из категорий от Создания и продвижения сайтов до Черной и цветной металлургии. Доступно бесплатное скачивание базы email и телефонов компаний с учетом фильтров поиска'
       }]
     }
   }

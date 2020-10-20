@@ -71,7 +71,12 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'О сервисе / Каталог компаний LEAQ'
+      title: 'О сервисе / Каталог компаний LEAQ',
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: 'Описание функций и возможностей сервиса LEAQ'
+      }]
     }
   }
 })

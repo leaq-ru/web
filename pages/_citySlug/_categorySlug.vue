@@ -133,7 +133,8 @@ export default Vue.extend({
         company: {
           items: []
         },
-        title: ''
+        title: '',
+        description: ''
       }
 
       if (city) {
@@ -162,6 +163,7 @@ export default Vue.extend({
         data.breadcrumb[2].to.path = toElems.join('/')
       }
       data.title = `${data.category.header} в ${data.city.header} / Каталог компаний LEAQ`
+      data.description = `Список всех сайтов компаний в ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска и скачивания базы email и телефонов`
 
       const query: any = {
         'opts.limit': '20'
@@ -229,7 +231,12 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: this.title
+      title: this.title,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.description
+      }]
     }
   }
 })

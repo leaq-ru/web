@@ -89,7 +89,12 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'Все города / Каталог компаний LEAQ'
+      title: 'Все города / Каталог компаний LEAQ',
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: 'Список городов доступных для поиска'
+      }]
     }
   }
 })

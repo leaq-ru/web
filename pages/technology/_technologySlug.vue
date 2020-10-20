@@ -77,6 +77,17 @@ const makeTitle = (resTech: any):string => {
   return `Все сайты на ${name} / Каталог компаний LEAQ`
 }
 
+const makeDescription = (resTech: any):string => {
+  if (!resTech) {
+    return ''
+  }
+
+  let name = makeTechnologyName(resTech)
+  name += makeCategoryName(resTech)
+
+  return `Список всех сайтов на ${name} с возможностью уточнения поиска по городам и категориям и скачивания базы email и телефонов`
+}
+
 export default Vue.extend({
   async asyncData ({ error, params }): Promise<any> {
     try {
@@ -135,6 +146,7 @@ export default Vue.extend({
           items: []
         },
         title: makeTitle(tech),
+        description: makeDescription(tech),
         technologyId: tech.id,
         technologyName,
         categoryName: makeCategoryName(tech),
@@ -197,7 +209,12 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: this.title
+      title: this.title,
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: this.description
+      }]
     }
   }
 })

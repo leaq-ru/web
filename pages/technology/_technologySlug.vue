@@ -4,11 +4,11 @@
     <Breadcrumb :items="breadcrumb" />
 
     <h1>
-      {{ category.header }} в {{ city.header }}
+      Все сайты на {{ technologyName }} {{ categoryName }}
     </h1>
 
     <p>
-      Список организаций {{ category.description }} {{ city.description }}. Это подборка, изменить условия поиска и скачать список email и телефонов можно на
+      Список организаций с технологией на сайте «{{ technologyName }}», которая относится к категории «{{ rawCategoryName }}». Это подборка, изменить условия поиска и скачать список email и телефонов можно на
       <b-link to="/">
         главной странице
       </b-link>
@@ -41,64 +41,73 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { cityIn } from 'lvovich'
 import getCompanies from '~/helpers/company/getCompanies'
 import apiAddr from '~/helpers/const/apiAddr'
+
+const makeCategoryName = (resTech: any): string => {
+  if (resTech.categories && resTech.categories[0]?.name) {
+    return ` (${resTech.categories[0].name})`
+  }
+  return ''
+}
+
+const makeRawCategoryName = (resTech: any): string => {
+  if (resTech.categories && resTech.categories[0]?.name) {
+    return resTech.categories[0].name
+  }
+  return ''
+}
+
+const makeTechnologyName = (resTech: any): string => {
+  let name = resTech.name
+  if (resTech.version) {
+    name += ` ${resTech.version}`
+  }
+  return name
+}
+
+const makeTitle = (resTech: any):string => {
+  if (!resTech) {
+    return ''
+  }
+
+  let name = makeTechnologyName(resTech)
+  name += makeCategoryName(resTech)
+
+  return `Все сайты на ${name} / Каталог компаний LEAQ`
+}
 
 export default Vue.extend({
   async asyncData ({ error, params }): Promise<any> {
     try {
-      if (!params.citySlug && !params.categorySlug) {
+      if (!params.technologySlug) {
         return error({
           statusCode: 404
         })
       }
 
-      const promises: Array<Promise<Response | null>> = [
-        null,
-        null
-      ]
+      const rawTech = await fetch([
+        apiAddr,
+        '/v1/technology/getBySlug?',
+        new URLSearchParams({
+          slug: params.technologySlug
+        }).toString()
+      ].join(''))
 
-      if (params.citySlug && params.citySlug !== 'all') {
-        promises[0] = fetch([
-          apiAddr,
-          '/v1/city/getBySlug?',
-          new URLSearchParams({
-            slug: params.citySlug
-          }).toString()
-        ].join(''))
-      }
-      if (params.categorySlug && params.categorySlug !== 'all') {
-        promises[1] = fetch([
-          apiAddr,
-          '/v1/category/getBySlug?',
-          new URLSearchParams({
-            slug: params.categorySlug
-          }).toString()
-        ].join(''))
-      }
-
-      const [rawCity, rawCategory] = await Promise.all(promises)
-      const citySuccess = params.citySlug === 'all' || rawCity.ok
-      const categorySuccess = params.categorySlug === 'all' || rawCategory.ok
-      if (!citySuccess || !categorySuccess) {
+      if (!rawTech.ok) {
         return error({
           statusCode: 404
         })
       }
 
-      const unmarshal: Array<any> = [
-        null,
-        null
-      ]
-      if (rawCity?.ok) {
-        unmarshal[0] = rawCity.json()
+      const resTech = await rawTech.json()
+      if (!resTech?.technology?.id) {
+        return error({
+          statusCode: 404
+        })
       }
-      if (rawCategory?.ok) {
-        unmarshal[1] = rawCategory.json()
-      }
-
-      const [city, category] = await Promise.all(unmarshal)
+      const tech = resTech.technology
+      const technologyName = makeTechnologyName(tech)
 
       const data = {
         breadcrumb: [{
@@ -109,68 +118,32 @@ export default Vue.extend({
           }
         }, {
           id: 2,
-          text: 'Все города',
-          to: {
-            path: '/all/all'
-          }
+          text: 'Технологии',
+          to: {},
+          active: false
         }, {
           id: 3,
-          text: 'Все категории',
-          to: {
-            path: '/all/all'
-          }
+          text: tech.categories[0].name,
+          to: {},
+          active: false
+        }, {
+          id: 4,
+          text: technologyName,
+          to: {}
         }],
-        city: {
-          id: '',
-          header: 'России',
-          description: 'во всех городах России'
-        },
-        category: {
-          id: '',
-          header: 'Все компании',
-          description: 'во всех категориях'
-        },
         company: {
           items: []
         },
-        title: ''
+        title: makeTitle(tech),
+        technologyId: tech.id,
+        technologyName,
+        categoryName: makeCategoryName(tech),
+        rawCategoryName: makeRawCategoryName(tech)
       }
-
-      if (city) {
-        data.city.id = city.id
-        data.city.header = cityIn(city.title)
-        data.city.description = `в городе ${city.title}`
-
-        data.breadcrumb[1].text = city.title
-
-        const toElems = data.breadcrumb[1].to.path.split('/')
-        toElems[1] = city.slug
-
-        data.breadcrumb[1].to.path = toElems.join('/')
-      }
-      if (category) {
-        data.category.id = category.id
-        data.category.header = category.title
-        data.category.description = `в категории «${category.title}»`
-
-        data.breadcrumb[2].text = category.title
-
-        const toElems = data.breadcrumb[1].to.path.split('/')
-        toElems[1] = city?.slug || 'all'
-        toElems[2] = category.slug
-
-        data.breadcrumb[2].to.path = toElems.join('/')
-      }
-      data.title = `${data.category.header} в ${data.city.header} / Каталог компаний LEAQ`
 
       const query: any = {
-        'opts.limit': '20'
-      }
-      if (data.city.id) {
-        query.cityIds = [data.city.id]
-      }
-      if (data.category.id) {
-        query.categoryIds = [data.category.id]
+        'opts.limit': '20',
+        technologyIds: [tech.id]
       }
 
       const res = await getCompanies({
@@ -201,15 +174,10 @@ export default Vue.extend({
   methods: {
     async collectionInfiniteScroll ($state) {
       const query: any = {
+        technologyIds: [this.technologyId],
         'opts.limit': '20'
       }
 
-      if (this.city?.id) {
-        query.cityIds = this.city.id
-      }
-      if (this.category?.id) {
-        query.categoryIds = this.category.id
-      }
       if (this.fromId) {
         query['opts.fromId'] = this.fromId
       }

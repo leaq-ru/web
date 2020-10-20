@@ -257,15 +257,17 @@
                   <b-row />
 
                   <div class="ml-21">
-                    <b-link
-                      v-for="t in technologyCategories[index].technologies"
+                    <span
+                      v-for="(t, i) in technologyCategories[index].technologies"
                       :key="t.id"
-                      pill
-                      variant="link"
-                      :to="`/technology/${t.slug}`"
                     >
-                      {{ t.version ? `${t.name} ${t.version}` : t.name }},
-                    </b-link>
+                      <b-link
+                        pill
+                        variant="link"
+                        :to="`/technology/${t.slug}`"
+                      >
+                        {{ t.version ? `${t.name} ${t.version}` : t.name }}</b-link><template v-if="technologyCategories[index].technologies.length-1!==i">,</template>
+                    </span>
                   </div>
                 </b-col>
 
@@ -282,15 +284,17 @@
                   <b-row />
 
                   <div class="ml-21">
-                    <b-link
-                      v-for="t in technologyCategories[index+1].technologies"
+                    <span
+                      v-for="(t, i) in technologyCategories[index+1].technologies"
                       :key="t.id"
-                      pill
-                      variant="link"
-                      :to="`/technology/${t.slug}`"
                     >
-                      {{ t.version ? `${t.name} ${t.version}` : t.name }},
-                    </b-link>
+                      <b-link
+                        pill
+                        variant="link"
+                        :to="`/technology/${t.slug}`"
+                      >
+                        {{ t.version ? `${t.name} ${t.version}` : t.name }}</b-link><template v-if="technologyCategories[index+1].technologies.length-1!==i">,</template>
+                    </span>
                   </div>
                 </b-col>
               </b-row>

@@ -29,7 +29,7 @@
               :title="tag"
               pill
               variant="primary"
-              class="mr-1 mb-1"
+              class="mr-1 mb-2"
               @remove="city.removeTag(tag)"
             >
               {{ tag.title }}
@@ -39,7 +39,7 @@
               v-model="city.search"
               :data="city.list"
               :serializer="s => s.title"
-              placeholder="Можно несколько"
+              placeholder="Например «Москва», «Бор», «Владивосток» ..."
               @hit="city.addTag($event)"
             />
             <b-form-text v-if="city.tags.length === 0">
@@ -56,7 +56,7 @@
               :title="tag"
               pill
               variant="primary"
-              class="mr-1 mb-1"
+              class="mr-1 mb-2"
               @remove="category.removeTag(tag)"
             >
               {{ tag.title }}
@@ -66,11 +66,48 @@
               v-model="category.search"
               :data="category.list"
               :serializer="s => s.title"
-              placeholder="Можно несколько"
+              placeholder="Например «Создание сайтов», «Металлургия», «Фитнес» ..."
               @hit="category.addTag($event)"
             />
             <b-form-text v-if="category.tags.length === 0">
               Все категории
+            </b-form-text>
+          </b-form-group>
+        </b-col>
+      </b-row>
+
+      <b-row>
+        <b-col md="6">
+          <b-form-group label="Технологии на сайте">
+            <b-form-tag
+              v-for="tag in technology.tags"
+              :key="tag.id"
+              :title="tag"
+              pill
+              variant="primary"
+              class="mr-1 mb-2"
+              @remove="technology.removeTag(tag)"
+            >
+              {{ makeTechnologyTagName(tag) }}
+            </b-form-tag>
+
+            <b-form-radio-group
+              v-if="technology.tags.length >= 2"
+              v-model="query.technologyFindRule"
+              class="mb-2"
+              :options="findRuleOptions"
+            />
+
+            <vue-bootstrap-typeahead
+              ref="technologyinput"
+              v-model="technology.search"
+              :data="technology.list"
+              :serializer="s => makeTechnologyTagName(s)"
+              placeholder="Например «Интернет-магазин», «1C-Bitrix», «Vue.js» ..."
+              @hit="technology.addTag($event)"
+            />
+            <b-form-text v-if="technology.tags.length === 0">
+              Все технологии
             </b-form-text>
           </b-form-group>
         </b-col>
@@ -409,6 +446,7 @@ import Vue from 'vue'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import select from '~/helpers/const/select'
 import getCompanies from '~/helpers/company/getCompanies'
+import findRule from '~/helpers/const/findRule'
 
 const debounce = (func, wait, immediate = false) => {
   let timeout
@@ -455,7 +493,7 @@ const download = async (querystring: string, type: downloadType): Promise<void> 
   window.open(res.downloadUrl, '_self')
 }
 
-const addCityCategoryTag = (ctx, type, inputRefName) => {
+const addTag = (ctx, type, inputRefName) => {
   return (val) => {
     ctx.$refs[inputRefName].inputValue = ''
     for (const tag of ctx[type].tags) {
@@ -467,7 +505,7 @@ const addCityCategoryTag = (ctx, type, inputRefName) => {
   }
 }
 
-const removeCityCategoryTag = (ctx, type) => {
+const removeTag = (ctx, type) => {
   return (val) => {
     for (let i = 0; i < ctx[type].tags.length; i += 1) {
       const tag = ctx[type].tags[i]
@@ -537,6 +575,13 @@ export default Vue.extend({
         text: 'Нет',
         value: select.no
       }],
+      findRuleOptions: [{
+        text: 'Одна из',
+        value: findRule.oneOf
+      }, {
+        text: 'Все вместе',
+        value: findRule.all
+      }],
       query: {
         hasEmail: select.any,
         hasPhone: select.any,
@@ -552,21 +597,29 @@ export default Vue.extend({
         hasInstagram: select.any,
         hasTwitter: select.any,
         hasYoutube: select.any,
-        hasFacebook: select.any
+        hasFacebook: select.any,
+        technologyFindRule: findRule.oneOf
       },
       city: {
         list: [],
         tags: [],
         search: '',
-        addTag: addCityCategoryTag(this, 'city', 'cityinput'),
-        removeTag: removeCityCategoryTag(this, 'city')
+        addTag: addTag(this, 'city', 'cityinput'),
+        removeTag: removeTag(this, 'city')
       },
       category: {
         list: [],
         tags: [],
         search: '',
-        addTag: addCityCategoryTag(this, 'category', 'categoryinput'),
-        removeTag: removeCityCategoryTag(this, 'category')
+        addTag: addTag(this, 'category', 'categoryinput'),
+        removeTag: removeTag(this, 'category')
+      },
+      technology: {
+        list: [],
+        tags: [],
+        search: '',
+        addTag: addTag(this, 'technology', 'technologyinput'),
+        removeTag: removeTag(this, 'technology')
       },
       loading: {
         search: false,
@@ -593,6 +646,9 @@ export default Vue.extend({
     'category.search': debounce(function (title: string) {
       this.getCategoriesHints(title)
     }, 500),
+    'technology.search': debounce(function (title: string) {
+      this.getTechnologiesHints(title)
+    }, 500),
     'query.hasVk' (val) {
       if (val !== select.yes) {
         this.query['vkMembersCount.from'] = ''
@@ -602,28 +658,45 @@ export default Vue.extend({
   },
   methods: {
     async getCitiesHints (title: string) {
-      const rawCities = await fetch([
+      const raw = await fetch([
         process.env.API_HOST,
         '/v1/city/getHints?',
         new URLSearchParams({
           title,
-          limit: '10'
+          limit: '7'
         }).toString()
       ].join(''))
-      const suggs = await rawCities.json()
-      this.city.list = suggs.cities || []
+      const res = await raw.json()
+      this.city.list = res.cities || []
     },
     async getCategoriesHints (title: string) {
-      const rawCategories = await fetch([
+      const raw = await fetch([
         process.env.API_HOST,
         '/v1/category/getHints?',
         new URLSearchParams({
           title,
-          limit: '10'
+          limit: '7'
         }).toString()
       ].join(''))
-      const suggs = await rawCategories.json()
-      this.category.list = suggs.categories || []
+      const res = await raw.json()
+      this.category.list = res.categories || []
+    },
+    async getTechnologiesHints (name: string) {
+      const params = new URLSearchParams({
+        name,
+        limit: '7'
+      })
+      this.technology.tags.forEach(({ id }) => {
+        params.append('excludeIds', id)
+      })
+
+      const raw = await fetch([
+        process.env.API_HOST,
+        '/v1/technology/getHints?',
+        params.toString()
+      ].join(''))
+      const res = await raw.json()
+      this.technology.list = res.technologies || []
     },
     async methodSearchCompanies () {
       this.scrollDone = false
@@ -666,16 +739,15 @@ export default Vue.extend({
 
       const params = new URLSearchParams(q)
 
-      if (this.city.tags.length !== 0) {
-        this.city.tags.forEach(({ id }) => {
-          params.append('cityIds', id)
-        })
-      }
-      if (this.category.tags.length !== 0) {
-        this.category.tags.forEach(({ id }) => {
-          params.append('categoryIds', id)
-        })
-      }
+      this.city.tags.forEach(({ id }) => {
+        params.append('cityIds', id)
+      })
+      this.category.tags.forEach(({ id }) => {
+        params.append('categoryIds', id)
+      })
+      this.technology.tags.forEach(({ id }) => {
+        params.append('technologyIds', id)
+      })
 
       return params.toString()
     },
@@ -705,6 +777,9 @@ export default Vue.extend({
       this.loading.downloadPhones = true
       await download(this.buildSearchQuery(false), downloadType.phone)
       this.loading.downloadPhones = false
+    },
+    makeTechnologyTagName (name: any): string {
+      return name.version ? `${name.name} ${name.version}` : name.name
     }
   },
   head () {

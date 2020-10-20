@@ -10,7 +10,7 @@
       itemscope
       itemtype="https://schema.org/ListItem"
       :to="item.to.path"
-      :active="index === items.length - 1"
+      :active="item.active === false || index === items.length - 1"
     >
       <span itemprop="name">
         {{ item.text }}

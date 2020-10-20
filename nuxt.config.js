@@ -93,6 +93,7 @@ export default {
       'BFormText',
       'BFormInput',
       'BFormSelect',
+      'BFormRadioGroup',
       'BCard',
       'BCardBody',
       'BCardGroup',

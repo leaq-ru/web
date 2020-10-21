@@ -25,6 +25,28 @@
               :content="company.avatar"
               itemprop="logo"
             >
+
+            <span
+              itemscope
+              itemtype="http://schema.org/ImageObject"
+            >
+              <meta
+                :content="`Логотип ${company.url}`"
+                itemprop="name"
+              >
+
+              <link
+                :href="company.avatar"
+                itemprop="contentUrl"
+              >
+
+              <template v-if="company.description">
+                <meta
+                  :content="company.description"
+                  itemprop="description"
+                >
+              </template>
+            </span>
           </template>
         </b-col>
 

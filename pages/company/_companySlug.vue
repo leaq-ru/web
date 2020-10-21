@@ -40,6 +40,15 @@
                 itemprop="contentUrl"
               >
 
+              <meta
+                content="200 px"
+                itemprop="height"
+              >
+              <meta
+                content="200 px"
+                itemprop="width"
+              >
+
               <template v-if="company.description">
                 <meta
                   :content="company.description"

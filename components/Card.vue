@@ -86,6 +86,7 @@
             <b-link
               :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
               target="_blank"
+              @click="setTipFoundOnLeaq"
             >
               <b-icon-envelope variant="primary" />
               {{ company.email }}
@@ -105,6 +106,7 @@
           <b-link
             v-if="company.phone"
             :href="`tel:${company.phone}`"
+            @click="setTipFoundOnLeaq"
           >
             <b-icon-telephone variant="primary" />
             <span itemprop="telephone">
@@ -116,16 +118,21 @@
             {{ none }}
           </span>
 
-          <b-row class="mb-3" />
+          <template v-if="showTipFoundOnLeaq">
+            <TipFoundOnLeaq />
+          </template>
 
+          <b-row class="mb-3 d-md-none" />
           <span class="d-md-none">
             <SocialIcons :company="company" />
           </span>
 
           <b-row class="mb-3" />
 
-          <b-icon-clock class="text-muted" />
-          {{ toShowedDate(company.updatedAt) }}
+          <span class="text-muted">
+            <b-icon-clock />
+            {{ toShowedDate(company.updatedAt) }}
+          </span>
         </b-col>
       </b-row>
     </b-card-body>
@@ -175,9 +182,15 @@ export default Vue.extend({
   },
   data () {
     return {
-      none: '—'
+      none: '—',
+      showTipFoundOnLeaq: false
     }
   },
-  methods: companyGetters
+  methods: {
+    ...companyGetters,
+    setTipFoundOnLeaq () {
+      this.showTipFoundOnLeaq = true
+    }
+  }
 })
 </script>

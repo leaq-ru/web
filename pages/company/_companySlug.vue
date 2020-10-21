@@ -124,6 +124,7 @@
                 <b-link
                   :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
                   target="_blank"
+                  @click="setTipFoundOnLeaq"
                 >
                   {{ company.email }}
                 </b-link>
@@ -157,6 +158,7 @@
               >
                 <b-link
                   :href="`tel:${company.phone}`"
+                  @click="setTipFoundOnLeaq"
                 >
                   <span itemprop="telephone">
                     {{ toShowedPhone(company.phone) }}
@@ -218,6 +220,10 @@
               <div class="ml-21">{{ toShowedDate(company.updatedAt) }}</div>
             </b-col>
           </b-row>
+
+          <template v-if="showTipFoundOnLeaq">
+            <TipFoundOnLeaq />
+          </template>
         </b-card>
 
         <b-card title="Описание">
@@ -982,7 +988,8 @@ export default Vue.extend({
   data () {
     return {
       none: '—',
-      scrollDone: false
+      scrollDone: false,
+      showTipFoundOnLeaq: false
     }
   },
   computed: {
@@ -1008,6 +1015,9 @@ export default Vue.extend({
         this.scrollDone = true
       }
       $state.loaded()
+    },
+    setTipFoundOnLeaq () {
+      this.showTipFoundOnLeaq = true
     }
   },
   head () {

@@ -632,11 +632,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    fromId (): string | undefined {
-      if (this.company?.items?.length) {
-        return this.company.items[this.company.items.length - 1].id
-      }
-      return undefined
+    skip (): string | undefined {
+      return this.company?.items?.length
     }
   },
   watch: {
@@ -702,7 +699,6 @@ export default Vue.extend({
       this.scrollDone = false
       this.loading.search = true
       const res = await getCompanies({
-        addr: process.env.API_HOST,
         querystring: this.buildSearchQuery()
       })
       this.loading.search = false
@@ -715,14 +711,14 @@ export default Vue.extend({
 
       this.company.items = res.companies
     },
-    buildSearchQuery (withFromId?: boolean): string {
+    buildSearchQuery (withSkip?: boolean): string {
       const q: any = {
         ...this.query,
         'opts.limit': 20
       }
 
-      if (withFromId) {
-        q['opts.fromId'] = this.fromId
+      if (withSkip) {
+        q['opts.skip'] = this.skip
       }
 
       if (q['vkMembersCount.from']) {
@@ -753,7 +749,6 @@ export default Vue.extend({
     },
     async infiniteScroll ($state) {
       const res = await getCompanies({
-        addr: process.env.API_HOST,
         querystring: this.buildSearchQuery(true)
       })
 

@@ -53,8 +53,13 @@ export default {
   safeLocationCityTitle (company) {
     return company.location?.city?.title
   },
+  safeShortCityTitle (company) {
+    return company.city?.title
+  },
   safeLocationCitySlug (company) {
     return company.location?.city?.slug
+  },
+  safeShortCitySlug (company) {
   },
   safeLocationAddress (company) {
     return company.location?.address

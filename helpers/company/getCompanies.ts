@@ -10,7 +10,7 @@ export default async ({
   try {
     const rawCompanies = await fetch([
       addr,
-      '/v1/company/get?',
+      '/v2/company/get?',
       querystring
     ].join(''))
 

@@ -176,11 +176,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    fromId (): string | undefined {
-      if (this.company?.items?.length) {
-        return this.company.items[this.company.items.length - 1].id
-      }
-      return undefined
+    skip (): string | undefined {
+      return this.company?.items?.length
     }
   },
   methods: {
@@ -190,8 +187,8 @@ export default Vue.extend({
         'opts.limit': '20'
       }
 
-      if (this.fromId) {
-        query['opts.fromId'] = this.fromId
+      if (this.skip) {
+        query['opts.skip'] = this.skip
       }
 
       const res = await getCompanies({

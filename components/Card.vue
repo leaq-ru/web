@@ -36,12 +36,12 @@
 
         <b-col md="7" class="mb-3">
           <b-link
-            v-if="safeLocationCityTitle(company)"
-            :to="`/${safeLocationCitySlug(company)}/all`"
+            v-if="safeShortCityTitle(company)"
+            :to="`/${safeShortCitySlug(company)}/all`"
           >
             <b-icon-building variant="primary" />
             <span itemprop="address">
-              {{ safeLocationCityTitle(company) }}
+              {{ safeShortCityTitle(company) }}
             </span>
           </b-link>
           <span v-else class="text-muted">

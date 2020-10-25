@@ -836,29 +836,28 @@ const getRelated = async ({
   addr = apiAddr,
   company,
   limit,
-  fromId
+  skip
 }: {
   addr?: string
   company: any
   limit: number
-  fromId?: string
+  skip: number
 }): Promise<any> => {
   const queryRelated = new URLSearchParams()
   queryRelated.append('opts.limit', limit.toString())
-  queryRelated.append('excludeIds', company.id)
   if (company.location?.city?.id) {
     queryRelated.append('cityIds', company.location.city.id)
   }
   if (company.category?.id) {
     queryRelated.append('categoryIds', company.category.id)
   }
-  if (fromId) {
-    queryRelated.append('opts.fromId', fromId)
+  if (skip) {
+    queryRelated.append('opts.skip', skip.toString())
   }
 
   const rawRelated = await fetch([
     addr,
-    '/v1/company/get?',
+    '/v2/company/get?',
     queryRelated.toString()
   ].join(''))
 
@@ -945,12 +944,13 @@ export default Vue.extend({
         })
       }
 
-      const { fullCompany, pageSpeed, technologyCategories } = await raw.json()
-
-      const related = await getRelated({
-        limit: 6,
-        company: fullCompany
-      })
+      const {
+        fullCompany,
+        pageSpeed,
+        technologyCategories,
+        related,
+        posts
+      } = await raw.json()
 
       const data = {
         breadcrumb: [{
@@ -1015,11 +1015,8 @@ export default Vue.extend({
     }
   },
   computed: {
-    fromId (): string | undefined {
-      if (this.related?.length) {
-        return this.related[this.related.length - 1].id
-      }
-      return undefined
+    skip (): number | undefined {
+      return this.related?.length
     }
   },
   methods: {
@@ -1028,7 +1025,7 @@ export default Vue.extend({
       const res = await getRelated({
         company: this.company,
         limit: 20,
-        fromId: this.fromId
+        skip: this.skip
       })
 
       if (res?.length) {

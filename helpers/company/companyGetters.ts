@@ -95,6 +95,12 @@ export default {
   safeSocialFacebookUrl (company) {
     return company.social?.facebook?.url
   },
+  safeTechnologyCategoriesLength (elem) {
+    if (elem?.technologies?.length) {
+      return elem.technologies.length
+    }
+    return 0
+  },
   relatedLink (company) {
     const result = ['all', 'all']
     if (this.safeShortCitySlug(company)) {

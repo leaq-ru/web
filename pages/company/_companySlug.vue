@@ -294,7 +294,7 @@
                         variant="link"
                         :to="`/technology/${t.slug}`"
                       >
-                        {{ t.version ? `${t.name} ${t.version}` : t.name }}</b-link><template v-if="technologyCategories[index].technologies.length-1!==i">,</template>
+                        {{ t.version ? `${t.name} ${t.version}` : t.name }}</b-link><template v-if="safeTechnologyCategoriesLength(technologyCategories[index])-1!==i">,</template>
                     </span>
                   </div>
                 </b-col>
@@ -321,7 +321,7 @@
                         variant="link"
                         :to="`/technology/${t.slug}`"
                       >
-                        {{ t.version ? `${t.name} ${t.version}` : t.name }}</b-link><template v-if="technologyCategories[index+1].technologies.length-1!==i">,</template>
+                        {{ t.version ? `${t.name} ${t.version}` : t.name }}</b-link><template v-if="safeTechnologyCategoriesLength(technologyCategories[index+1])-1!==i">,</template>
                     </span>
                   </div>
                 </b-col>
@@ -815,7 +815,7 @@
 
     <CardDeck :items="related" />
 
-    <client-only v-if="related.length >= 6 && !scrollDone">
+    <client-only v-if="related && related.length >= 6 && !scrollDone">
       <infinite-loading
         spinner="spiral"
         :distance="1000"

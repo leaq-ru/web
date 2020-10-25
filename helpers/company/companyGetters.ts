@@ -60,6 +60,7 @@ export default {
     return company.location?.city?.slug
   },
   safeShortCitySlug (company) {
+    return company.city?.slug
   },
   safeLocationAddress (company) {
     return company.location?.address
@@ -96,8 +97,8 @@ export default {
   },
   relatedLink (company) {
     const result = ['all', 'all']
-    if (this.safeLocationCitySlug(company)) {
-      result[0] = this.safeLocationCitySlug(company)
+    if (this.safeShortCitySlug(company)) {
+      result[0] = this.safeShortCitySlug(company)
     }
     if (this.safeCategorySlug(company)) {
       result[1] = this.safeCategorySlug(company)

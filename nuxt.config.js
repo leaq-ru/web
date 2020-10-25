@@ -81,6 +81,7 @@ export default {
       'BIconList',
       'BIconGear',
       'BIconCloudDownload',
+      'BIconArrowDownCircle',
 
       'BContainer',
       'BRow',
@@ -98,6 +99,7 @@ export default {
       'BCardBody',
       'BCardGroup',
       'BCardFooter',
+      'BCardImgLazy',
       'BAlert',
       'BImgLazy',
       'BCollapse',

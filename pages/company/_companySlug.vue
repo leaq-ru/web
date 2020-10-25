@@ -805,7 +805,28 @@
       </b-card-group>
     </span>
 
-    <b-row class="mt-5 mb-3">
+    <b-row
+      v-if="posts.length"
+      class="mt-5 mb-2"
+    >
+      <b-col>
+        <h2>
+          Новости компании
+        </h2>
+      </b-col>
+    </b-row>
+
+    <PostCardDeck :items="posts" />
+    <b-button
+      size="sm"
+      pill
+      variant="primary"
+    >
+      <b-icon-arrow-down-circle />
+      Показать еще
+    </b-button>
+
+    <b-row class="mt-5 mb-2">
       <b-col>
         <h2>
           Похожие компании
@@ -947,9 +968,9 @@ export default Vue.extend({
       const {
         fullCompany,
         pageSpeed,
-        technologyCategories,
-        related,
-        posts
+        technologyCategories = [],
+        related = [],
+        posts = []
       } = await raw.json()
 
       const data = {
@@ -983,7 +1004,8 @@ export default Vue.extend({
         company: fullCompany,
         related,
         pageSpeed: makePageSpeed(pageSpeed),
-        technologyCategories
+        technologyCategories,
+        posts
       }
 
       if (fullCompany.location?.city) {

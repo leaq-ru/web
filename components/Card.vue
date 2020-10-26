@@ -141,7 +141,6 @@
       <b-row>
         <b-col md="5" class="mb-3 mb-md-0">
           <b-button
-            size="sm"
             :to="`/company/${company.slug}`"
             variant="primary"
             pill
@@ -153,7 +152,6 @@
 
         <b-col md="7">
           <b-button
-            size="sm"
             :to="relatedLink(company)"
             variant="outline-primary"
             pill

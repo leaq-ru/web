@@ -3,14 +3,20 @@
     <template v-for="(_, i) in items">
       <template v-if="i % 2 === 0">
         <b-card-group
-          :key="items[i].id"
+          :key="i"
           class="mb-4"
           deck
         >
-          <PostCard :post="items[i]" />
+          <PostCard
+            :avatar="avatar"
+            :title="title"
+            :post="items[i]"
+          />
 
           <PostCard
             v-if="items[i+1]"
+            :avatar="avatar"
+            :title="title"
             :post="items[i+1]"
           />
         </b-card-group>
@@ -24,10 +30,30 @@ import Vue from 'vue'
 
 export default Vue.extend({
   props: {
+    avatar: {
+      type: String,
+      default () {
+        return ''
+      }
+    },
+    title: {
+      type: String,
+      default () {
+        return ''
+      }
+    },
     items: {
       type: Array,
       default () {
         return []
+      }
+    }
+  },
+  data () {
+    return {
+      modal: {
+        visible: false,
+        imgSrc: ''
       }
     }
   }

@@ -99,6 +99,7 @@ export default {
       'BCardBody',
       'BCardGroup',
       'BCardFooter',
+      'BCardText',
       'BCardImgLazy',
       'BAlert',
       'BImgLazy',

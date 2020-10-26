@@ -114,7 +114,6 @@
             pill
             :to="breadcrumb[2].to.path"
             variant="primary"
-            size="sm"
           >
             <b-icon-tags />
             Найти похожие
@@ -408,7 +407,7 @@
                 <b-row />
 
                 <div class="ml-21">
-                  {{ company.social.vk.name }}
+                  {{ safeSocialVkName(company) }}
                 </div>
 
                 <b-row class="mt-1" />
@@ -816,13 +815,23 @@
       </b-col>
     </b-row>
 
-    <PostCardDeck :items="posts" />
+    <PostCardDeck
+      :avatar="safeSocialVkPhoto200(company)"
+      :title="safeSocialVkName(company)"
+      :items="posts"
+    />
     <b-button
-      size="sm"
+      v-if="!postsScrollDone && postsLoaded"
       pill
       variant="primary"
+      @click="getPosts"
     >
-      <b-icon-arrow-down-circle />
+      <b-icon-arrow-clockwise
+        v-if="postsLoading"
+        animation="spin"
+      />
+      <b-icon-arrow-down-circle v-else />
+
       Показать еще
     </b-button>
 
@@ -836,7 +845,7 @@
 
     <CardDeck :items="related" />
 
-    <client-only v-if="related && related.length >= 6 && !scrollDone">
+    <client-only v-if="related && related.length >= 6 && !relatedScrollDone">
       <infinite-loading
         spinner="spiral"
         :distance="1000"
@@ -1032,22 +1041,31 @@ export default Vue.extend({
   data () {
     return {
       none: '—',
-      scrollDone: false,
-      showTipFoundOnLeaq: false
+      relatedScrollDone: false,
+      postsScrollDone: false,
+      showTipFoundOnLeaq: false,
+      postsLoading: false,
+      postsLoaded: true
     }
   },
   computed: {
-    skip (): number | undefined {
+    relatedSkip (): number | undefined {
       return this.related?.length
+    },
+    postsSkip (): number | undefined {
+      return this.posts?.length
     }
   },
   methods: {
     ...companyGetters,
+    setTipFoundOnLeaq () {
+      this.showTipFoundOnLeaq = true
+    },
     async collectionInfiniteScroll ($state) {
       const res = await getRelated({
         company: this.company,
         limit: 20,
-        skip: this.skip
+        skip: this.relatedSkip
       })
 
       if (res?.length) {
@@ -1057,8 +1075,33 @@ export default Vue.extend({
       }
       $state.loaded()
     },
-    setTipFoundOnLeaq () {
-      this.showTipFoundOnLeaq = true
+    async getPosts (): Promise<void> {
+      const limit = 20
+
+      const query = new URLSearchParams()
+      query.append('companyId', this.company.id)
+      query.append('opts.limit', limit.toString())
+      if (this.postsSkip) {
+        query.append('opts.skip', this.postsSkip)
+      }
+
+      this.postsLoading = true
+      const raw = await fetch([
+        process.env.API_HOST,
+        '/v1/post/get?',
+        query.toString()
+      ].join(''))
+      const res = await raw.json()
+      this.postsLoading = false
+
+      this.postsLoaded = false
+      this.posts.push(...res.posts)
+      setTimeout(() => {
+        this.postsLoaded = true
+      }, 0)
+      if (res.posts.length < limit) {
+        this.postsScrollDone = true
+      }
     }
   },
   head () {

@@ -7,9 +7,13 @@
       itemscope
       itemtype="http://schema.org/Organization"
     >
-      <h1 itemprop="name">
-        {{ company.title || company.slug }}
-      </h1>
+      <b-row class="mt-3 mb-2">
+        <b-col>
+          <h1 itemprop="name">
+            {{ company.title || company.slug }}
+          </h1>
+        </b-col>
+      </b-row>
 
       <b-row class="mb-3">
         <b-col cols="6">
@@ -125,7 +129,7 @@
         class="mb-3"
         deck
       >
-        <b-card title="Контакты">
+        <b-card title="📍 Контакты">
           <b-row>
             <b-col
               md="6"
@@ -247,7 +251,7 @@
           </template>
         </b-card>
 
-        <b-card title="Описание">
+        <b-card title="⌨️ Описание">
           <span
             v-if="company.description"
             itemprop="description"
@@ -265,8 +269,8 @@
         class="mb-3"
         deck
       >
-        <b-card title="Технологии на сайте">
-          <template v-if="technologyCategories">
+        <b-card title="🛠️ Технологии на сайте">
+          <template v-if="technologyCategories && technologyCategories.length">
             <span
               v-for="(c, index) in technologyCategories"
               :key="c.id"
@@ -332,7 +336,7 @@
           </template>
         </b-card>
 
-        <b-card title="Домен">
+        <b-card title="🔗 Домен">
           <b-row>
             <IconHeader
               icon="cloud"
@@ -383,7 +387,7 @@
         class="mb-3"
         deck
       >
-        <b-card title="ВКонтакте">
+        <b-card title="😎 ВКонтакте">
           <template v-if="safeSocialVkId(company)">
             <b-row class="mb-3">
               <b-col md="5">
@@ -461,7 +465,7 @@
           </template>
         </b-card>
 
-        <b-card title="Менеджеры">
+        <b-card title="👨‍💻 Менеджеры">
           <template v-if="!company.people || !company.people.length">
             {{ none }}
           </template>
@@ -579,7 +583,7 @@
         class="mb-3"
         deck
       >
-        <b-card title="Соцсети">
+        <b-card title="👍 Соцсети">
           <b-row>
             <b-col
               class="mb-1"
@@ -710,7 +714,7 @@
 
         </b-card>
 
-        <b-card title="Приложения">
+        <b-card title="📱 Приложения">
           <b-row>
             <b-col
               class="mb-1"
@@ -778,7 +782,7 @@
       </b-card-group>
 
       <b-card-group deck>
-        <b-card title="Реквизиты">
+        <b-card title="🇷🇺 Реквизиты">
           <b-row>
             <IconHeader
               icon="info-circle"
@@ -801,41 +805,53 @@
             />
           </b-row>
         </b-card>
+
+        <b-card title="🤔 Не нашли что искали?">
+          <a
+            href="https://vk.me/leaq_ru"
+            rel="nofollow"
+            target="_blank"
+          >
+            Напишите нам
+          </a>
+        </b-card>
       </b-card-group>
     </span>
 
+    <template v-if="posts.length">
+      <b-row class="mt-5 mb-2">
+        <b-col>
+          <h2>
+            Новости компании
+          </h2>
+        </b-col>
+      </b-row>
+
+      <PostCardDeck
+        :avatar="safeSocialVkPhoto200(company)"
+        :title="safeSocialVkName(company)"
+        :items="posts"
+      />
+      <b-button
+        v-if="!postsScrollDone && postsLoaded"
+        pill
+        variant="primary"
+        @click="getPosts"
+      >
+        <b-icon-arrow-clockwise
+          v-if="postsLoading"
+          animation="spin"
+        />
+        <b-icon-arrow-down-circle v-else />
+
+        Показать еще
+      </b-button>
+    </template>
+
     <b-row
-      v-if="posts.length"
+      v-if="related && related.length"
       class="mt-5 mb-2"
     >
-      <b-col>
-        <h2>
-          Новости компании
-        </h2>
-      </b-col>
-    </b-row>
-
-    <PostCardDeck
-      :avatar="safeSocialVkPhoto200(company)"
-      :title="safeSocialVkName(company)"
-      :items="posts"
-    />
-    <b-button
-      v-if="!postsScrollDone && postsLoaded"
-      pill
-      variant="primary"
-      @click="getPosts"
-    >
-      <b-icon-arrow-clockwise
-        v-if="postsLoading"
-        animation="spin"
-      />
-      <b-icon-arrow-down-circle v-else />
-
-      Показать еще
-    </b-button>
-
-    <b-row class="mt-5 mb-2">
       <b-col>
         <h2>
           Похожие компании

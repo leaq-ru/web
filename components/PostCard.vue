@@ -36,19 +36,21 @@
             />
           </a>
 
-          <a
-            v-for="photo in post.photos"
-            :key="photo.urlM"
-            class="cursor-pointer"
-            @click="setActiveHref(photo.urlR)"
-          >
-            <b-img-lazy
-              thumbnail
-              :src="photo.urlM"
-              :alt="post.text ? post.text : 'фото из публикации компании'"
-              :class="active.href === photo.urlR ? 'bg-primary rounded-sm mt-3 mr-3' : 'rounded-sm mt-3 mr-3'"
-            />
-          </a>
+          <template v-if="post.photos.length > 1">
+            <a
+              v-for="photo in post.photos"
+              :key="photo.urlM"
+              class="cursor-pointer"
+              @click="setActiveHref(photo.urlR)"
+            >
+              <b-img-lazy
+                thumbnail
+                :src="photo.urlM"
+                :alt="post.text ? post.text : 'фото из публикации компании'"
+                :class="active.href === photo.urlR ? 'bg-primary rounded-sm mt-3 mr-3' : 'rounded-sm mt-3 mr-3'"
+              />
+            </a>
+          </template>
         </template>
       </b-card-body>
     </b-col>

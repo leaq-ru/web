@@ -1087,7 +1087,7 @@ export default Vue.extend({
       if (res?.length) {
         this.related.push(...res)
       } else {
-        this.scrollDone = true
+        this.relatedScrollDone = true
       }
       $state.loaded()
     },

@@ -833,7 +833,7 @@
         :items="posts"
       />
       <b-button
-        v-if="!postsScrollDone && postsLoaded"
+        v-if="posts.length >= 6 && !postsScrollDone && postsLoaded"
         pill
         variant="primary"
         @click="getPosts"

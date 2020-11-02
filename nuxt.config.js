@@ -34,6 +34,9 @@ export default {
     src: '~/plugins/vue-infinite-loading',
     mode: 'client',
     ssr: false
+  }, {
+    src: '~plugins/localStorage.js',
+    ssr: false
   }],
   /*
   ** Auto import components
@@ -113,7 +116,9 @@ export default {
       'BNavbarBrand',
       'BNavbarToggle',
       'BNavbarNav',
-      'BNavItem'
+      'BNavItem',
+      'BNavItemDropdown',
+      'BDropdownItem'
     ]
   },
   fontawesome: {

@@ -3,7 +3,7 @@
     <Header />
     <Breadcrumb :items="breadcrumb" />
 
-    <h2 class="mb-4">
+    <h2>
       Всего
       <span class="text-muted">
         {{ categories.length }}

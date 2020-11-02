@@ -22,7 +22,10 @@
 
     <b-navbar-toggle target="nav-collapse" />
 
-    <b-collapse id="nav-collapse" is-nav>
+    <b-collapse
+      id="nav-collapse"
+      is-nav
+    >
       <b-navbar-nav>
         <b-nav-item
           to="/about"
@@ -52,6 +55,30 @@
           Связаться с нами
         </b-nav-item>
       </b-navbar-nav>
+
+      <b-navbar-nav class="ml-auto">
+        <b-nav-item-dropdown v-if="$store.state.user.self.id">
+          <template slot="button-content">
+            <b-avatar
+              size="21px"
+              :src="$store.state.user.self.photo"
+              class="mr-1"
+            />
+
+            {{ $store.state.user.self.firstName }}
+          </template>
+
+          <b-dropdown-item @click="logout">
+            Выйти
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
+        <b-nav-item
+          v-else
+          to="/login"
+        >
+          Войти
+        </b-nav-item>
+      </b-navbar-nav>
     </b-collapse>
   </b-navbar>
 </template>
@@ -59,5 +86,11 @@
 <script lang="ts">
 import Vue from 'vue'
 
-export default Vue.extend({})
+export default Vue.extend({
+  methods: {
+    logout () {
+      this.$store.commit('user/logout')
+    }
+  }
+})
 </script>

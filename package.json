@@ -21,7 +21,8 @@
     "lvovich": "^1.0.16",
     "nuxt": "^2.14.6",
     "vue-bootstrap-typeahead": "^0.2.6",
-    "vue-infinite-loading": "^2.4.5"
+    "vue-infinite-loading": "^2.4.5",
+    "vuex-persistedstate": "^4.0.0-beta.1"
   },
   "devDependencies": {
     "@nuxt/types": "^2.14.6",

@@ -12,6 +12,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    'nuxt/no-this-in-fetch-data': 'off'
+    'nuxt/no-this-in-fetch-data': 'off',
+    camelcase: 'off'
   }
 }

@@ -30,7 +30,7 @@
       apiId: 7646708,
       });
 
-      VK.Widgets.Auth("vk_auth", {
+      VK.Widgets.Auth('vk_auth', {
       authUrl: '/login/vk',
       });
     </script>

@@ -22,7 +22,7 @@
     </p>
 
     <div class="d-flex flex-row justify-content-center align-items-center">
-      <div id="vk_auth" />
+      <div id="vk-auth" />
     </div>
     <Footer />
   </b-container>
@@ -55,6 +55,9 @@ export default Vue.extend({
         }
       }]
     }
+  },
+  mounted () {
+    (window as any).VK.Widgets.Auth('vk-auth', { authUrl: '/login/vk' })
   },
   head () {
     return {

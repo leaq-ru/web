@@ -1,26 +1,13 @@
 <!DOCTYPE html>
 <html {{ HTML_ATTRS }}>
 <head {{ HEAD_ATTRS }}>
-    {{ HEAD }}
+{{ HEAD }}
 </head>
 <body {{ BODY_ATTRS }}>
 {{ APP }}
-<script type="text/javascript" src="https://vk.com/js/api/openapi.js?168"></script>
-<script type="text/javascript">
-  VK.init({
-    apiId: 7646708,
-  });
-  VK.Widgets.Auth('vk_auth', {
-    authUrl: '/login/vk',
-  });
-  VK.Widgets.CommunityMessages('vk_community_messages', 197531682, {
-    disableExpandChatSound: '1',
-    disableNewMessagesSound: '1',
-    tooltipButtonText: 'Есть вопрос?',
-  });
-</script>
-<script type="text/javascript">VK.Retargeting.Init("VK-RTRG-518954-fF7rQ");VK.Retargeting.Hit()</script><noscript><img src="https://vk.com/rtrg?p=VK-RTRG-518954-fF7rQ" style="position:fixed; left:-999px;" alt=""/></noscript>
-<div id="vk_community_messages"></div>
+<div id="vk-community-messages"></div>
+<script async type="text/javascript" src="https://vk.com/js/api/openapi.js?168" onload="VK.init({apiId:7646708});VK.Widgets.CommunityMessages('vk-community-messages',197531682,{disableExpandChatSound:'1',disableNewMessagesSound:'1',tooltipButtonText:'Есть вопрос?'});VK.Retargeting.Init('VK-RTRG-518954-fF7rQ');VK.Retargeting.Hit()"></script>
+<noscript><img src="https://vk.com/rtrg?p=VK-RTRG-518954-fF7rQ" style="position:fixed; left:-999px;" alt=""/></noscript>
 <script type="text/javascript">(function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");ym(66609163,"init",{clickmap:true,trackLinks:true,accurateTrackBounce:true,webvisor:true,trackHash:true});</script><noscript><div><img src="https://mc.yandex.ru/watch/66609163" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-175908787-1"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','UA-175908787-1');</script>

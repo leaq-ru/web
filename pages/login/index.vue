@@ -24,16 +24,6 @@
     <div class="d-flex flex-row justify-content-center align-items-center">
       <div id="vk_auth" />
     </div>
-
-    <script type="text/javascript">
-      VK.init({
-      apiId: 7646708,
-      });
-
-      VK.Widgets.Auth('vk_auth', {
-      authUrl: '/login/vk',
-      });
-    </script>
     <Footer />
   </b-container>
 </template>

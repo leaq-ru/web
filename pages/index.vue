@@ -540,17 +540,25 @@ export default Vue.extend({
     VueBootstrapTypeahead
   },
   async asyncData (): Promise<object> {
-    const res = await getCompanies({
-      querystring: new URLSearchParams({
-        'opts.limit': '20'
-      }).toString()
-    })
+    const [resComps, rawTotalCount] = await Promise.all([
+      getCompanies({
+        querystring: new URLSearchParams({
+          'opts.limit': '20'
+        }).toString()
+      }),
+      fetch([
+        process.env.API_HOST,
+        '/v1/company/getTotalCount'
+      ].join(''))
+    ])
 
-    const countWithCommas = toTitleCompaniesCount(5000000)
+    const resTotalCount = await rawTotalCount.json()
+
+    const countWithCommas = toTitleCompaniesCount(resTotalCount.totalCount)
 
     return {
       company: {
-        items: res.companies
+        items: resComps.companies
       },
       titleCompaniesCount: countWithCommas,
       title: makeTitle(countWithCommas)

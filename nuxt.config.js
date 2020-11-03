@@ -169,7 +169,8 @@ export default {
     }
   },
   env: {
-    API_HOST: 'https://api.leaq.ru'
+    HOST: process.env.NODE_ENV === 'production' ? 'https://leaq.ru' : 'http://leaq.local',
+    API_HOST: process.env.NODE_ENV === 'production' ? 'https://api.leaq.ru' : 'http://localhost:1111'
   },
   router: {
     prefetchLinks: false,

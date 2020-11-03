@@ -74,8 +74,10 @@
         </b-nav-item-dropdown>
         <b-nav-item
           v-else
-          to="/login"
+          :href="`https://oauth.vk.com/authorize?client_id=7649529&display=page&scope=email&redirect_uri=${host}/vk-auth&response_type=code&v=5.124&state=${authRedirectPath}`"
         >
+          <fa :icon="['fab', 'vk']" />
+
           Войти
         </b-nav-item>
       </b-navbar-nav>
@@ -87,6 +89,12 @@
 import Vue from 'vue'
 
 export default Vue.extend({
+  data () {
+    return {
+      host: process.env.HOST,
+      authRedirectPath: this.$nuxt.$route.path
+    }
+  },
   methods: {
     logout () {
       this.$store.commit('user/logout')

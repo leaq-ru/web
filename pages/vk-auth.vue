@@ -32,12 +32,7 @@ export default Vue.extend({
       ].join(''), {
         method: 'POST',
         body: JSON.stringify({
-          uid: query.uid,
-          firstName: query.first_name,
-          lastName: query.last_name,
-          photo: query.photo,
-          photoRec: query.photo_rec,
-          hash: query.hash
+          code: query.code
         })
       })
 
@@ -52,13 +47,12 @@ export default Vue.extend({
       this.$store.commit('user/login', res)
 
       let redirect = '/'
-      const preAuth = this.$store.state.preAuth.page
-      if (preAuth?.page) {
-        redirect = preAuth.page
+      if (query.state) {
+        redirect = query.state
       }
 
       return this.$nuxt.context.redirect(redirect)
-    } catch (e) {
+    } catch {
       return this.$nuxt.context.error({
         statusCode: 500
       })

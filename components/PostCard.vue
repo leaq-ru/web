@@ -18,7 +18,18 @@
 
           <b-row class="mb-3" />
 
-          {{ post.text }}
+          <template v-if="!showFull && postText.length > 217">
+            <p>
+              {{ postText.slice(0, 217) }}
+            </p>
+
+            <b-link @click="showFull = true">
+              Показать полностью...
+            </b-link>
+          </template>
+          <p v-else>
+            {{ postText }}
+          </p>
         </b-card-text>
 
         <b-row class="mb-3" />
@@ -84,6 +95,8 @@ export default Vue.extend({
   },
   data () {
     return {
+      postText: this.$props.post.text || '',
+      showFull: false,
       active: {
         href: this.post.photos && this.post.photos[0]?.urlR
       },

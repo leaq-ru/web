@@ -68,13 +68,19 @@
             {{ $store.state.user.self.firstName }}
           </template>
 
+          <b-dropdown-item to="/account/companies">
+            Мои компании
+          </b-dropdown-item>
+
+          <b-dropdown-divider />
+
           <b-dropdown-item @click="logout">
             Выйти
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item
           v-else
-          :href="`https://oauth.vk.com/authorize?client_id=7649529&display=page&scope=email&redirect_uri=${host}/vk-auth&response_type=code&v=5.124&state=${authRedirectPath}`"
+          :href="`https://oauth.vk.com/authorize?client_id=${vkAppId}&display=page&scope=email&redirect_uri=${host}/vk-auth&response_type=code&v=5.124&state=${authRedirectPath}`"
         >
           <fa :icon="['fab', 'vk']" />
 
@@ -91,6 +97,7 @@ import Vue from 'vue'
 export default Vue.extend({
   data () {
     return {
+      vkAppId: process.env.VK_APPID,
       host: process.env.HOST,
       authRedirectPath: this.$nuxt.$route.path
     }

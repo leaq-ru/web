@@ -1,3 +1,4 @@
+import isProd from './helpers/isProd'
 import ssrBotsOnly from './middleware/ssrBotsOnly'
 
 export default {
@@ -118,7 +119,8 @@ export default {
       'BNavbarNav',
       'BNavItem',
       'BNavItemDropdown',
-      'BDropdownItem'
+      'BDropdownItem',
+      'BDropdownDivider'
     ]
   },
   fontawesome: {
@@ -169,8 +171,9 @@ export default {
     }
   },
   env: {
-    HOST: process.env.NODE_ENV === 'production' ? 'https://leaq.ru' : 'http://leaq.local',
-    API_HOST: process.env.NODE_ENV === 'production' ? 'https://api.leaq.ru' : 'http://localhost:1111'
+    HOST: isProd('https://leaq.ru', 'http://leaq.local'),
+    API_HOST: isProd('https://api.leaq.ru', 'http://localhost:1111'),
+    VK_APPID: isProd('7649529', '7654813')
   },
   router: {
     prefetchLinks: false,

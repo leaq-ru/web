@@ -1058,10 +1058,10 @@ export default Vue.extend({
     return {
       none: '—',
       relatedScrollDone: false,
-      postsScrollDone: false,
       showTipFoundOnLeaq: false,
       postsLoading: false,
-      postsLoaded: true
+      postsLoaded: true,
+      postsScrollDone: false,
     }
   },
   computed: {
@@ -1115,7 +1115,7 @@ export default Vue.extend({
       setTimeout(() => {
         this.postsLoaded = true
       }, 0)
-      if (res.posts.length < limit) {
+      if (res?.posts?.length < limit) {
         this.postsScrollDone = true
       }
     }

@@ -86,6 +86,10 @@ export default {
       'BIconGear',
       'BIconCloudDownload',
       'BIconArrowDownCircle',
+      'BIconPlusCircle',
+      'BIconPatchCheckFll',
+      'BIconPencil',
+      'BIconPersonCheck',
 
       'BContainer',
       'BRow',
@@ -99,6 +103,8 @@ export default {
       'BFormInput',
       'BFormSelect',
       'BFormRadioGroup',
+      'BInputGroup',
+      'BInputGroupAppend',
       'BCard',
       'BCardBody',
       'BCardGroup',
@@ -120,7 +126,12 @@ export default {
       'BNavItem',
       'BNavItemDropdown',
       'BDropdownItem',
-      'BDropdownDivider'
+      'BDropdownDivider',
+      'BMedia',
+      'BTooltip'
+    ],
+    directives: [
+      'VBTooltip'
     ]
   },
   fontawesome: {

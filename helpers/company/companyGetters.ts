@@ -47,6 +47,9 @@ export default {
   safeCategoryTitle (company) {
     return company.category?.title
   },
+  safeTitleLen (company) {
+    return company.title?.length || 0
+  },
   safeCategorySlug (company) {
     return company.category?.slug
   },

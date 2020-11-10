@@ -3,20 +3,39 @@
     <Header />
     <Breadcrumb :items="breadcrumb" />
 
-    <label for="input-title">
-      Название
-    </label>
-    <b-form-input
-      id="input-title"
-      v-model="company.title"
-      :state="titleState"
-      aria-describedby="input-title-help"
-      placeholder="Название компании"
-    />
-    <b-form-text id="input-live-help">
-      {{ safeTitleLen(company) }}/48
-    </b-form-text>
+    <b-row>
+      <b-col md="6">
+        <label for="input-title">
+          Название
+        </label>
+        <b-form-input
+          id="input-title"
+          v-model="company.title"
+          :state="titleState"
+          aria-describedby="input-title-help"
+          placeholder="Название компании"
+        />
+        <b-form-text id="input-title-help">
+          {{ safeTitleLen(company) }}/48 символов
+        </b-form-text>
+      </b-col>
 
+      <b-col md="6">
+        <label for="input-description">
+          Описание
+        </label>
+        <b-form-textarea
+          id="input-description"
+          v-model="company.description"
+          :state="descriptionState"
+          aria-describedby="input-description-help"
+          placeholder="Описание товаров, услуг, деятельности компании"
+        />
+        <b-form-text id="input-description-help">
+          {{ safeDescriptionLen(company) }}/1500 символов
+        </b-form-text>
+      </b-col>
+    </b-row>
     <Footer />
   </b-container>
 </template>
@@ -37,9 +56,10 @@ export default Vue.extend({
     }
 
     if (!ctx.params.companySlug) {
-      return ctx.error({
+      ctx.error({
         statusCode: 404
       })
+      return
     }
 
     const raw = await fetch([
@@ -51,9 +71,10 @@ export default Vue.extend({
     ].join(''))
 
     if (!raw.ok) {
-      return ctx.error({
+      ctx.error({
         statusCode: 404
       })
+      return
     }
 
     const res = await raw.json()
@@ -93,8 +114,15 @@ export default Vue.extend({
         to: {
           path: `/account/companies/edit/${this.$route.params.companySlug}`
         }
-      }],
-      titleState: false
+      }]
+    }
+  },
+  computed: {
+    titleState () {
+      return this.company.title?.length <= 48
+    },
+    descriptionState () {
+      return this.company.description?.length <= 1500
     }
   },
   methods: {

@@ -100,6 +100,7 @@ export default {
       'BFormGroup',
       'BFormTag',
       'BFormText',
+      'BFormTextarea',
       'BFormInput',
       'BFormSelect',
       'BFormRadioGroup',

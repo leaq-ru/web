@@ -40,7 +40,7 @@
           />
 
           <b-form-text>
-            {{ query.title.length }}/50 символов
+            {{ (query.title || '').length }}/50 символов
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -80,7 +80,7 @@
           />
 
           <b-form-text>
-            {{ query.description.length }}/1500 символов
+            {{ (query.description || '').length }}/1500 символов
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -100,7 +100,7 @@
           />
 
           <b-form-text>
-            {{ query.email.length }}/50 символов в формате email адреса
+            {{ (query.email || '').length }}/50 символов в формате email адреса
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -158,7 +158,7 @@
           />
 
           <b-form-text>
-            {{ query.addressStreet.length }}/50 символов
+            {{ (query.addressStreet || '').length }}/50 символов
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -174,7 +174,7 @@
           />
 
           <b-form-text>
-            {{ query.addressHouse.length }}/50 символов
+            {{ (query.addressHouse || '').length }}/50 символов
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -194,7 +194,7 @@
           />
 
           <b-form-text>
-            {{ query.vkUrl.length }}/250 символов в формате https://vk.com/yourcompany. Из группы автоматически отображаем менеджеров и новости
+            {{ (query.vkUrl || '').length }}/250 символов в формате https://vk.com/yourcompany. Из группы автоматически отображаем менеджеров и новости
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -208,7 +208,7 @@
           />
 
           <b-form-text>
-            {{ query.instagramUrl.length }}/250 символов в формате https://www.instagram.com/yourcompany
+            {{ (query.instagramUrl || '').length }}/250 символов в формате https://www.instagram.com/yourcompany
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -224,7 +224,7 @@
           />
 
           <b-form-text>
-            {{ query.youtubeUrl.length }}/250 символов в формате https://www.youtube.com/yourcompany
+            {{ (query.youtubeUrl || '').length }}/250 символов в формате https://www.youtube.com/yourcompany
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -238,7 +238,7 @@
           />
 
           <b-form-text>
-            {{ query.facebookUrl.length }}/250 символов в формате https://www.facebook.com/yourcompany
+            {{ (query.facebookUrl || '').length }}/250 символов в формате https://www.facebook.com/yourcompany
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -254,7 +254,7 @@
           />
 
           <b-form-text>
-            {{ query.twitterUrl.length }}/250 символов в формате https://twitter.com/yourcompany
+            {{ (query.twitterUrl || '').length }}/250 символов в формате https://twitter.com/yourcompany
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -274,7 +274,7 @@
           />
 
           <b-form-text>
-            {{ query.appStoreUrl.length }}/250 символов в формате https://apps.apple.com/yourcompany
+            {{ (query.appStoreUrl || '').length }}/250 символов в формате https://apps.apple.com/yourcompany
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -288,7 +288,7 @@
           />
 
           <b-form-text>
-            {{ query.googlePlayUrl.length }}/250 символов в формате https://play.google.com/yourcompany
+            {{ (query.googlePlayUrl || '').length }}/250 символов в формате https://play.google.com/yourcompany
           </b-form-text>
         </b-form-group>
       </b-col>
@@ -385,7 +385,9 @@ const addTag = (ctx, type, inputRefName) => {
 
 const removeTag = (ctx, type) => {
   return () => {
-    ctx[type] = {}
+    ctx[type] = {
+      id: ''
+    }
   }
 }
 
@@ -426,34 +428,34 @@ export default Vue.extend({
 
     return {
       query: {
-        addressHouse: companyGetters.safeLocationAddressTitle(comp),
-        addressStreet: companyGetters.safeLocationAddress(comp),
-        appStoreUrl: companyGetters.safeAppStoreUrl(comp),
-        avatarBase64: '',
-        categoryId: companyGetters.safeCategoryId(comp),
-        cityId: companyGetters.safeLocationCityId(comp),
+        addressHouse: companyGetters.safeLocationAddressTitle(comp) || null,
+        addressStreet: companyGetters.safeLocationAddress(comp) || null,
+        appStoreUrl: companyGetters.safeAppStoreUrl(comp) || null,
+        avatarBase64: null,
+        categoryId: companyGetters.safeCategoryId(comp) || null,
+        cityId: companyGetters.safeLocationCityId(comp) || null,
         companyId: comp.id,
-        description: comp.description || '',
-        email: comp.email || '',
-        facebookUrl: companyGetters.safeSocialFacebookUrl(comp),
-        googlePlayUrl: companyGetters.safeGooglePlayUrl(comp),
-        inn: comp.inn || '',
-        instagramUrl: companyGetters.safeSocialInstagramUrl(comp),
-        kpp: comp.kpp || '',
-        ogrn: comp.ogrn || '',
-        phone: comp.phone || '',
-        title: comp.title || '',
-        twitterUrl: companyGetters.safeSocialTwitterUrl(comp),
-        vkUrl: companyGetters.safeSocialVkId(comp) ? `https://vk.com/club${companyGetters.safeSocialVkId(comp)}` : '',
-        youtubeUrl: companyGetters.safeSocialYoutubeUrl(comp)
+        description: comp.description || null,
+        email: comp.email || null,
+        facebookUrl: companyGetters.safeSocialFacebookUrl(comp) || null,
+        googlePlayUrl: companyGetters.safeGooglePlayUrl(comp) || null,
+        inn: comp.inn || null,
+        instagramUrl: companyGetters.safeSocialInstagramUrl(comp) || null,
+        kpp: comp.kpp || null,
+        ogrn: comp.ogrn || null,
+        phone: comp.phone || null,
+        title: comp.title || null,
+        twitterUrl: companyGetters.safeSocialTwitterUrl(comp) || null,
+        vkUrl: companyGetters.safeSocialVkId(comp) ? `https://vk.com/club${companyGetters.safeSocialVkId(comp)}` : null,
+        youtubeUrl: companyGetters.safeSocialYoutubeUrl(comp) || null
       },
       categoryTag: {
-        id: companyGetters.safeCategoryId(comp),
+        id: companyGetters.safeCategoryId(comp) || null,
         title: companyGetters.safeCategoryTitle(comp),
         slug: companyGetters.safeCategorySlug(comp)
       },
       cityTag: {
-        id: companyGetters.safeLocationCityId(comp),
+        id: companyGetters.safeLocationCityId(comp) || null,
         title: companyGetters.safeLocationCityTitle(comp),
         slug: companyGetters.safeLocationCitySlug(comp)
       }
@@ -549,17 +551,19 @@ export default Vue.extend({
       return this.validateQueryStrLen(this.query.description, 1500)
     },
     emailState () {
-      if (this.query.email.length === 0) {
+      const len = this.safeLen(this.query.email)
+
+      if (len === 0) {
         return null
       }
 
-      const validLen = this.query.email.length <= 50
+      const validLen = len <= 50
 
       if (!validLen) {
         return false
       }
 
-      if (this.query.email.length !== 0) {
+      if (len !== 0) {
         return new RegExp('[a-z0-9._%+\\-]+@[a-z0-9.\\-]+\\.[a-z]{2,6}').test(this.query.email)
       }
 
@@ -584,7 +588,7 @@ export default Vue.extend({
       return this.validateQueryInt(this.query.ogrn)
     },
     phoneState () {
-      const phone = this.query.phone.toString()
+      const phone = (this.query.phone || '').toString()
 
       if (phone.length === 0) {
         return null
@@ -622,11 +626,36 @@ export default Vue.extend({
   },
   methods: {
     ...hints,
+    replaceEmptyStrWithZero (obj, ...keys) {
+      keys.forEach((key) => {
+        if (obj[key] === '') {
+          obj[key] = 0
+        }
+      })
+    },
+    omitNull (obj) {
+      Object.keys(obj).forEach((key) => {
+        if (obj[key] === null) {
+          delete obj[key]
+        }
+      })
+    },
     async sendEdit () {
-      const bodyRaw = this.query
+      const bodyRaw = JSON.parse(JSON.stringify(this.query))
+      this.omitNull(bodyRaw)
+      this.replaceEmptyStrWithZero(bodyRaw, 'phone', 'inn', 'kpp', 'ogrn')
+
+      if (this.cityTag.id !== null) {
+        bodyRaw.cityId = this.cityTag.id
+      }
+      if (this.categoryTag.id !== null) {
+        bodyRaw.categoryId = this.categoryTag.id
+      }
       if (this.file) {
         bodyRaw.avatarBase64 = await this.toBase64(this.file)
       }
+
+      console.log(JSON.stringify(bodyRaw))
 
       this.sendEditLoading = true
       const raw = await fetch([
@@ -652,31 +681,34 @@ export default Vue.extend({
         successMsg: 'Информация о компании отредактирована'
       })
     },
+    safeLen (val: string | undefined): number {
+      return val?.length || 0
+    },
     validateQueryStrLen (val: string, maxLen: number): boolean | null {
-      if (val.length === 0) {
+      if (this.safeLen(val) === 0) {
         return null
       }
 
-      return val.length <= maxLen
+      return this.safeLen(val) <= maxLen
     },
     validateQueryInt (val: string): boolean | null {
-      if (val.length === 0) {
+      if (this.safeLen(val) === 0) {
         return null
       }
 
       return Number.isInteger(Number(val))
     },
     validateQuerySocialUrl (val: string, url: string): boolean | null {
-      if (val.length === 0) {
+      if (this.safeLen(val) === 0) {
         return null
       }
 
-      const validLen = val.length <= 250
+      const validLen = this.safeLen(val) <= 250
       if (!validLen) {
         return false
       }
 
-      if (val.length !== 0) {
+      if (this.safeLen(val) !== 0) {
         return val.startsWith(url)
       }
 
@@ -686,7 +718,7 @@ export default Vue.extend({
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.readAsDataURL(file)
-        reader.onload = () => resolve(reader.result)
+        reader.onload = () => resolve(reader.result.slice(22))
         reader.onerror = error => reject(error)
       })
     }

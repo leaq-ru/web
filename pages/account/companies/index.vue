@@ -4,12 +4,12 @@
     <Breadcrumb :items="breadcrumb" />
 
     <b-alert
-      v-if="newUrl"
+      v-if="successMsg"
       variant="success"
       show
       dismissible
     >
-      Компания {{ newUrl }} добавлена
+      {{ successMsg }}
     </b-alert>
 
     <h2>
@@ -160,7 +160,7 @@ export default Vue.extend({
 
       return {
         companies: res.companies || [],
-        newUrl: ctx.query?.newUrl
+        successMsg: ctx.query?.successMsg
       }
     } catch {
       return ctx.error({

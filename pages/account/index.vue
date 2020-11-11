@@ -8,12 +8,16 @@
     </h2>
 
     <b-link to="/account/profile">
+      <b-icon-person-circle />
+
       Профиль
     </b-link>
 
     <b-row />
 
     <b-link to="/account/companies">
+      <b-icon-window />
+
       Компании
     </b-link>
 

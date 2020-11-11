@@ -129,7 +129,7 @@ export default Vue.extend({
       this.$nuxt.context.redirect({
         path: '/account/companies',
         query: {
-          newUrl: this.url
+          successMsg: `Компания ${this.url} добавлена`
         }
       })
     }

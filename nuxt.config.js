@@ -90,6 +90,8 @@ export default {
       'BIconPatchCheckFll',
       'BIconPencil',
       'BIconPersonCheck',
+      'BIconPersonCircle',
+      'BIconWindow',
 
       'BContainer',
       'BRow',
@@ -104,6 +106,7 @@ export default {
       'BFormInput',
       'BFormSelect',
       'BFormRadioGroup',
+      'BFormFile',
       'BInputGroup',
       'BInputGroupAppend',
       'BCard',

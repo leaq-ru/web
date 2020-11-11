@@ -154,13 +154,10 @@ export default Vue.extend({
         return
       }
 
-      this.$nuxt.context.redirect({
-        path: '/account/companies/apply/verify',
-        query: {
-          url: this.url,
-          metaContent: res.metaContent,
-          metaName: res.metaName
-        }
+      this.$nuxt.context.redirect('/account/companies/apply/verify', {
+        url: this.url,
+        metaContent: res.metaContent,
+        metaName: res.metaName
       })
     }
   },

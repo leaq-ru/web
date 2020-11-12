@@ -1,3 +1,4 @@
+import isProd from './helpers/isProd'
 import ssrBotsOnly from './middleware/ssrBotsOnly'
 
 export default {
@@ -85,6 +86,13 @@ export default {
       'BIconGear',
       'BIconCloudDownload',
       'BIconArrowDownCircle',
+      'BIconPlusCircle',
+      'BIconPatchCheckFll',
+      'BIconPencil',
+      'BIconPersonCheck',
+      'BIconPersonCircle',
+      'BIconWindow',
+      'BIconCheck2Circle',
 
       'BContainer',
       'BRow',
@@ -95,12 +103,17 @@ export default {
       'BFormGroup',
       'BFormTag',
       'BFormText',
+      'BFormTextarea',
       'BFormInput',
       'BFormSelect',
       'BFormRadioGroup',
+      'BFormFile',
+      'BInputGroup',
+      'BInputGroupAppend',
       'BCard',
       'BCardBody',
       'BCardGroup',
+      'BCardHeader',
       'BCardFooter',
       'BCardText',
       'BCardImgLazy',
@@ -118,7 +131,13 @@ export default {
       'BNavbarNav',
       'BNavItem',
       'BNavItemDropdown',
-      'BDropdownItem'
+      'BDropdownItem',
+      'BDropdownDivider',
+      'BMedia',
+      'BTooltip'
+    ],
+    directives: [
+      'VBTooltip'
     ]
   },
   fontawesome: {
@@ -169,8 +188,9 @@ export default {
     }
   },
   env: {
-    HOST: process.env.NODE_ENV === 'production' ? 'https://leaq.ru' : 'http://leaq.local',
-    API_HOST: process.env.NODE_ENV === 'production' ? 'https://api.leaq.ru' : 'http://localhost:1111'
+    HOST: isProd('https://leaq.ru', 'http://leaq.local'),
+    API_HOST: isProd('https://api.leaq.ru', 'http://localhost:1111'),
+    VK_APPID: isProd('7649529', '7654813')
   },
   router: {
     prefetchLinks: false,

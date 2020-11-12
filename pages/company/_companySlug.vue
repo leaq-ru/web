@@ -10,6 +10,8 @@
       <b-row class="mt-3 mb-2">
         <b-col>
           <h1 itemprop="name">
+            <PatchCheck v-if="verified" />
+
             {{ company.title || company.slug }}
           </h1>
         </b-col>
@@ -87,7 +89,6 @@
               {{ safeCategoryTitle(company) }}
             </b-link>
             <template v-else>
-              <b-icon-grid />
               {{ none }}
             </template>
           </div>
@@ -787,13 +788,13 @@
             <IconHeader
               icon="info-circle"
               header="ИНН"
-              :body="company.inn"
+              :body="(company.inn || '').toString()"
             />
 
             <IconHeader
               icon="info-circle"
               header="КПП"
-              :body="company.kpp"
+              :body="(company.kpp || '').toString()"
             />
           </b-row>
 
@@ -801,12 +802,33 @@
             <IconHeader
               icon="info-circle"
               header="ОГРН"
-              :body="company.ogrn"
+              :body="(company.ogrn || '').toString()"
             />
           </b-row>
         </b-card>
 
-        <b-card title="🤔 Не нашли что искали?">
+        <b-card
+          v-if="!verified"
+          title="🤔 Это ваша компания?"
+        >
+          <p class="text-muted">
+            Подтверите права чтобы управлять информацией о компании
+          </p>
+
+          <b-button
+            pill
+            variant="outline-primary"
+            :to="`/account/companies/apply?url=${company.url.slice(7)}`"
+          >
+            <b-icon-check2-circle />
+
+            Подтвердить
+          </b-button>
+        </b-card>
+        <b-card
+          v-else
+          title="🤔 Не нашли что искали?"
+        >
           <a
             href="https://vk.me/leaq_ru"
             rel="nofollow"
@@ -995,7 +1017,8 @@ export default Vue.extend({
         pageSpeed,
         technologyCategories = [],
         related = [],
-        posts = []
+        posts = [],
+        verified = false
       } = await raw.json()
 
       const data = {
@@ -1030,7 +1053,8 @@ export default Vue.extend({
         related,
         pageSpeed: makePageSpeed(pageSpeed),
         technologyCategories,
-        posts
+        posts,
+        verified
       }
 
       if (fullCompany.location?.city) {
@@ -1058,10 +1082,10 @@ export default Vue.extend({
     return {
       none: '—',
       relatedScrollDone: false,
-      postsScrollDone: false,
       showTipFoundOnLeaq: false,
       postsLoading: false,
-      postsLoaded: true
+      postsLoaded: true,
+      postsScrollDone: false
     }
   },
   computed: {
@@ -1115,7 +1139,7 @@ export default Vue.extend({
       setTimeout(() => {
         this.postsLoaded = true
       }, 0)
-      if (res.posts.length < limit) {
+      if (res?.posts?.length < limit) {
         this.postsScrollDone = true
       }
     }

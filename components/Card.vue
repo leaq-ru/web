@@ -1,8 +1,11 @@
 <template>
-  <b-card
-    no-body
-    :header="company.title || company.slug"
-  >
+  <b-card no-body>
+    <b-card-header>
+      <PatchCheck v-if="company.verified" />
+
+      {{ company.title || company.slug }}
+    </b-card-header>
+
     <b-card-body
       itemscope
       itemtype="http://schema.org/Organization"

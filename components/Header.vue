@@ -57,6 +57,10 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
+        <b-nav-item to="/account/companies/apply">
+          Добавить компанию
+        </b-nav-item>
+
         <b-nav-item-dropdown v-if="$store.state.user.self.id">
           <template slot="button-content">
             <b-avatar
@@ -68,13 +72,23 @@
             {{ $store.state.user.self.firstName }}
           </template>
 
+          <b-dropdown-item to="/account/profile">
+            Профиль
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/account/companies">
+            Компании
+          </b-dropdown-item>
+
+          <b-dropdown-divider />
+
           <b-dropdown-item @click="logout">
             Выйти
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item
           v-else
-          :href="`https://oauth.vk.com/authorize?client_id=7649529&display=page&scope=email&redirect_uri=${host}/vk-auth&response_type=code&v=5.124&state=${authRedirectPath}`"
+          :href="methodMakeAuthUrl()"
         >
           <fa :icon="['fab', 'vk']" />
 
@@ -87,17 +101,15 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import makeAuthUrl from '~/helpers/makeAuthUrl'
 
 export default Vue.extend({
-  data () {
-    return {
-      host: process.env.HOST,
-      authRedirectPath: this.$nuxt.$route.path
-    }
-  },
   methods: {
     logout () {
       this.$store.commit('user/logout')
+    },
+    methodMakeAuthUrl () {
+      return makeAuthUrl(this.$nuxt.$route.path)
     }
   }
 })

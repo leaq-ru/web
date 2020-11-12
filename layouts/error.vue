@@ -50,6 +50,9 @@ export default Vue.extend({
       }
     }
   },
+  fetch (): void {
+    this.$store.commit('user/logout')
+  },
   data () {
     return {
       breadcrumb: [{

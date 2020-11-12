@@ -26,7 +26,7 @@
             <b-form-tag
               v-for="tag in city.tags"
               :key="tag.id"
-              :title="tag"
+              :title="tag.title"
               pill
               variant="primary"
               class="mr-1 mb-2"
@@ -53,7 +53,7 @@
             <b-form-tag
               v-for="tag in category.tags"
               :key="tag.id"
-              :title="tag"
+              :title="tag.title"
               pill
               variant="primary"
               class="mr-1 mb-2"
@@ -447,22 +447,8 @@ import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import select from '~/helpers/const/select'
 import getCompanies from '~/helpers/company/getCompanies'
 import findRule from '~/helpers/const/findRule'
-
-const debounce = (func, wait, immediate = false) => {
-  let timeout
-  return function () {
-    const context = this
-    const args = arguments
-    const later = function () {
-      timeout = null
-      if (!immediate) { func.apply(context, args) }
-    }
-    const callNow = immediate && !timeout
-    clearTimeout(timeout)
-    timeout = setTimeout(later, wait)
-    if (callNow) { func.apply(context, args) }
-  }
-}
+import hints from '~/helpers/hints'
+import debounce from '~/helpers/debounce'
 
 enum downloadType {
   email = 'email',
@@ -662,47 +648,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    async getCitiesHints (title: string) {
-      const raw = await fetch([
-        process.env.API_HOST,
-        '/v1/city/getHints?',
-        new URLSearchParams({
-          title,
-          limit: '7'
-        }).toString()
-      ].join(''))
-      const res = await raw.json()
-      this.city.list = res.cities || []
-    },
-    async getCategoriesHints (title: string) {
-      const raw = await fetch([
-        process.env.API_HOST,
-        '/v1/category/getHints?',
-        new URLSearchParams({
-          title,
-          limit: '7'
-        }).toString()
-      ].join(''))
-      const res = await raw.json()
-      this.category.list = res.categories || []
-    },
-    async getTechnologiesHints (name: string) {
-      const params = new URLSearchParams({
-        name,
-        limit: '7'
-      })
-      this.technology.tags.forEach(({ id }) => {
-        params.append('excludeIds', id)
-      })
-
-      const raw = await fetch([
-        process.env.API_HOST,
-        '/v1/technology/getHints?',
-        params.toString()
-      ].join(''))
-      const res = await raw.json()
-      this.technology.list = res.technologies || []
-    },
+    ...hints,
     async methodSearchCompanies () {
       this.scrollDone = false
       this.loading.search = true

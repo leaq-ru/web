@@ -1,5 +1,13 @@
 import unifyDate from '~/helpers/unifyDate'
 
+const safeString = (val) => {
+  if (!val) {
+    return ''
+  }
+
+  return val
+}
+
 export default {
   toShowedPhone (phone: number): string {
     if (!phone) {
@@ -36,67 +44,70 @@ export default {
     return unifyDate(date).toLocaleDateString()
   },
   safeAppStoreUrl (company) {
-    return company.app?.appStore?.url
+    return safeString(company.app?.appStore?.url)
   },
   safeGooglePlayUrl (company) {
-    return company.app?.googlePlay?.url
+    return safeString(company.app?.googlePlay?.url)
   },
   safeCategoryId (company) {
-    return company.category?.id
+    return safeString(company.category?.id)
   },
   safeCategoryTitle (company) {
-    return company.category?.title
+    return safeString(company.category?.title)
   },
   safeCategorySlug (company) {
-    return company.category?.slug
+    return safeString(company.category?.slug)
   },
   safeLocationCityTitle (company) {
-    return company.location?.city?.title
+    return safeString(company.location?.city?.title)
   },
   safeShortCityTitle (company) {
-    return company.city?.title
+    return safeString(company.city?.title)
+  },
+  safeLocationCityId (company) {
+    return safeString(company.location?.city?.id)
   },
   safeLocationCitySlug (company) {
-    return company.location?.city?.slug
+    return safeString(company.location?.city?.slug)
   },
   safeShortCitySlug (company) {
-    return company.city?.slug
+    return safeString(company.city?.slug)
   },
   safeLocationAddress (company) {
-    return company.location?.address
+    return safeString(company.location?.address)
   },
   safeLocationAddressTitle (company) {
-    return company.location?.addressTitle
+    return safeString(company.location?.addressTitle)
   },
   safeSocialVkId (company) {
-    return company.social?.vk?.groupId
+    return safeString(company.social?.vk?.groupId)
   },
   safeSocialVkName (company) {
-    return company.social?.vk?.name
+    return safeString(company.social?.vk?.name)
   },
   safeSocialVkDescription (company) {
-    return company.social?.vk?.description
+    return safeString(company.social?.vk?.description)
   },
   safeSocialVkPhoto200 (company) {
-    return company.social?.vk?.photo200
+    return safeString(company.social?.vk?.photo200)
   },
   safeSocialVkScreenName (company) {
-    return company.social?.vk?.screenName
+    return safeString(company.social?.vk?.screenName)
   },
   safeSocialVkMembersCount (company) {
-    return company.social?.vk?.membersCount
+    return safeString(company.social?.vk?.membersCount)
   },
   safeSocialInstagramUrl (company) {
-    return company.social?.instagram?.url
+    return safeString(company.social?.instagram?.url)
   },
   safeSocialTwitterUrl (company) {
-    return company.social?.twitter?.url
+    return safeString(company.social?.twitter?.url)
   },
   safeSocialYoutubeUrl (company) {
-    return company.social?.youtube?.url
+    return safeString(company.social?.youtube?.url)
   },
   safeSocialFacebookUrl (company) {
-    return company.social?.facebook?.url
+    return safeString(company.social?.facebook?.url)
   },
   safeTechnologyCategoriesLength (elem) {
     if (elem?.technologies?.length) {

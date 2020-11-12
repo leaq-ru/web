@@ -12,4 +12,4 @@ COPY --from=build /app/static /app/static
 COPY --from=build /app/middleware /app/middleware
 COPY --from=build /app/.nuxt /app/.nuxt
 COPY --from=build /app/nuxt.config.js /app
-COPY --from=build /app/helpers/isProd.js /app/helpers
+COPY --from=build /app/helpers/isProd.js /app/helpers/isProd.js

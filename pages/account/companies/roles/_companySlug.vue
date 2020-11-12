@@ -15,7 +15,7 @@
       Администратор — может редактировать информацию о компании. У компании может быть до 50 Администраторов
     </p>
 
-    <template v-if="isMeOwner">
+    <template v-if="meOwner">
       <p class="text-muted">
         Попросите будущего администратора передать ID пользователя с
 
@@ -25,8 +25,8 @@
       </p>
       <b-input-group class="mt-3">
         <b-form-input
-          v-model="url"
-          class="col-4"
+          v-model="newAdminId"
+          class="col-sm-4"
           placeholder="ID пользователя"
         />
 
@@ -53,7 +53,11 @@
       Менеджеры
     </h3>
 
-    {{ managers }}
+    <ManagersList
+      :items="managers"
+      :company-id="companyId"
+      @managerEdit="reloadManagers"
+    />
 
     <Footer />
   </b-container>
@@ -107,7 +111,7 @@ export default Vue.extend({
       query.toString()
     ].join(''), {
       headers: new Headers({
-        Authorization: `Bearer ${ctx.store.state?.user?.self?.token}`
+        Authorization: `Bearer ${ctx.store.state.user.self.token}`
       })
     })
 
@@ -120,18 +124,10 @@ export default Vue.extend({
     const resManagers = await rawManagers.json()
     const managers = resManagers.managers || []
 
-    let myGrant = ''
-    for (const man of managers) {
-      if (man.id === ctx.store.state?.user?.self?.id) {
-        myGrant = man.grant
-        break
-      }
-    }
-
     return {
+      companyId: resComp.fullCompany.id,
       companyHost: resComp.fullCompany.url.slice(7),
-      managers,
-      myGrant
+      managers
     }
   },
   data () {
@@ -166,12 +162,72 @@ export default Vue.extend({
           path: `/account/companies/roles/${this.$route.params.companySlug}`
         }
       }],
-      addAdminLoading: false
+      addAdminLoading: false,
+      newAdminId: ''
     }
   },
+  computed: {
+    meOwner () {
+      let myGrant = ''
+      for (const man of this.managers) {
+        if (man.id === this.$store.state.user.self.id) {
+          myGrant = man.grant
+          break
+        }
+      }
+
+      return myGrant === grant.owner
+    },
+  },
   methods: {
-    isMeOwner () {
-      return this.myGrant === grant.owner
+    async reloadManagers () {
+      const q = new URLSearchParams()
+      q.append('opts.limit', '100')
+      q.append('companyId', this.companyId)
+      const rawManagers = await fetch([
+        apiAddr,
+        '/v1/role/getManagers?',
+        q.toString()
+      ].join(''), {
+        headers: new Headers({
+          Authorization: `Bearer ${this.$store.state.user.self.token}`
+        })
+      })
+
+      if (!rawManagers.ok) {
+        return this.$nuxt.error({
+          statusCode: 500
+        })
+      }
+      const { managers } = await rawManagers.json()
+      managers.sort(a => a.grant === grant.owner ? -1 : 1)
+
+      this.managers = managers
+    },
+    async addAdmin () {
+      this.addAdminLoading = true
+      const raw = await fetch([
+        apiAddr,
+        '/v1/role/addCompanyAdmin'
+      ].join(''), {
+        method: 'POST',
+        headers: new Headers({
+          Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
+        }),
+        body: JSON.stringify({
+          companyId: this.companyId,
+          userId: this.newAdminId
+        })
+      })
+      this.addAdminLoading = false
+
+      if (!raw.ok) {
+        return this.$nuxt.error({
+          statusCode: 500
+        })
+      }
+
+      await this.reloadManagers()
     }
   },
   head () {

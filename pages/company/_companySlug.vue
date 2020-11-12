@@ -788,13 +788,13 @@
             <IconHeader
               icon="info-circle"
               header="ИНН"
-              :body="company.inn"
+              :body="(company.inn || '').toString()"
             />
 
             <IconHeader
               icon="info-circle"
               header="КПП"
-              :body="company.kpp"
+              :body="(company.kpp || '').toString()"
             />
           </b-row>
 
@@ -802,12 +802,33 @@
             <IconHeader
               icon="info-circle"
               header="ОГРН"
-              :body="company.ogrn"
+              :body="(company.ogrn || '').toString()"
             />
           </b-row>
         </b-card>
 
-        <b-card title="🤔 Не нашли что искали?">
+        <b-card
+          v-if="!verified"
+          title="🤔 Это ваша компания?"
+        >
+          <p class="text-muted">
+            Подтверите права чтобы управлять информацией о компании
+          </p>
+
+          <b-button
+            pill
+            variant="outline-primary"
+            :to="`/account/companies/apply?url=${company.url.slice(7)}`"
+          >
+            <b-icon-check2-circle />
+
+            Подтвердить
+          </b-button>
+        </b-card>
+        <b-card
+          v-else
+          title="🤔 Не нашли что искали?"
+        >
           <a
             href="https://vk.me/leaq_ru"
             rel="nofollow"

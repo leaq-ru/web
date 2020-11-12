@@ -92,6 +92,7 @@ export default {
       'BIconPersonCheck',
       'BIconPersonCircle',
       'BIconWindow',
+      'BIconCheck2Circle',
 
       'BContainer',
       'BRow',

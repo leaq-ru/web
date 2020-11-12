@@ -57,6 +57,10 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
+        <b-nav-item to="/account/companies/apply">
+          Добавить компанию
+        </b-nav-item>
+
         <b-nav-item-dropdown v-if="$store.state.user.self.id">
           <template slot="button-content">
             <b-avatar

@@ -14,7 +14,7 @@
     <b-input-group class="mt-3">
       <b-form-input
         v-model="url"
-        class="col-4"
+        class="col-sm-4"
         placeholder="yourcompany.ru"
       />
 
@@ -61,27 +61,21 @@ import makeTitle from '~/helpers/makeTitle'
 import makeAuthUrl from '~/helpers/makeAuthUrl'
 
 export default Vue.extend({
-  asyncData (ctx: Context): object | void {
-    try {
-      if (!ctx.store.state?.user?.self?.token) {
-        ctx.redirect(makeAuthUrl(ctx.route.path))
-        return
-      }
-
-      const data = {
-        url: ''
-      }
-
-      if (ctx.query?.url) {
-        data.url = String(ctx.query?.url)
-      }
-
-      return data
-    } catch {
-      return ctx.error({
-        statusCode: 500
-      })
+  asyncData (ctx: Context): object {
+    if (!ctx.store.state?.user?.self?.token) {
+      ctx.redirect(makeAuthUrl(ctx.route.path))
+      return
     }
+
+    const data = {
+      url: ''
+    }
+
+    if (ctx.query?.url) {
+      data.url = String(ctx.query?.url)
+    }
+
+    return data
   },
   data () {
     return {

@@ -58,7 +58,7 @@ import makeTitle from '~/helpers/makeTitle'
 import makeAuthUrl from '~/helpers/makeAuthUrl'
 
 export default Vue.extend({
-  asyncData (ctx: Context): Promise<object | void> {
+  asyncData (ctx: Context): void {
     if (!ctx.store.state?.user?.self?.token) {
       ctx.redirect(makeAuthUrl(ctx.route.path))
     }

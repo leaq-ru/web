@@ -655,8 +655,6 @@ export default Vue.extend({
         bodyRaw.avatarBase64 = await this.toBase64(this.file)
       }
 
-      console.log(JSON.stringify(bodyRaw))
-
       this.sendEditLoading = true
       const raw = await fetch([
         apiAddr,

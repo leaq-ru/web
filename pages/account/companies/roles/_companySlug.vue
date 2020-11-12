@@ -1,0 +1,183 @@
+<template>
+  <b-container fluid="xl">
+    <Header />
+    <Breadcrumb :items="breadcrumb" />
+
+    <h2>
+      Права доступа на {{ companyHost }}
+    </h2>
+
+    <p class="text-muted">
+      Владелец — может редактировать информацию о компании, назначать и снимать Администраторов, передавать права Владельца другому пользователю. У компании может быть только один Владелец
+    </p>
+
+    <p class="text-muted">
+      Администратор — может редактировать информацию о компании. У компании может быть до 50 Администраторов
+    </p>
+
+    <template v-if="isMeOwner">
+      <p class="text-muted">
+        Попросите будущего администратора передать ID пользователя с
+
+        <b-link to="/account/profile">
+          этой страницы
+        </b-link>
+      </p>
+      <b-input-group class="mt-3">
+        <b-form-input
+          v-model="url"
+          class="col-4"
+          placeholder="ID пользователя"
+        />
+
+        <b-input-group-append>
+          <b-button
+            variant="primary"
+            :disabled="addAdminLoading"
+            @click="addAdmin"
+          >
+            Добавить администратора
+          </b-button>
+        </b-input-group-append>
+
+        <b-icon-arrow-clockwise
+          v-if="addAdminLoading"
+          class="ml-2 mt-2 text-primary"
+          font-scale="1.5"
+          animation="spin"
+        />
+      </b-input-group>
+    </template>
+
+    <h3 class="mt-3">
+      Менеджеры
+    </h3>
+
+    {{ managers }}
+
+    <Footer />
+  </b-container>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import { Context } from '@nuxt/types'
+import makeTitle from '~/helpers/makeTitle'
+import apiAddr from '~/helpers/const/apiAddr'
+import makeAuthUrl from '~/helpers/makeAuthUrl'
+import grant from '~/helpers/role/grant'
+
+export default Vue.extend({
+  async asyncData (ctx: Context): Promise<object | void> {
+    if (!ctx.store.state?.user?.self?.token) {
+      ctx.redirect(makeAuthUrl(ctx.route.path))
+      return
+    }
+
+    if (!ctx.params.companySlug) {
+      return ctx.error({
+        statusCode: 404
+      })
+    }
+
+    const queryGetBySlug = new URLSearchParams()
+    queryGetBySlug.append('slug', ctx.params.companySlug)
+
+    const rawComp = await fetch([
+      apiAddr,
+      '/v2/company/getBySlug?',
+      queryGetBySlug.toString()
+    ].join(''))
+
+    if (!rawComp.ok) {
+      return ctx.error({
+        statusCode: 404
+      })
+    }
+
+    const resComp = await rawComp.json()
+
+    const query = new URLSearchParams()
+    query.append('opts.limit', '100')
+    query.append('companyId', resComp.fullCompany.id)
+
+    const rawManagers = await fetch([
+      apiAddr,
+      '/v1/role/getManagers?',
+      query.toString()
+    ].join(''), {
+      headers: new Headers({
+        Authorization: `Bearer ${ctx.store.state?.user?.self?.token}`
+      })
+    })
+
+    if (!rawManagers.ok) {
+      return ctx.error({
+        statusCode: 500
+      })
+    }
+
+    const resManagers = await rawManagers.json()
+    const managers = resManagers.managers || []
+
+    let myGrant = ''
+    for (const man of managers) {
+      if (man.id === ctx.store.state?.user?.self?.id) {
+        myGrant = man.grant
+        break
+      }
+    }
+
+    return {
+      companyHost: resComp.fullCompany.url.slice(7),
+      managers,
+      myGrant
+    }
+  },
+  data () {
+    return {
+      breadcrumb: [{
+        id: 1,
+        text: '🏠',
+        to: {
+          path: '/'
+        }
+      }, {
+        id: 2,
+        text: 'Аккаунт',
+        to: {
+          path: '/account'
+        }
+      }, {
+        id: 3,
+        text: 'Мои компании',
+        to: {
+          path: '/account/companies'
+        }
+      }, {
+        id: 4,
+        text: this.$route.params.companySlug,
+        to: {},
+        active: false
+      }, {
+        id: 5,
+        text: 'Права доступа',
+        to: {
+          path: `/account/companies/roles/${this.$route.params.companySlug}`
+        }
+      }],
+      addAdminLoading: false
+    }
+  },
+  methods: {
+    isMeOwner () {
+      return this.myGrant === grant.owner
+    }
+  },
+  head () {
+    return {
+      title: makeTitle('Права доступа')
+    }
+  }
+})
+</script>

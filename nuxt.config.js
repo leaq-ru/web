@@ -112,6 +112,7 @@ export default {
       'BCard',
       'BCardBody',
       'BCardGroup',
+      'BCardHeader',
       'BCardFooter',
       'BCardText',
       'BCardImgLazy',

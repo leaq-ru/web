@@ -10,6 +10,8 @@
       <b-row class="mt-3 mb-2">
         <b-col>
           <h1 itemprop="name">
+            <PatchCheck v-if="verified" />
+
             {{ company.title || company.slug }}
           </h1>
         </b-col>
@@ -87,7 +89,6 @@
               {{ safeCategoryTitle(company) }}
             </b-link>
             <template v-else>
-              <b-icon-grid />
               {{ none }}
             </template>
           </div>
@@ -995,7 +996,8 @@ export default Vue.extend({
         pageSpeed,
         technologyCategories = [],
         related = [],
-        posts = []
+        posts = [],
+        verified = false
       } = await raw.json()
 
       const data = {
@@ -1030,7 +1032,8 @@ export default Vue.extend({
         related,
         pageSpeed: makePageSpeed(pageSpeed),
         technologyCategories,
-        posts
+        posts,
+        verified
       }
 
       if (fullCompany.location?.city) {
@@ -1061,7 +1064,7 @@ export default Vue.extend({
       showTipFoundOnLeaq: false,
       postsLoading: false,
       postsLoaded: true,
-      postsScrollDone: false,
+      postsScrollDone: false
     }
   },
   computed: {

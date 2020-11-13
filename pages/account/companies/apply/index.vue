@@ -50,6 +50,13 @@
       У компании уже есть владелец. Если вы считаете, что это ошибка, обратитесь в <a href="https://vk.me/leaq_ru" target="_blank" rel="nofollow">поддержку</a>
     </p>
 
+    <p
+      v-if="err"
+      class="text-danger mt-3"
+    >
+      Произошла ошибка
+    </p>
+
     <Footer />
   </b-container>
 </template>
@@ -105,6 +112,7 @@ export default Vue.extend({
         }
       }],
       sendApplyLoading: false,
+      err: false,
       errNoContacts: false,
       errAlreadyHasOwner: false
     }
@@ -113,6 +121,7 @@ export default Vue.extend({
     async sendApply () {
       let res
       try {
+        this.err = false
         this.errNoContacts = false
         this.errAlreadyHasOwner = false
 
@@ -151,9 +160,7 @@ export default Vue.extend({
           return
         }
 
-        this.$nuxt.context.error({
-          statusCode: 500
-        })
+        this.err = true
       } finally {
         this.sendApplyLoading = false
       }

@@ -348,7 +348,7 @@
             <IconHeader
               icon="clock"
               header="Дата регистрации"
-              :body="toShowedDate(company.domain && company.domain.registrationDate) || none"
+              :body="company.domain && company.domain.registrationDate ? toShowedDate(company.domain.registrationDate) : none"
             />
           </b-row>
 

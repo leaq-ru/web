@@ -34,7 +34,7 @@ export default Vue.extend({
         body: JSON.stringify({
           code: query.code
         })
-      }).catch()
+      })
 
       if (!raw.ok) {
         return this.$nuxt.context.error({

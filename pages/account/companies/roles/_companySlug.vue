@@ -91,7 +91,7 @@ export default Vue.extend({
       apiAddr,
       '/v2/company/getBySlug?',
       queryGetBySlug.toString()
-    ].join('')).catch()
+    ].join(''))
 
     if (!rawComp.ok) {
       return ctx.error({
@@ -113,7 +113,7 @@ export default Vue.extend({
       headers: new Headers({
         Authorization: `Bearer ${ctx.store.state.user.self.token}`
       })
-    }).catch()
+    })
 
     if (!rawManagers.ok) {
       return ctx.error({
@@ -192,7 +192,7 @@ export default Vue.extend({
         headers: new Headers({
           Authorization: `Bearer ${this.$store.state.user.self.token}`
         })
-      }).catch()
+      })
 
       if (!rawManagers.ok) {
         return this.$nuxt.error({
@@ -218,7 +218,7 @@ export default Vue.extend({
           companyId: this.companyId,
           userId: this.newAdminId
         })
-      }).catch()
+      })
       this.addAdminLoading = false
 
       if (!raw.ok) {

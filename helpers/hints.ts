@@ -7,7 +7,7 @@ export default {
         title,
         limit: '7'
       }).toString()
-    ].join('')).catch()
+    ].join(''))
     const res = await raw.json()
     this.city.list = res.cities || []
   },
@@ -19,7 +19,7 @@ export default {
         title,
         limit: '7'
       }).toString()
-    ].join('')).catch()
+    ].join(''))
     const res = await raw.json()
     this.category.list = res.categories || []
   },
@@ -36,7 +36,7 @@ export default {
       process.env.API_HOST,
       '/v1/technology/getHints?',
       params.toString()
-    ].join('')).catch()
+    ].join(''))
     const res = await raw.json()
     this.technology.list = res.technologies || []
   }

@@ -103,7 +103,7 @@ export default Vue.extend({
         new URLSearchParams({
           slug: params.technologySlug
         }).toString()
-      ].join('')).catch()
+      ].join(''))
 
       if (!rawTech.ok) {
         return error({

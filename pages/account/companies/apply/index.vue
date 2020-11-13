@@ -126,7 +126,7 @@ export default Vue.extend({
         headers: new Headers({
           Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
         })
-      }).catch()
+      })
       this.sendApplyLoading = false
 
       const res = await raw.json()

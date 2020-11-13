@@ -121,7 +121,7 @@ export default Vue.extend({
           headers: new Headers({
             Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
           })
-        }).catch()
+        })
 
         if (!raw.ok) {
           return this.$nuxt.error({

@@ -149,7 +149,7 @@ export default Vue.extend({
         headers: new Headers({
           Authorization: `Bearer ${ctx.store.state?.user?.self?.token}`
         })
-      }).catch()
+      })
 
       if (!raw.ok) {
         return ctx.error({
@@ -219,7 +219,7 @@ export default Vue.extend({
         headers: new Headers({
           Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
         })
-      }).catch()
+      })
       const res = await raw.json()
       this.companiesLoading = false
 

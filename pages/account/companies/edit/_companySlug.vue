@@ -414,7 +414,7 @@ export default Vue.extend({
       new URLSearchParams({
         slug: ctx.params.companySlug
       }).toString()
-    ].join('')).catch()
+    ].join(''))
 
     if (!raw.ok) {
       ctx.error({
@@ -665,7 +665,7 @@ export default Vue.extend({
           Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
         }),
         body: JSON.stringify(bodyRaw)
-      }).catch()
+      })
       this.sendEditLoading = false
 
       if (!raw.ok) {

@@ -45,7 +45,7 @@ export default Vue.extend({
       const raw = await fetch([
         apiAddr,
         '/v1/category/getAll'
-      ].join(''))
+      ].join('')).catch()
 
       const result = await raw.json()
       result.categories.sort((a, b) => a.title.localeCompare(b.title))

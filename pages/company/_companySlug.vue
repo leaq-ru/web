@@ -927,7 +927,7 @@ const getRelated = async ({
     addr,
     '/v2/company/get?',
     queryRelated.toString()
-  ].join(''))
+  ].join('')).catch()
 
   const resRelated = await rawRelated.json()
 
@@ -1004,7 +1004,7 @@ export default Vue.extend({
         new URLSearchParams({
           slug: params.companySlug
         }).toString()
-      ].join(''))
+      ].join('')).catch()
 
       if (!raw.ok) {
         return error({
@@ -1130,7 +1130,7 @@ export default Vue.extend({
         process.env.API_HOST,
         '/v1/post/get?',
         query.toString()
-      ].join(''))
+      ].join('')).catch()
       const res = await raw.json()
       this.postsLoading = false
 

@@ -12,7 +12,7 @@ export default async ({
       addr,
       '/v2/company/get?',
       querystring
-    ].join(''))
+    ].join('')).catch()
 
     const result = await rawCompanies.json()
     return result

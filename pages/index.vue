@@ -472,7 +472,7 @@ const download = async (querystring: string, type: downloadType): Promise<void> 
     process.env.API_HOST,
     `/v1/company/${apiPath}?`,
     querystring
-  ].join(''))
+  ].join('')).catch()
 
   const res = await raw.json()
 

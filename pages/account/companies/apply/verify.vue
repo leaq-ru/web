@@ -118,7 +118,7 @@ export default Vue.extend({
         headers: new Headers({
           Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
         })
-      })
+      }).catch()
       this.sendVerifyLoading = false
 
       if (!raw.ok) {

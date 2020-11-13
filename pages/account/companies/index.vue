@@ -35,7 +35,8 @@
           <template #aside>
             <b-img-lazy
               :src="company.avatar || ''"
-              width="64"
+              width="100"
+              height="100"
             />
           </template>
 

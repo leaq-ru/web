@@ -50,13 +50,6 @@
       У компании уже есть владелец. Если вы считаете, что это ошибка, обратитесь в <a href="https://vk.me/leaq_ru" target="_blank" rel="nofollow">поддержку</a>
     </p>
 
-    <p
-      v-if="err"
-      class="text-danger mt-3"
-    >
-      Произошла ошибка
-    </p>
-
     <Footer />
   </b-container>
 </template>
@@ -112,44 +105,33 @@ export default Vue.extend({
         }
       }],
       sendApplyLoading: false,
-      err: false,
       errNoContacts: false,
       errAlreadyHasOwner: false
     }
   },
   methods: {
     async sendApply () {
-      let res
-      try {
-        this.err = false
-        this.errNoContacts = false
-        this.errAlreadyHasOwner = false
+      this.errNoContacts = false
+      this.errAlreadyHasOwner = false
 
-        this.sendApplyLoading = true
-        const raw = await fetch([
-          process.env.API_HOST,
-          '/v1/role/applyCompanyOwner'
-        ].join(''), {
-          method: 'POST',
-          body: JSON.stringify({
-            companyUrl: this.url
-          }),
-          headers: new Headers({
-            Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
-          })
+      this.sendApplyLoading = true
+      const raw = await fetch([
+        process.env.API_HOST,
+        '/v1/role/applyCompanyOwner'
+      ].join(''), {
+        method: 'POST',
+        body: JSON.stringify({
+          companyUrl: this.url
+        }),
+        headers: new Headers({
+          Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
         })
-        res = await raw.json()
+      })
+      this.sendApplyLoading = false
 
-        if (!raw.ok) {
-          throw new Error('not ok')
-        }
+      const res = await raw.json()
 
-        this.$nuxt.context.redirect('/account/companies/apply/verify', {
-          url: this.url,
-          metaContent: res.metaContent,
-          metaName: res.metaName
-        })
-      } catch {
+      if (!raw.ok) {
         if (res?.error?.includes('company not found')) {
           this.errNoContacts = true
           return
@@ -160,10 +142,17 @@ export default Vue.extend({
           return
         }
 
-        this.err = true
-      } finally {
-        this.sendApplyLoading = false
+        this.$nuxt.context.error({
+          statusCode: 500
+        })
+        return
       }
+
+      this.$nuxt.context.redirect('/account/companies/apply/verify', {
+        url: this.url,
+        metaContent: res.metaContent,
+        metaName: res.metaName
+      })
     }
   },
   head () {

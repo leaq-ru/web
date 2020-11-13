@@ -111,27 +111,36 @@ export default Vue.extend({
   },
   methods: {
     async sendApply () {
-      this.errNoContacts = false
-      this.errAlreadyHasOwner = false
+      let res
+      try {
+        this.errNoContacts = false
+        this.errAlreadyHasOwner = false
 
-      this.sendApplyLoading = true
-      const raw = await fetch([
-        process.env.API_HOST,
-        '/v1/role/applyCompanyOwner'
-      ].join(''), {
-        method: 'POST',
-        body: JSON.stringify({
-          companyUrl: this.url
-        }),
-        headers: new Headers({
-          Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
+        this.sendApplyLoading = true
+        const raw = await fetch([
+          process.env.API_HOST,
+          '/v1/role/applyCompanyOwner'
+        ].join(''), {
+          method: 'POST',
+          body: JSON.stringify({
+            companyUrl: this.url
+          }),
+          headers: new Headers({
+            Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
+          })
         })
-      })
-      this.sendApplyLoading = false
+        res = await raw.json()
 
-      const res = await raw.json()
+        if (!raw.ok) {
+          throw new Error('not ok')
+        }
 
-      if (!raw.ok) {
+        this.$nuxt.context.redirect('/account/companies/apply/verify', {
+          url: this.url,
+          metaContent: res.metaContent,
+          metaName: res.metaName
+        })
+      } catch {
         if (res?.error?.includes('company not found')) {
           this.errNoContacts = true
           return
@@ -145,14 +154,9 @@ export default Vue.extend({
         this.$nuxt.context.error({
           statusCode: 500
         })
-        return
+      } finally {
+        this.sendApplyLoading = false
       }
-
-      this.$nuxt.context.redirect('/account/companies/apply/verify', {
-        url: this.url,
-        metaContent: res.metaContent,
-        metaName: res.metaName
-      })
     }
   },
   head () {

@@ -8,7 +8,11 @@
     </h2>
 
     <p class="text-muted">
-      Укажите адрес вашего сайта. Если его нет в каталоге, он будет добавлен автоматически
+      Укажите адрес вашего сайта в формате
+
+      <span class="font-weight-bold">yourcompany.ru</span>.
+
+      Если его нет в каталоге, он будет добавлен автоматически
     </p>
 
     <b-input-group class="mt-3">
@@ -63,7 +67,7 @@ import makeAuthUrl from '~/helpers/makeAuthUrl'
 export default Vue.extend({
   asyncData (ctx: Context): object {
     if (!ctx.store.state?.user?.self?.token) {
-      ctx.redirect(makeAuthUrl(ctx.route.path))
+      ctx.redirect(makeAuthUrl(ctx.route))
       return
     }
 

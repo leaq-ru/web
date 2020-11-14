@@ -134,7 +134,7 @@ export default Vue.extend({
   async asyncData (ctx: Context): Promise<object | void> {
     try {
       if (!ctx.store.state?.user?.self?.token) {
-        ctx.redirect(makeAuthUrl(ctx.route.path))
+        ctx.redirect(makeAuthUrl(ctx.route))
         return
       }
 

@@ -397,7 +397,7 @@ export default Vue.extend({
   },
   async asyncData (ctx: Context): Promise<object> {
     if (!ctx.store.state?.user?.self?.token) {
-      ctx.redirect(makeAuthUrl(ctx.route.path))
+      ctx.redirect(makeAuthUrl(ctx.route))
       return
     }
 
@@ -609,11 +609,11 @@ export default Vue.extend({
       return this.validateQuerySocialUrl(this.query.youtubeUrl, 'https://www.youtube.com/')
     },
     fileState () {
-      if (this.file?.size < 200000 && this.file?.name?.split('.').pop() === 'png') {
-        return true
+      if (this.file === null) {
+        return null
       }
 
-      return this.file === null ? null : true
+      return this.file?.size <= 200000 && this.file?.name?.split('.').pop() === 'png'
     }
   },
   watch: {

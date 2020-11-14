@@ -257,7 +257,7 @@
             v-if="company.description"
             itemprop="description"
           >
-            {{ company.description }}
+            <TextSpoiler :text="company.description" />
           </span>
 
           <template v-else>
@@ -458,7 +458,7 @@
             <b-row />
 
             <div class="ml-21">
-              {{ company.social.vk.description || none }}
+              <TextSpoiler :text="company.social.vk.description || none" />
             </div>
           </template>
           <template v-else>
@@ -812,7 +812,9 @@
           title="🤔 Это ваша компания?"
         >
           <p class="text-muted">
-            Подтверите права чтобы управлять информацией о компании
+            Подтверите права чтобы управлять информацией о компании и получить знак
+
+            <PatchCheck />
           </p>
 
           <b-button
@@ -955,7 +957,6 @@ const makeDescription = (company: any): string => {
   }
 
   const result = 'Контакты компании: '
-  let desc = ''
   const contacts = []
   if (company.phone) {
     contacts.push(`телефон ${companyGetters.toShowedPhone(company.phone)}`)
@@ -963,6 +964,13 @@ const makeDescription = (company: any): string => {
   if (company.email) {
     contacts.push(`email ${company.email}`)
   }
+
+  const sn = companyGetters.safeSocialVkScreenName(company)
+  if (sn) {
+    contacts.push(`ВКонтакте https://vk.com/${sn}`)
+  }
+
+  let desc = ''
   if (companyGetters.safeSocialVkDescription(company)) {
     desc = companyGetters.safeSocialVkDescription(company)
   }

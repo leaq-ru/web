@@ -18,18 +18,7 @@
 
           <b-row class="mb-3" />
 
-          <template v-if="!showFull && postText.length > 217">
-            <p>
-              {{ postText.slice(0, 217) }}
-            </p>
-
-            <b-link @click="showFull = true">
-              Показать полностью...
-            </b-link>
-          </template>
-          <p v-else>
-            {{ postText }}
-          </p>
+          <TextSpoiler :text="postText" />
         </b-card-text>
 
         <b-row class="mb-3" />

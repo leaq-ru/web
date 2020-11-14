@@ -58,7 +58,7 @@ import makeAuthUrl from '~/helpers/makeAuthUrl'
 export default Vue.extend({
   asyncData (ctx: Context): object {
     if (!ctx.store.state?.user?.self?.token) {
-      ctx.redirect(makeAuthUrl(ctx.route.path))
+      ctx.redirect(makeAuthUrl(ctx.route))
       return
     }
 

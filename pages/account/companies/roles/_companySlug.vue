@@ -74,7 +74,7 @@ import grant from '~/helpers/role/grant'
 export default Vue.extend({
   async asyncData (ctx: Context): Promise<object | void> {
     if (!ctx.store.state?.user?.self?.token) {
-      ctx.redirect(makeAuthUrl(ctx.route.path))
+      ctx.redirect(makeAuthUrl(ctx.route))
       return
     }
 

@@ -109,7 +109,7 @@ export default Vue.extend({
       this.$store.commit('user/logout')
     },
     methodMakeAuthUrl () {
-      return makeAuthUrl(this.$nuxt.$route.path)
+      return makeAuthUrl(this.$nuxt.$route)
     }
   }
 })

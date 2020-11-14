@@ -1,4 +1,10 @@
-export default (path: string): string => {
+import { Vue } from 'vue/types/vue'
+
+export default (route: Vue['$route']): string => {
+  let path = '/'
+  if (route.fullPath) {
+    path = route.fullPath
+  }
   const vkAppId = process.env.VK_APPID
   const host = process.env.HOST
 

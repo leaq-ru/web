@@ -345,20 +345,6 @@
         Сохранить
       </b-button>
 
-      <span
-        v-if="!stateValid"
-        class="ml-2 mt-2 text-danger"
-      >
-        Одно из полей некорректно, пожалуйста проверьте данные
-      </span>
-
-      <span
-        v-if="errVk"
-        class="ml-2 mt-2 text-danger"
-      >
-        Вы ввели ссылку на закрытую группу ВКонтакте. Пожалуйста, откройте группу или не вставляйте ссылку на нее
-      </span>
-
       <b-icon-arrow-clockwise
         v-if="sendEditLoading"
         class="ml-2 mt-2 text-primary"
@@ -366,6 +352,20 @@
         animation="spin"
       />
     </b-input-group>
+
+    <p
+      v-if="!stateValid"
+      class="mt-3 text-danger"
+    >
+      Одно из полей некорректно, пожалуйста проверьте данные
+    </p>
+
+    <p
+      v-if="errVk"
+      class="mt-3 text-danger"
+    >
+      Вы ввели ссылку на закрытую группу ВКонтакте. Пожалуйста, откройте группу или не вставляйте ссылку на нее
+    </p>
 
     <Footer />
   </b-container>

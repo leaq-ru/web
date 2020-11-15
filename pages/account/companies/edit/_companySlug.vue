@@ -352,6 +352,13 @@
         Одно из полей некорректно, пожалуйста проверьте данные
       </span>
 
+      <span
+        v-if="errVk"
+        class="ml-2 mt-2 text-danger"
+      >
+        Вы ввели ссылку на закрытую группу ВКонтакте. Пожалуйста, откройте группу или не вставляйте ссылку на нее
+      </span>
+
       <b-icon-arrow-clockwise
         v-if="sendEditLoading"
         class="ml-2 mt-2 text-primary"
@@ -506,7 +513,8 @@ export default Vue.extend({
         addTag: addTag(this, 'cityTag', 'input-city'),
         removeTag: removeTag(this, 'cityTag')
       },
-      sendEditLoading: false
+      sendEditLoading: false,
+      errVk: false
     }
   },
   computed: {
@@ -669,6 +677,13 @@ export default Vue.extend({
       this.sendEditLoading = false
 
       if (!raw.ok) {
+        const res = await raw.json()
+
+        if (res?.error === 'vk group access denied') {
+          this.errVk = true
+          return
+        }
+
         this.$nuxt.error({
           statusCode: 500
         })

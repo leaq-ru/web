@@ -136,12 +136,12 @@ export default Vue.extend({
       const res = await raw.json()
 
       if (!raw.ok) {
-        if (res?.error?.includes('company not found')) {
+        if (res?.error === 'company not found') {
           this.errNoContacts = true
           return
         }
 
-        if (res?.error?.includes('company already has owner')) {
+        if (res?.error === 'company already has owner') {
           this.errAlreadyHasOwner = true
           return
         }

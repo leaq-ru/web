@@ -820,6 +820,7 @@
           <b-button
             pill
             variant="outline-primary"
+            rel="nofollow"
             :to="`/account/companies/apply?url=${company.url.slice(7)}`"
           >
             <b-icon-check2-circle />

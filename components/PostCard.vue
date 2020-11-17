@@ -1,5 +1,8 @@
 <template>
-  <b-card no-body class="overflow-hidden">
+  <b-card
+    no-body
+    class="overflow-hidden"
+  >
     <b-col>
       <b-card-body>
         <b-card-text>

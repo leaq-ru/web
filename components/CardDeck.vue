@@ -13,6 +13,11 @@
             v-if="items[i+1]"
             :company="items[i+1]"
           />
+          <b-card
+            v-else
+            no-body
+            class="invisible"
+          />
         </b-card-group>
       </template>
     </template>

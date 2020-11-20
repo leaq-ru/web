@@ -4,8 +4,16 @@ const isBot = (header) => {
   }
 
   const lowHeader = header.toLowerCase()
-  const bots = ['bot', 'google', 'baidu', 'bing', 'msn', 'teoma', 'slurp', 'yandex']
 
+  // don't spend SSR CPU resources for this bots
+  const blacklistBots = ['ahrefsbot', 'semrushbot']
+  for (const bot of blacklistBots) {
+    if (lowHeader.includes(bot)) {
+      return false
+    }
+  }
+
+  const bots = ['bot', 'google', 'baidu', 'bing', 'msn', 'teoma', 'slurp', 'yandex']
   for (const bot of bots) {
     if (lowHeader.includes(bot)) {
       return true

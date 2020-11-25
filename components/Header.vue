@@ -80,6 +80,10 @@
             Компании
           </b-dropdown-item>
 
+          <b-dropdown-item to="/account/billing">
+            Платежи
+          </b-dropdown-item>
+
           <b-dropdown-divider />
 
           <b-dropdown-item @click="logout">

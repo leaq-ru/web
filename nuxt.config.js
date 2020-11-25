@@ -93,6 +93,7 @@ export default {
       'BIconPersonCircle',
       'BIconWindow',
       'BIconCheck2Circle',
+      'BIconReceipt',
 
       'BContainer',
       'BRow',
@@ -110,6 +111,7 @@ export default {
       'BFormFile',
       'BInputGroup',
       'BInputGroupAppend',
+      'BInputGroupText',
       'BCard',
       'BCardBody',
       'BCardGroup',

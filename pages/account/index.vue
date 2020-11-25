@@ -21,6 +21,14 @@
       Компании
     </b-link>
 
+    <b-row />
+
+    <b-link to="/account/billing">
+      <b-icon-receipt />
+
+      Платежи
+    </b-link>
+
     <Footer />
   </b-container>
 </template>

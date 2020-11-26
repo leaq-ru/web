@@ -16,44 +16,77 @@
       Мои платежи
     </h2>
 
-    <p class="text-muted">
-      Баланс: {{ balance }} руб.
-    </p>
+    <b-card class="col-sm-8 col-md-6 col-lg-4 mt-3">
+      <span class="text-muted">
+        <b-icon-wallet />
 
-    <b-input-group class="mt-3">
-      <b-form-input
-        v-model="sum"
-        type="number"
-        class="col-sm-2 col-md-2 col-lg-1"
-        placeholder="Сумма"
-      />
+        Баланс
+      </span>
 
-      <b-input-group-append>
-        <b-input-group-text>
-          руб.
-        </b-input-group-text>
-      </b-input-group-append>
+      {{ `${balance} руб.` }}
 
-      <b-input-group-append>
-        <b-button
-          variant="primary"
-          @click="paymentRedirect"
-        >
-          Пополнить
-        </b-button>
-      </b-input-group-append>
-    </b-input-group>
+      <b-row />
+
+      <b-input-group class="mt-3">
+        <b-form-input
+          v-model="sum"
+          :state="sumState"
+          class="no-spin"
+          type="number"
+          placeholder="Сумма"
+        />
+
+        <b-input-group-append>
+          <b-input-group-text>
+            руб.
+          </b-input-group-text>
+        </b-input-group-append>
+
+        <b-input-group-append>
+          <b-button
+            :disabled="!sumState || paymentRedirectLoading"
+            variant="primary"
+            @click="paymentRedirect"
+          >
+            Пополнить
+          </b-button>
+        </b-input-group-append>
+
+        <b-input-group-append v-if="paymentRedirectLoading">
+          <b-icon-arrow-clockwise
+            class="ml-2 mt-2 text-primary"
+            font-scale="1.5"
+            animation="spin"
+          />
+        </b-input-group-append>
+      </b-input-group>
+
+      <b-row />
+
+      <b-form-text
+        v-if="!sumState"
+        text-variant="danger"
+      >
+        Минимум 490 руб.
+      </b-form-text>
+    </b-card>
 
     <p
       v-if="!invoices.length"
-      class="mt-5 text-muted"
+      class="mt-3 text-muted"
     >
       Здесь будет отображаться история всех операций
     </p>
+    <b-table
+      v-else
+      class="mt-3"
+      striped
+      hover
+      :items="invoices"
+    />
 
     <b-button
       v-if="invoices.length >= 20 && !invoicesScrollDone && invoicesLoaded"
-      class="mt-3"
       pill
       variant="primary"
       @click="getInvoices"
@@ -77,6 +110,59 @@ import { Context } from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeAuthUrl from '~/helpers/makeAuthUrl'
+import unifyDate from '~/helpers/unifyDate'
+
+const transformInvoices = (invs: any[]): any[] => invs.map((inv) => {
+  const toStatus = (st) => {
+    switch (st) {
+      case 'PENDING':
+        return 'Ожидание'
+      case 'SUCCESS':
+        return 'Успешно'
+    }
+  }
+  const toOp = (kind) => {
+    switch (kind) {
+      case 'DEBIT_ROBOKASSA':
+        return 'Пополнение'
+      case 'DEBIT_MANUAL':
+        return 'Пополнение'
+      case 'CREDIT_COMPANY_PREMIUM':
+        return 'Списание'
+    }
+  }
+  const toKind = (kind) => {
+    switch (kind) {
+      case 'DEBIT_ROBOKASSA':
+        return 'Robokassa'
+      case 'DEBIT_MANUAL':
+        return 'Операция вручную'
+      case 'CREDIT_COMPANY_PREMIUM':
+        return 'Приоритетное размещение'
+    }
+  }
+  const toDetails = (inv) => {
+    if (inv?.debitRobokassa?.invoiceId) {
+      return `Счет #${inv.debitRobokassa.invoiceId}`
+    }
+
+    if (inv?.creditCompanyPremium?.companySlug) {
+      return `${inv.creditCompanyPremium.companySlug} (${inv?.creditCompanyPremium?.monthAmount} мес.)`
+    }
+  }
+  const toAmount = (am) => {
+    return `${am / 100} руб.`
+  }
+
+  return {
+    Дата: unifyDate(inv.createdAt).toLocaleDateString(),
+    Операция: toOp(inv.kind),
+    Статус: toStatus(inv.status),
+    Тип: toKind(inv.kind),
+    Детали: toDetails(inv),
+    Сумма: toAmount(inv.amount)
+  }
+})
 
 export default Vue.extend({
   async asyncData (ctx: Context): Promise<object | void> {
@@ -122,7 +208,7 @@ export default Vue.extend({
 
       return {
         balance: Number(resBal.balance) / 100,
-        invoices: resInv.invoices || [],
+        invoices: transformInvoices(resInv.invoices || []),
         successMsg: ctx.query?.successMsg
       }
     } catch {
@@ -155,12 +241,16 @@ export default Vue.extend({
       sum: 490,
       invoicesScrollDone: false,
       invoicesLoading: false,
-      invoicesLoaded: true
+      invoicesLoaded: true,
+      paymentRedirectLoading: false
     }
   },
   computed: {
     invoicesSkip (): number | undefined {
       return this.invoices?.length
+    },
+    sumState (): boolean {
+      return this.sum >= 490
     }
   },
   methods: {
@@ -176,7 +266,7 @@ export default Vue.extend({
       this.invoicesLoading = true
       const raw = await fetch([
         apiAddr,
-        '/v1/company/getMy?',
+        '/v1/billing/getMyInvoices?',
         query.toString()
       ].join(''), {
         headers: new Headers({
@@ -188,7 +278,7 @@ export default Vue.extend({
 
       this.invoicesLoaded = false
       if (Array.isArray(res?.invoices)) {
-        this.invoices.push(...res.invoices)
+        this.invoices.push(...transformInvoices(res.invoices))
       }
       setTimeout(() => {
         this.invoicesLoaded = true
@@ -196,6 +286,23 @@ export default Vue.extend({
       if (!res?.invoices || res?.invoices?.length < limit) {
         this.invoicesScrollDone = true
       }
+    },
+    async paymentRedirect () {
+      this.paymentRedirectLoading = true
+      const raw = await fetch([
+        apiAddr,
+        '/v1/billing/createInvoice?'
+      ].join(''), {
+        method: 'POST',
+        headers: new Headers({
+          Authorization: `Bearer ${this.$store.state?.user?.self?.token}`
+        }),
+        body: JSON.stringify({
+          amount: this.sum * 100
+        })
+      })
+      const res = await raw.json()
+      window.open(res.url, '_self')
     }
   },
   head () {
@@ -205,3 +312,14 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style scoped>
+.no-spin::-webkit-inner-spin-button, .no-spin::-webkit-outer-spin-button {
+  -webkit-appearance: none !important;
+  margin: 0 !important;
+}
+
+.no-spin {
+  -moz-appearance:textfield !important;
+}
+</style>

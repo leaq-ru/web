@@ -94,6 +94,7 @@ export default {
       'BIconWindow',
       'BIconCheck2Circle',
       'BIconReceipt',
+      'BIconWallet',
 
       'BContainer',
       'BRow',
@@ -136,7 +137,8 @@ export default {
       'BDropdownItem',
       'BDropdownDivider',
       'BMedia',
-      'BTooltip'
+      'BTooltip',
+      'BTable'
     ],
     directives: [
       'VBTooltip'

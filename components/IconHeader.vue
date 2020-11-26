@@ -56,3 +56,9 @@ export default Vue.extend({
   }
 })
 </script>
+
+<style scoped>
+.ml-21 {
+  margin-left: 21px;
+}
+</style>

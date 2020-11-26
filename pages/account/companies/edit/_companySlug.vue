@@ -453,7 +453,7 @@ export default Vue.extend({
         phone: comp.phone || null,
         title: comp.title || null,
         twitterUrl: companyGetters.safeSocialTwitterUrl(comp) || null,
-        vkUrl: companyGetters.safeSocialVkId(comp) ? `https://vk.com/club${companyGetters.safeSocialVkId(comp)}` : null,
+        vkUrl: companyGetters.safeSocialVkScreenName(comp) ? `https://vk.com/${companyGetters.safeSocialVkScreenName(comp)}` : null,
         youtubeUrl: companyGetters.safeSocialYoutubeUrl(comp) || null
       },
       categoryTag: {

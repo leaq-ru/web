@@ -199,7 +199,7 @@ export default Vue.extend({
       ])
 
       return {
-        balance: Number(resBal.balance) / 100,
+        balance: Number(resBal.balance || 0) / 100,
         invoices: transformInvoices(resInv.invoices || [])
       }
     } catch {

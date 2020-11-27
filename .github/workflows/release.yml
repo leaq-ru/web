@@ -46,4 +46,4 @@ jobs:
         run: kubectl -n leaq apply -f ${{ github.workspace }}/config/deployment.yml
 
       - name: Verify deployment
-        run: kubectl -n leaq rollout status deployment/${{ steps.substr.outputs.result }}
+        run: kubectl -n leaq rollout status deployment/test-web

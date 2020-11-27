@@ -23,7 +23,7 @@
         Баланс
       </span>
 
-      {{ `${balance} руб.` }}
+      {{ `${balance} руб` }}
 
       <b-row />
 
@@ -38,7 +38,7 @@
 
         <b-input-group-append>
           <b-input-group-text>
-            руб.
+            руб
           </b-input-group-text>
         </b-input-group-append>
 
@@ -67,7 +67,7 @@
         v-if="!sumState"
         text-variant="danger"
       >
-        Минимум 490 руб.
+        Минимум 490 руб
       </b-form-text>
     </b-card>
 
@@ -147,11 +147,11 @@ const transformInvoices = (invs: any[]): any[] => invs.map((inv) => {
     }
 
     if (inv?.creditCompanyPremium?.companySlug) {
-      return `${inv.creditCompanyPremium.companySlug} (${inv?.creditCompanyPremium?.monthAmount} мес.)`
+      return `${inv.creditCompanyPremium.companySlug} (${inv?.creditCompanyPremium?.monthAmount} мес)`
     }
   }
   const toAmount = (am) => {
-    return `${am / 100} руб.`
+    return `${am / 100} руб`
   }
 
   return {

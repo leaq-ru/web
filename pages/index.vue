@@ -415,7 +415,10 @@
       </b-alert>
     </b-row>
 
-    <h3 class="pt-3 pb-3">
+    <h3
+      id="results"
+      class="pt-3 pb-3"
+    >
       Найдено
       <template v-if="company.items && company.items.length >= 20">
         более

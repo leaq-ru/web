@@ -1,7 +1,22 @@
 <template>
-  <b-card no-body>
-    <b-card-header>
-      <PatchCheck v-if="company.verified" />
+  <b-card
+    :border-variant="company.premium ? 'success' : ''"
+    no-body
+  >
+    <b-card-header
+      :class="company.premium ? 'text-light' : ''"
+      :header-bg-variant="company.premium ? 'success' : ''"
+      :header-border-variant="company.premium ? 'success' : ''"
+    >
+      <PatchLightning
+        v-if="company.premium"
+        text-class="text-light"
+      />
+
+      <PatchCheck
+        v-if="company.verified"
+        text-class="text-light"
+      />
 
       {{ company.title || company.slug }}
     </b-card-header>
@@ -40,9 +55,10 @@
         <b-col md="7" class="mb-3">
           <b-link
             v-if="safeShortCityTitle(company)"
+            :class="company.premium ? 'text-dark' : ''"
             :to="`/${safeShortCitySlug(company)}/all`"
           >
-            <b-icon-building variant="primary" />
+            <b-icon-building :class="color" />
             <span itemprop="address">
               {{ safeShortCityTitle(company) }}
             </span>
@@ -56,9 +72,10 @@
 
           <b-link
             v-if="safeCategoryTitle(company)"
+            :class="company.premium ? 'text-dark' : ''"
             :to="`/all/${safeCategorySlug(company)}`"
           >
-            <b-icon-grid variant="primary" />
+            <b-icon-grid :class="color" />
             {{ safeCategoryTitle(company) }}
           </b-link>
           <span v-else class="text-muted">
@@ -70,12 +87,13 @@
 
           <b-link
             v-if="company.url"
+            :class="company.premium ? 'text-dark' : ''"
             itemprop="url"
             :href="company.url"
             target="_blank"
             rel="nofollow"
           >
-            <b-icon-globe variant="primary" />
+            <b-icon-globe :class="color" />
             {{ company.url }}
           </b-link>
           <template v-else>
@@ -87,11 +105,12 @@
 
           <template v-if="company.email">
             <b-link
+              :class="company.premium ? 'text-dark' : ''"
               :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
               target="_blank"
               @click="setTipFoundOnLeaq"
             >
-              <b-icon-envelope variant="primary" />
+              <b-icon-envelope :class="color" />
               {{ company.email }}
             </b-link>
             <meta
@@ -108,10 +127,11 @@
 
           <b-link
             v-if="company.phone"
+            :class="company.premium ? 'text-dark' : ''"
             :href="`tel:${company.phone}`"
             @click="setTipFoundOnLeaq"
           >
-            <b-icon-telephone variant="primary" />
+            <b-icon-telephone :class="color" />
             <span itemprop="telephone">
               {{ toShowedPhone(company.phone) }}
             </span>
@@ -140,12 +160,15 @@
       </b-row>
     </b-card-body>
 
-    <b-card-footer footer-bg-variant="white">
+    <b-card-footer
+      :footer-border-variant="company.premium ? 'success' : ''"
+      footer-bg-variant="white"
+    >
       <b-row>
         <b-col md="5" class="mb-3 mb-md-0">
           <b-button
             :to="`/company/${company.slug}`"
-            variant="primary"
+            :variant="company.premium ? 'success' : 'primary'"
             pill
           >
             <b-icon-info-circle />
@@ -156,7 +179,7 @@
         <b-col md="7">
           <b-button
             :to="relatedLink(company)"
-            variant="outline-primary"
+            :variant="company.premium ? 'outline-success' : 'outline-primary'"
             pill
           >
             <b-icon-tags />
@@ -184,7 +207,8 @@ export default Vue.extend({
   data () {
     return {
       none: '—',
-      showTipFoundOnLeaq: false
+      showTipFoundOnLeaq: false,
+      color: this.company.premium ? 'text-success' : 'text-primary'
     }
   },
   methods: {

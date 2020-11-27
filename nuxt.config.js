@@ -95,6 +95,7 @@ export default {
       'BIconCheck2Circle',
       'BIconReceipt',
       'BIconWallet',
+      'BIconLightningFill',
 
       'BContainer',
       'BRow',

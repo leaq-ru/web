@@ -1,6 +1,7 @@
 <template>
-  <b-icon-patch-check-fll
-    v-b-tooltip="'Информация подтверждена владельцем и регулярно обновляется'"
+  <b-icon-lightning-fill
+    ref="tooltip-lightning"
+    v-b-tooltip="'Приоритетное размещение'"
     :class="textClass"
   />
 </template>
@@ -13,7 +14,7 @@ export default Vue.extend({
     textClass: {
       type: String,
       default () {
-        return 'text-primary'
+        return 'text-success'
       }
     }
   }

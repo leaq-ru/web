@@ -7,7 +7,7 @@
       rel="nofollow"
     >
       <fa
-        color="#007bff"
+        :class="color"
         :icon="['fab', 'instagram']"
       />
     </b-link>
@@ -24,7 +24,7 @@
       rel="nofollow"
     >
       <fa
-        color="#007bff"
+        :class="color"
         :icon="['fab', 'youtube']"
       />
     </b-link>
@@ -41,7 +41,7 @@
       rel="nofollow"
     >
       <fa
-        color="#007bff"
+        :class="color"
         :icon="['fab', 'facebook']"
       />
     </b-link>
@@ -58,7 +58,7 @@
       rel="nofollow"
     >
       <fa
-        color="#007bff"
+        :class="color"
         :icon="['fab', 'twitter']"
       />
     </b-link>
@@ -75,7 +75,7 @@
       rel="nofollow"
     >
       <fa
-        color="#007bff"
+        :class="color"
         :icon="['fab', 'app-store']"
       />
     </b-link>
@@ -92,7 +92,7 @@
       rel="nofollow"
     >
       <fa
-        color="#007bff"
+        :class="color"
         :icon="['fab', 'google-play']"
       />
     </b-link>
@@ -106,19 +106,20 @@
 
     <b-link
       v-if="safeSocialVkId(company)"
+      :class="company.premium ? 'text-dark' : ''"
       :href="`https://vk.com/club${safeSocialVkId(company)}`"
       target="_blank"
       rel="nofollow"
     >
       <fa
-        color="#007bff"
+        :class="color"
         :icon="['fab', 'vk']"
       />
       {{ safeSocialVkScreenName(company) }}
 
       <b-row />
 
-      <b-icon-people variant="primary" />
+      <b-icon-people :class="color" />
       {{ safeSocialVkMembersCount(company) || none }}
     </b-link>
     <template v-else>
@@ -151,7 +152,8 @@ export default Vue.extend({
   },
   data () {
     return {
-      none: '—'
+      none: '—',
+      color: this.company.premium ? 'text-success' : 'text-primary'
     }
   },
   methods: companyGetters

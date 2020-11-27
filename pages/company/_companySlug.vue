@@ -10,6 +10,8 @@
       <b-row class="mt-3 mb-2">
         <b-col>
           <h1 itemprop="name">
+            <PatchLightning v-if="premium" />
+
             <PatchCheck v-if="verified" />
 
             {{ company.title || company.slug }}
@@ -1027,7 +1029,8 @@ export default Vue.extend({
         technologyCategories = [],
         related = [],
         posts = [],
-        verified = false
+        verified = false,
+        premium = false
       } = await raw.json()
 
       const data = {
@@ -1063,7 +1066,8 @@ export default Vue.extend({
         pageSpeed: makePageSpeed(pageSpeed),
         technologyCategories,
         posts,
-        verified
+        verified,
+        premium
       }
 
       if (fullCompany.location?.city) {

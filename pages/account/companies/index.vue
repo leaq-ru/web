@@ -25,83 +25,16 @@
       Добавить
     </b-link>
 
-    <ul class="list-group">
-      <b-card
-        v-for="company in companies"
-        :key="company.id"
-        class="mt-3 col-lg-8"
-      >
-        <b-media tag="li">
-          <template #aside>
-            <b-img-lazy
-              :src="company.avatar || ''"
-              width="100"
-              height="100"
-            />
-          </template>
-
-          <h5 class="mt-0 mb-1">
-            <PatchCheck v-if="company.verified" />
-
-            {{ company.title || company.slug }}
-          </h5>
-
-          <b-row />
-
-          <b-link
-            v-if="company.url"
-            itemprop="url"
-            :href="company.url"
-            target="_blank"
-            rel="nofollow"
-          >
-            <b-icon-globe variant="primary" />
-            {{ company.url }}
-          </b-link>
-
-          <b-row class="mb-3" />
-
-          <b-link
-            :to="`/company/${company.slug}`"
-          >
-            <b-icon-info-circle />
-
-            Посмотреть
-          </b-link>
-
-          <b-row />
-
-          <b-link
-            :to="`/account/companies/edit/${company.slug}`"
-          >
-            <b-icon-pencil />
-
-            Редактировать
-          </b-link>
-
-          <b-row />
-
-          <b-link
-            :to="`/account/companies/roles/${company.slug}`"
-          >
-            <b-icon-person-check />
-
-            Права доступа
-          </b-link>
-
-          <p
-            v-if="!company.verified"
-            class="text-danger mt-3"
-          >
-            Требуется
-            <b-link :to="`/account/companies/edit/${company.slug}`">
-              отредактировать / подтвердить
-            </b-link>
-            информацию о компании чтобы получить знак <PatchCheck />
-          </p>
-        </b-media>
-      </b-card>
-    </ul>
+    <b-card
+      v-for="company in companies"
+      :key="company.id"
+      class="mt-3 col-lg-8"
+    >
+      <MyCompanyCard
+        :company="company"
+        @paymentOk="loadMyCompaniesFirstPage"
+      />
+    </b-card>
 
     <b-button
       v-if="companies.length >= 20 && !companiesScrollDone && companiesLoaded"
@@ -119,6 +52,61 @@
       Показать еще
     </b-button>
 
+    <b-card
+      class="mt-3"
+      border-variant="success"
+      body-border-variant="success"
+      no-body
+    >
+      <b-card-header
+        header-bg-variant="success"
+        header-text-variant="white"
+      >
+        <b-icon-lightning-fill />
+
+        Приоритетное размещение
+      </b-card-header>
+
+      <b-list-group flush>
+        <b-list-group-item>
+          <span class="font-weight-bold">
+            490
+          </span>
+
+          <span class="text-muted">
+            руб / мес
+          </span>
+        </b-list-group-item>
+      </b-list-group>
+
+      <b-card-body>
+        <ul>
+          <li>
+            Ваша компания выше бесплатных во всех поисках и на главной
+          </li>
+
+          <li>
+            Карточка компании подсвечена зеленым и привлекает внимание посетителей
+          </li>
+
+          <li>
+            Специальный знак
+
+            <PatchLightning />
+
+            выделяет компанию среди остальных
+          </li>
+        </ul>
+
+        <b-button
+          to="/#results"
+          variant="outline-success"
+        >
+          Как это выглядит?
+        </b-button>
+      </b-card-body>
+    </b-card>
+
     <Footer />
   </b-container>
 </template>
@@ -129,6 +117,25 @@ import { Context } from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeAuthUrl from '~/helpers/makeAuthUrl'
+import unifyDate from '~/helpers/unifyDate'
+
+const loadMyCompaniesFirstPage = async (token: string): Promise<any[]> => {
+  const query = new URLSearchParams()
+  query.append('opts.limit', '20')
+
+  const raw = await fetch([
+    process.env.API_HOST,
+    '/v1/company/getMy?',
+    query.toString()
+  ].join(''), {
+    headers: new Headers({
+      Authorization: `Bearer ${token}`
+    })
+  })
+  const res = await raw.json()
+
+  return res.companies || []
+}
 
 export default Vue.extend({
   async asyncData (ctx: Context): Promise<object | void> {
@@ -138,29 +145,10 @@ export default Vue.extend({
         return
       }
 
-      const query = new URLSearchParams()
-      query.append('opts.limit', '20')
-
-      const raw = await fetch([
-        process.env.API_HOST,
-        '/v1/company/getMy?',
-        query.toString()
-      ].join(''), {
-        headers: new Headers({
-          Authorization: `Bearer ${ctx.store.state?.user?.self?.token}`
-        })
-      })
-
-      if (!raw.ok) {
-        return ctx.error({
-          statusCode: 500
-        })
-      }
-
-      const res = await raw.json()
+      const companies = await loadMyCompaniesFirstPage(ctx.store.state?.user?.self?.token)
 
       return {
-        companies: res.companies || [],
+        companies,
         successMsg: ctx.query?.successMsg
       }
     } catch {
@@ -201,6 +189,10 @@ export default Vue.extend({
     }
   },
   methods: {
+    async loadMyCompaniesFirstPage () {
+      this.companies = await loadMyCompaniesFirstPage(this.$store.state?.user?.self?.token)
+    },
+    unifyDate,
     async getCompanies () {
       const limit = 20
 

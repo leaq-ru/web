@@ -33,6 +33,11 @@
           О сервисе
         </b-nav-item>
         <b-nav-item
+          to="/plans"
+        >
+          Тарифы
+        </b-nav-item>
+        <b-nav-item
           to="/cities"
         >
           Города
@@ -47,12 +52,6 @@
           href="https://api.leaq.ru/docs"
         >
           API
-        </b-nav-item>
-        <b-nav-item
-          target="_blank"
-          href="https://vk.me/leaq_ru"
-        >
-          Связаться с нами
         </b-nav-item>
       </b-navbar-nav>
 

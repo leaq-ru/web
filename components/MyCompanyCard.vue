@@ -62,29 +62,34 @@
 
     <b-row class="mb-3" />
 
-    <template v-if="company.premium">
-      <p>
-        Приоритетное размещение до {{ unifyDate(company.premiumDeadline).toLocaleDateString() }}
-      </p>
+    <p>
+      <b-link to="/plans">
+        Приоритетное размещение
+      </b-link>
 
-      <b-row />
+      <template v-if="company.premium">
+        до {{ unifyDate(company.premiumDeadline).toLocaleDateString() }}
+      </template>
+    </p>
 
-      <b-button
-        size="sm"
-        pill
-        variant="success"
-        :disabled="renewCompanyPremiumLoading"
-        @click="renewCompanyPremium"
-      >
-        <b-icon-arrow-clockwise
-          v-if="renewCompanyPremiumLoading"
-          animation="spin"
-        />
-        <b-icon-lightning-fill v-else />
+    <b-row />
 
-        Продлить
-      </b-button>
-    </template>
+    <b-button
+      v-if="company.premium"
+      size="sm"
+      pill
+      variant="success"
+      :disabled="renewCompanyPremiumLoading"
+      @click="renewCompanyPremium"
+    >
+      <b-icon-arrow-clockwise
+        v-if="renewCompanyPremiumLoading"
+        animation="spin"
+      />
+      <b-icon-lightning-fill v-else />
+
+      Продлить
+    </b-button>
     <b-button
       v-else
       size="sm"
@@ -99,7 +104,7 @@
       />
       <b-icon-lightning-fill v-else />
 
-      Запустить продвижение
+      Запустить
     </b-button>
 
     <b-button

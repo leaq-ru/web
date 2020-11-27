@@ -8,7 +8,7 @@
     </h2>
 
     <p class="text-muted">
-      Укажите адрес вашего сайта в формате
+      Укажите адрес сайта в формате
 
       <span class="font-weight-bold">yourcompany.ru</span>.
 

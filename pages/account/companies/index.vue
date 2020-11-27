@@ -17,7 +17,7 @@
     </h2>
 
     <p class="text-muted">
-      Вы можете подтвердить права на сайты из каталога, и управлять информацией о своей компании
+      Вы можете подтвердить права на сайты из каталога, и бесплатно управлять информацией о своей компании
     </p>
 
     <b-link to="/account/companies/apply">
@@ -51,61 +51,6 @@
 
       Показать еще
     </b-button>
-
-    <b-card
-      class="mt-3"
-      border-variant="success"
-      body-border-variant="success"
-      no-body
-    >
-      <b-card-header
-        header-bg-variant="success"
-        header-text-variant="white"
-      >
-        <b-icon-lightning-fill />
-
-        Приоритетное размещение
-      </b-card-header>
-
-      <b-list-group flush>
-        <b-list-group-item>
-          <span class="font-weight-bold">
-            490
-          </span>
-
-          <span class="text-muted">
-            руб / мес
-          </span>
-        </b-list-group-item>
-      </b-list-group>
-
-      <b-card-body>
-        <ul>
-          <li>
-            Ваша компания выше бесплатных во всех поисках и на главной
-          </li>
-
-          <li>
-            Карточка компании подсвечена зеленым и привлекает внимание посетителей
-          </li>
-
-          <li>
-            Специальный знак
-
-            <PatchLightning />
-
-            выделяет компанию среди остальных
-          </li>
-        </ul>
-
-        <b-button
-          to="/#results"
-          variant="outline-success"
-        >
-          Как это выглядит?
-        </b-button>
-      </b-card-body>
-    </b-card>
 
     <Footer />
   </b-container>

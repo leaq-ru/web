@@ -15,7 +15,7 @@
 
       <PatchCheck
         v-if="company.verified"
-        text-class="text-light"
+        :text-class="company.premium ? 'text-light' : 'text-primary'"
       />
 
       {{ company.title || company.slug }}

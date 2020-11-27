@@ -1,18 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: test-web
+  name: web
   labels:
-    app: test-web
+    app: web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: test-web
+      app: web
   template:
     metadata:
       labels:
-        app: test-web
+        app: web
       annotations:
         linkerd.io/inject: enabled
         config.linkerd.io/proxy-cpu-request: 4m
@@ -64,12 +64,12 @@ spec:
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: test-web
+  name: web
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: test-web
+    name: web
   minReplicas: 1
   maxReplicas: 15
   metrics:
@@ -84,12 +84,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: test-web
+  name: web
   labels:
-    app: test-web
+    app: web
 spec:
   ports:
     - port: 80
       protocol: TCP
   selector:
-    app: test-web
+    app: web

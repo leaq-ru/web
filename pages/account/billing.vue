@@ -18,40 +18,39 @@
 
       <b-row />
 
-      Пополнение будет доступно через 1-2 дня
-<!--      <b-input-group class="mt-3">-->
-<!--        <b-form-input-->
-<!--          v-model="sum"-->
-<!--          :state="sumState"-->
-<!--          class="no-spin"-->
-<!--          type="number"-->
-<!--          placeholder="Сумма"-->
-<!--        />-->
+      <b-input-group class="mt-3">
+        <b-form-input
+          v-model="sum"
+          :state="sumState"
+          class="no-spin"
+          type="number"
+          placeholder="Сумма"
+        />
 
-<!--        <b-input-group-append>-->
-<!--          <b-input-group-text>-->
-<!--            руб-->
-<!--          </b-input-group-text>-->
-<!--        </b-input-group-append>-->
+        <b-input-group-append>
+          <b-input-group-text>
+            руб
+          </b-input-group-text>
+        </b-input-group-append>
 
-<!--        <b-input-group-append>-->
-<!--          <b-button-->
-<!--            :disabled="!sumState || paymentRedirectLoading"-->
-<!--            variant="primary"-->
-<!--            @click="paymentRedirect"-->
-<!--          >-->
-<!--            Пополнить-->
-<!--          </b-button>-->
-<!--        </b-input-group-append>-->
+        <b-input-group-append>
+          <b-button
+            :disabled="!sumState || paymentRedirectLoading"
+            variant="primary"
+            @click="paymentRedirect"
+          >
+            Пополнить
+          </b-button>
+        </b-input-group-append>
 
-<!--        <b-input-group-append v-if="paymentRedirectLoading">-->
-<!--          <b-icon-arrow-clockwise-->
-<!--            class="ml-2 mt-2 text-primary"-->
-<!--            font-scale="1.5"-->
-<!--            animation="spin"-->
-<!--          />-->
-<!--        </b-input-group-append>-->
-<!--      </b-input-group>-->
+        <b-input-group-append v-if="paymentRedirectLoading">
+          <b-icon-arrow-clockwise
+            class="ml-2 mt-2 text-primary"
+            font-scale="1.5"
+            animation="spin"
+          />
+        </b-input-group-append>
+      </b-input-group>
 
       <b-row />
 

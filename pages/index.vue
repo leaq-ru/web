@@ -4,7 +4,6 @@
     <Breadcrumb :items="breadcrumb" />
 
     <b-jumbotron
-      id="search"
       header="Каталог компаний России"
       :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
     >
@@ -15,6 +14,7 @@
         </b-link>
         для интеграции с вашим бизнесом
       </p>
+      <span id="search" />
     </b-jumbotron>
     <b-card
       border-variant="primary"
@@ -169,42 +169,6 @@
             </b-row>
           </b-form-group>
         </b-card>
-
-        <b-card
-          header="Наличие реквизитов"
-          class="mb-4"
-        >
-          <b-form-group>
-            <b-row>
-              <b-col md="4">
-                <b-form-group label="ИНН">
-                  <b-form-select
-                    v-model="query.hasInn"
-                    :options="selectOptions"
-                  />
-                </b-form-group>
-              </b-col>
-
-              <b-col md="4">
-                <b-form-group label="КПП">
-                  <b-form-select
-                    v-model="query.hasKpp"
-                    :options="selectOptions"
-                  />
-                </b-form-group>
-              </b-col>
-
-              <b-col md="4">
-                <b-form-group label="ОГРН">
-                  <b-form-select
-                    v-model="query.hasOgrn"
-                    :options="selectOptions"
-                  />
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </b-form-group>
-        </b-card>
       </b-col>
 
       <b-col md="6">
@@ -303,8 +267,51 @@
             </b-row>
           </b-form-group>
         </b-card>
+      </b-col>
+    </b-row>
 
+    <b-row>
+      <b-col md="6">
         <b-card
+          header="Наличие реквизитов"
+          class="mb-4"
+        >
+          <b-form-group>
+            <b-row>
+              <b-col md="4">
+                <b-form-group label="ИНН">
+                  <b-form-select
+                    v-model="query.hasInn"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="4">
+                <b-form-group label="КПП">
+                  <b-form-select
+                    v-model="query.hasKpp"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="4">
+                <b-form-group label="ОГРН">
+                  <b-form-select
+                    v-model="query.hasOgrn"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </b-card>
+      </b-col>
+
+      <b-col md="6">
+        <b-card
+          id="search-buttons"
           header="Сайт онлайн"
           class="mb-4"
         >
@@ -324,8 +331,8 @@
       </b-col>
     </b-row>
 
-    <b-row>
-      <b-col md="4" class="mb-4">
+    <b-row class="mb-2">
+      <b-col md="3" class="mb-3">
         <b-button
           v-if="loading.search"
           disabled
@@ -349,7 +356,31 @@
         </b-button>
       </b-col>
 
-      <b-col md="4" class="mb-4">
+      <b-col md="3" class="mb-3">
+        <b-button
+          v-if="loading.downloadCsv"
+          disabled
+          pill
+          block
+          variant="outline-primary"
+          @click="methodDownloadCsv"
+        >
+          <b-icon-arrow-clockwise animation="spin" />
+          Скачать csv
+        </b-button>
+        <b-button
+          v-else
+          pill
+          block
+          variant="outline-primary"
+          @click="methodDownloadCsv"
+        >
+          <b-icon-file-text />
+          Скачать csv базу
+        </b-button>
+      </b-col>
+
+      <b-col md="3" class="mb-3">
         <b-button
           v-if="loading.downloadEmails"
           disabled
@@ -369,11 +400,11 @@
           @click="methodDownloadEmails"
         >
           <b-icon-envelope />
-          Скачать emails
+          Скачать email
         </b-button>
       </b-col>
 
-      <b-col md="4" class="mb-4">
+      <b-col md="3" class="mb-3">
         <b-button
           v-if="loading.downloadPhones"
           disabled
@@ -447,18 +478,44 @@
 import Vue from 'vue'
 // @ts-ignore - no types for this module
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import { Context } from '@nuxt/types'
 import select from '~/helpers/const/select'
 import getCompanies from '~/helpers/company/getCompanies'
 import findRule from '~/helpers/const/findRule'
 import hints from '~/helpers/hints'
 import debounce from '~/helpers/debounce'
+import apiAddr from '~/helpers/const/apiAddr'
+import makePrettyNumber from '~/helpers/makePrettyNumber'
 
 enum downloadType {
   email = 'email',
   phone = 'phone',
+  csv = 'csv',
 }
 
-const download = async (querystring: string, type: downloadType): Promise<void> => {
+const download = async (querystring: string, type: downloadType, premium: boolean, token: string): Promise<void> => {
+  if (type === downloadType.csv) {
+    const path = premium ? 'exportCompaniesAsync' : 'exportCompanies'
+
+    const opts:RequestInit = {}
+    if (token) {
+      opts.headers = new Headers({
+        Authorization: `Bearer ${token}`
+      })
+    }
+
+    const raw = await fetch([
+      apiAddr,
+      `/v1/exporter/${path}?`,
+      querystring
+    ].join(''), opts)
+
+    const res = await raw.json()
+
+    window.open(res.downloadUrl, '_self')
+    return
+  }
+
   let apiPath
   switch (type) {
     case downloadType.email:
@@ -472,7 +529,7 @@ const download = async (querystring: string, type: downloadType): Promise<void> 
   }
 
   const raw = await fetch([
-    process.env.API_HOST,
+    apiAddr,
     `/v1/company/${apiPath}?`,
     querystring
   ].join(''))
@@ -528,30 +585,56 @@ export default Vue.extend({
   components: {
     VueBootstrapTypeahead
   },
-  async asyncData (): Promise<object> {
-    const [resComps, rawTotalCount] = await Promise.all([
+  async asyncData (ctx: Context): Promise<object> {
+    const promises = [
       getCompanies({
         querystring: new URLSearchParams({
           'opts.limit': '20'
         }).toString()
       }),
       fetch([
-        process.env.API_HOST,
+        apiAddr,
         '/v1/company/getTotalCount'
       ].join(''))
-    ])
+    ]
+
+    const token = ctx.store?.state?.self?.token
+    if (token) {
+      promises.push(fetch([
+        apiAddr,
+        '/v1/billing/getMyDataPlan'
+      ].join(''), {
+        headers: new Headers({
+          Authorization: `Bearer ${token}`
+        })
+      }))
+    }
+
+    const [
+      resComps,
+      rawTotalCount,
+      rawMyDataPlan
+    ] = await Promise.all(promises)
 
     const resTotalCount = await rawTotalCount.json()
 
-    const countWithCommas = toTitleCompaniesCount(resTotalCount.totalCount)
+    const countWithCommas = makePrettyNumber(resTotalCount.totalCount, ',')
 
-    return {
+    const data = {
       company: {
         items: resComps.companies
       },
       titleCompaniesCount: countWithCommas,
-      title: makeTitle(countWithCommas)
+      title: makeTitle(countWithCommas),
+      dataPremium: false
     }
+
+    if (rawMyDataPlan) {
+      const resMyDataPlan = await rawMyDataPlan.json()
+      data.dataPremium = resMyDataPlan.premium
+    }
+
+    return data
   },
   data (): any {
     return {
@@ -621,10 +704,11 @@ export default Vue.extend({
       loading: {
         search: false,
         downloadEmails: false,
-        downloadPhones: false
+        downloadPhones: false,
+        downloadCsv: false
       },
       downloadAlertCountDown: 0,
-      downloadAlertDismissSecs: 10,
+      downloadAlertDismissSecs: 15,
       scrollDone: false
     }
   },
@@ -729,6 +813,13 @@ export default Vue.extend({
       this.loading.downloadPhones = true
       await download(this.buildSearchQuery(false), downloadType.phone)
       this.loading.downloadPhones = false
+    },
+    async methodDownloadCsv () {
+      this.downloadAlertCountDown = this.downloadAlertDismissSecs
+
+      this.loading.downloadCsv = true
+      await download(this.buildSearchQuery(false), downloadType.csv)
+      this.loading.downloadCsv = false
     },
     makeTechnologyTagName (name: any): string {
       return name.version ? `${name.name} ${name.version}` : name.name

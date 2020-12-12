@@ -96,6 +96,7 @@ export default {
       'BIconReceipt',
       'BIconWallet',
       'BIconLightningFill',
+      'BIconFileText',
 
       'BContainer',
       'BRow',

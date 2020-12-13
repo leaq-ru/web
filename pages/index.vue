@@ -366,7 +366,7 @@
           @click="methodDownloadCsv"
         >
           <b-icon-arrow-clockwise animation="spin" />
-          Скачать csv
+          Скачать csv базу
         </b-button>
         <b-button
           v-else
@@ -474,8 +474,8 @@
       </b-alert>
 
       <b-alert
-        v-if="errConcExports"
         fade
+        :show="errConcExports"
         dismissible
         variant="danger"
         class="w-100"
@@ -485,7 +485,11 @@
         </h6>
 
         <p>
-          Пожалуйста, дождитесь пока одна из ваших выгрузок завершится, и затем попробуйте снова
+          Пожалуйста, дождитесь пока одна из ваших
+          <b-link to="/account/exports">
+            выгрузок
+          </b-link>
+          завершится, и затем попробуйте снова
         </p>
       </b-alert>
     </b-row>
@@ -644,7 +648,7 @@ export default Vue.extend({
       ].join(''))
     ]
 
-    const token = ctx.store?.state?.self?.token
+    const token = ctx.store.state?.user?.self?.token
     if (token) {
       promises.push(fetch([
         apiAddr,
@@ -754,10 +758,10 @@ export default Vue.extend({
         downloadCsv: false
       },
       downloadAlertCountDown: 0,
-      downloadAlertDismissSecs: 15,
+      downloadAlertDismissSecs: 30,
       scrollDone: false,
       csvClick: false,
-      errConcExports: true
+      errConcExports: false
     }
   },
   computed: {
@@ -852,8 +856,8 @@ export default Vue.extend({
       this.csvClick = false
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
+      const token = this.$store.state?.user?.self?.token
       this.loading.downloadEmails = true
-      const token = this.$store.state?.self?.token
       await download(this.buildSearchQuery(false), downloadType.email, this.dataPremium, token)
       this.loading.downloadEmails = false
     },
@@ -861,23 +865,25 @@ export default Vue.extend({
       this.csvClick = false
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
+      const token = this.$store.state?.user?.self?.token
       this.loading.downloadPhones = true
-      const token = this.$store.state?.self?.token
       await download(this.buildSearchQuery(false), downloadType.phone, this.dataPremium, token)
       this.loading.downloadPhones = false
     },
     async methodDownloadCsv () {
       this.csvClick = true
       this.errConcExports = false
-      this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
+      const token = this.$store.state?.user?.self?.token
       this.loading.downloadCsv = true
-      const token = this.$store.state?.self?.token
       const resDl = await download(this.buildSearchQuery(false), downloadType.csv, this.dataPremium, token)
+      this.loading.downloadCsv = false
       if (resDl === downloadRes.errConcExports) {
         this.errConcExports = true
+        return
       }
-      this.loading.downloadCsv = false
+
+      this.downloadAlertCountDown = this.downloadAlertDismissSecs
     },
     makeTechnologyTagName (name: any): string {
       return name.version ? `${name.name} ${name.version}` : name.name

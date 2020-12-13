@@ -7,6 +7,10 @@
       Мои выгрузки
     </h2>
 
+    <p class="text-muted">
+      В зависимости от размера, выгрузка может занимать от 2 минут до 2 часов. Средняя скорость обработки – 300 компаний в секунду. Если уйти с этой страницы, процесс не прервется
+    </p>
+
     <b-card class="col-sm-9 col-md-7 col-lg-5">
       <p>
         <b-link to="/plans#data">
@@ -79,15 +83,66 @@
       v-if="!exports.length"
       class="mt-3 text-muted"
     >
-      Здесь будет отображаться история всех выгрузок csv баз компаний
+      Здесь будет отображаться история выгрузок csv баз компаний за 3 дня
     </p>
-    <b-table
+    <b-table-simple
       v-else
       class="mt-3"
       striped
       hover
-      :items="exports"
-    />
+    >
+      <b-thead>
+        <b-tr>
+          <b-th>Дата</b-th>
+          <b-th>Операция</b-th>
+          <b-th>Статус</b-th>
+          <b-th>Прогресс</b-th>
+          <b-th>Ссылка</b-th>
+        </b-tr>
+      </b-thead>
+
+      <b-tbody>
+        <b-tr
+          v-for="ex in exports"
+          :key="ex.id"
+        >
+          <b-td>
+            {{ unifyDate(ex.createdAt).toLocaleDateString() }}
+          </b-td>
+
+          <b-td>
+            {{ ex.name }}
+          </b-td>
+
+          <b-td>
+            {{ parseExportStatus(ex.status) }}
+          </b-td>
+
+          <b-td v-if="ex.status === 'IN_PROGRESS' || ex.status === 'PENDING'">
+            <b-progress
+              v-if="ex.currentCount && ex.totalCount"
+              class="mt-1"
+              show-progress
+              animated
+              :value="ex.currentCount"
+              :max="ex.totalCount"
+            />
+          </b-td>
+          <b-td v-else>
+            Завершено
+          </b-td>
+
+          <b-td v-if="ex.status === 'SUCCESS'">
+            <b-link :href="ex.url">
+              Скачать
+            </b-link>
+          </b-td>
+          <b-td v-else>
+            —
+          </b-td>
+        </b-tr>
+      </b-tbody>
+    </b-table-simple>
 
     <b-button
       v-if="exports.length >= 20 && !exportsScrollDone && exportsLoaded"
@@ -214,6 +269,18 @@ export default Vue.extend({
   },
   methods: {
     unifyDate,
+    parseExportStatus (st: string) {
+      switch (st) {
+        case 'PENDING':
+          return 'В очереди'
+        case 'IN_PROGRESS':
+          return 'Обработка'
+        case 'SUCCESS':
+          return 'Успешно'
+        case 'FAIL':
+          return 'Ошибка'
+      }
+    },
     async renewDataPremium () {
       this.errInsufficientFunds = false
       this.renewDataPremiumLoading = true

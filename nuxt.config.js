@@ -141,6 +141,12 @@ export default {
       'BMedia',
       'BTooltip',
       'BTable',
+      'BTableSimple',
+      'BThead',
+      'BTbody',
+      'BTr',
+      'BTd',
+      'BTh',
       'BProgress'
     ],
     directives: [

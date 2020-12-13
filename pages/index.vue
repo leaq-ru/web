@@ -9,7 +9,7 @@
     >
       <p>
         Город, сфера деятельности, телефон, email, и многое другое в карточках компаний. Все данные доступны по
-        <b-link href="https://api.leaq.ru/docs" target="_blank">
+        <b-link href="https://api.leaq.ru/docs/" target="_blank">
           API
         </b-link>
         для интеграции с вашим бизнесом
@@ -429,6 +429,31 @@
       </b-col>
 
       <b-alert
+        v-if="dataPremium"
+        fade
+        :show="downloadAlertCountDown"
+        dismissible
+        variant="success"
+        class="w-100"
+        @dismissed="downloadAlertCountDown=0"
+      >
+        <h6 class="alert-heading">
+          Скачивание началось
+        </h6>
+
+        <p v-if="csvClick">
+          База будет доступна в разделе
+          <b-link to="/account/exports">
+            выгрузки
+          </b-link>
+          в личном кабинете
+        </p>
+        <p v-else>
+          Пожалуйста не покидайте страницу, собираем список для вас, затем начнется скачивание. Обычно занимает 30-60 секунд
+        </p>
+      </b-alert>
+      <b-alert
+        v-else
         fade
         :show="downloadAlertCountDown"
         dismissible
@@ -441,7 +466,10 @@
         </h6>
 
         <p>
-          Наберитесь терпения, скачивание может идти ~1 минуту. Кстати, файл уже очищен от дубликатов
+          Будет скачано не более 1000 результатов. Данные без ограничений доступны на
+          <b-link to="/plans#data">
+            расширенном тарифе
+          </b-link>
         </p>
       </b-alert>
     </b-row>
@@ -561,20 +589,6 @@ const removeTag = (ctx, type) => {
       }
     }
   }
-}
-
-const toTitleCompaniesCount = (num: number): string => {
-  if (!num) {
-    return '—'
-  }
-
-  const str = String(num).split('').reverse()
-  str.forEach((elem, i) => {
-    if (i % 3 === 0 && i !== 0) {
-      str[i] = elem + ','
-    }
-  })
-  return str.reverse().join('')
 }
 
 const makeTitle = (companiesCount: string) => {
@@ -709,12 +723,16 @@ export default Vue.extend({
       },
       downloadAlertCountDown: 0,
       downloadAlertDismissSecs: 15,
-      scrollDone: false
+      scrollDone: false,
+      csvClick: false
     }
   },
   computed: {
     skip (): string | undefined {
       return this.company?.items?.length
+    },
+    token (): string | undefined {
+      return this.$store?.state?.self?.token
     }
   },
   watch: {
@@ -801,24 +819,27 @@ export default Vue.extend({
       $state.loaded()
     },
     async methodDownloadEmails () {
+      this.csvClick = false
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       this.loading.downloadEmails = true
-      await download(this.buildSearchQuery(false), downloadType.email)
+      await download(this.buildSearchQuery(false), downloadType.email, this.dataPremium, this.token)
       this.loading.downloadEmails = false
     },
     async methodDownloadPhones () {
+      this.csvClick = false
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       this.loading.downloadPhones = true
-      await download(this.buildSearchQuery(false), downloadType.phone)
+      await download(this.buildSearchQuery(false), downloadType.phone, this.dataPremium, this.token)
       this.loading.downloadPhones = false
     },
     async methodDownloadCsv () {
+      this.csvClick = true
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       this.loading.downloadCsv = true
-      await download(this.buildSearchQuery(false), downloadType.csv)
+      await download(this.buildSearchQuery(false), downloadType.csv, this.dataPremium, this.token)
       this.loading.downloadCsv = false
     },
     makeTechnologyTagName (name: any): string {

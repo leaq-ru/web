@@ -28,7 +28,7 @@
         <span class="text-muted">
           Токен для доступа по
 
-          <a href="https://api.leaq.ru/docs" target="_blank">
+          <a href="https://api.leaq.ru/docs/" target="_blank">
             API
           </a>
 

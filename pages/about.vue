@@ -40,7 +40,7 @@
     <p>
       Доступно
       <a
-        href="https://api.leaq.ru/docs"
+        href="https://api.leaq.ru/docs/"
         target="_blank"
       >
         API

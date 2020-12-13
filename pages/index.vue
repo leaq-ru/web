@@ -472,6 +472,22 @@
           </b-link>
         </p>
       </b-alert>
+
+      <b-alert
+        v-if="errConcExports"
+        fade
+        dismissible
+        variant="danger"
+        class="w-100"
+      >
+        <h6 class="alert-heading">
+          Ошибка
+        </h6>
+
+        <p>
+          Пожалуйста, дождитесь пока одна из ваших выгрузок завершится, и затем попробуйте снова
+        </p>
+      </b-alert>
     </b-row>
 
     <h3
@@ -521,7 +537,13 @@ enum downloadType {
   csv = 'csv',
 }
 
-const download = async (querystring: string, type: downloadType, premium: boolean, token: string): Promise<void> => {
+enum downloadRes {
+  ok = 0,
+  errUnknown = 1,
+  errConcExports = 2,
+}
+
+const download = async (querystring: string, type: downloadType, premium: boolean, token: string): Promise<downloadRes> => {
   if (type === downloadType.csv) {
     const path = premium ? 'exportCompaniesAsync' : 'exportCompanies'
 
@@ -538,10 +560,20 @@ const download = async (querystring: string, type: downloadType, premium: boolea
       querystring
     ].join(''), opts)
 
-    const res = await raw.json()
+    if (!raw.ok) {
+      const res = await raw.json()
+      if (res?.error === 'too many concurrent exports. Wait for old export succeeded, and try again') {
+        return downloadRes.errConcExports
+      }
 
-    window.open(res.downloadUrl, '_self')
-    return
+      return downloadRes.errUnknown
+    }
+
+    if (!premium) {
+      const res = await raw.json()
+      window.open(res.url, '_self')
+    }
+    return downloadRes.ok
   }
 
   let apiPath
@@ -724,15 +756,13 @@ export default Vue.extend({
       downloadAlertCountDown: 0,
       downloadAlertDismissSecs: 15,
       scrollDone: false,
-      csvClick: false
+      csvClick: false,
+      errConcExports: true
     }
   },
   computed: {
     skip (): string | undefined {
       return this.company?.items?.length
-    },
-    token (): string | undefined {
-      return this.$store?.state?.self?.token
     }
   },
   watch: {
@@ -823,7 +853,8 @@ export default Vue.extend({
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       this.loading.downloadEmails = true
-      await download(this.buildSearchQuery(false), downloadType.email, this.dataPremium, this.token)
+      const token = this.$store.state?.self?.token
+      await download(this.buildSearchQuery(false), downloadType.email, this.dataPremium, token)
       this.loading.downloadEmails = false
     },
     async methodDownloadPhones () {
@@ -831,15 +862,21 @@ export default Vue.extend({
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       this.loading.downloadPhones = true
-      await download(this.buildSearchQuery(false), downloadType.phone, this.dataPremium, this.token)
+      const token = this.$store.state?.self?.token
+      await download(this.buildSearchQuery(false), downloadType.phone, this.dataPremium, token)
       this.loading.downloadPhones = false
     },
     async methodDownloadCsv () {
       this.csvClick = true
+      this.errConcExports = false
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       this.loading.downloadCsv = true
-      await download(this.buildSearchQuery(false), downloadType.csv, this.dataPremium, this.token)
+      const token = this.$store.state?.self?.token
+      const resDl = await download(this.buildSearchQuery(false), downloadType.csv, this.dataPremium, token)
+      if (resDl === downloadRes.errConcExports) {
+        this.errConcExports = true
+      }
       this.loading.downloadCsv = false
     },
     makeTechnologyTagName (name: any): string {

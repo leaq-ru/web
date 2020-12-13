@@ -7,7 +7,7 @@
       Мои платежи
     </h2>
 
-    <b-card class="col-sm-8 col-md-6 col-lg-4 mt-3">
+    <b-card class="col-sm-8 col-md-6 col-lg-4">
       <span class="text-muted">
         <b-icon-wallet />
 
@@ -120,6 +120,8 @@ const transformInvoices = (invs: any[]): any[] => invs.map((inv) => {
         return 'Пополнение'
       case 'CREDIT_COMPANY_PREMIUM':
         return 'Списание'
+      case 'CREDIT_DATA_PREMIUM':
+        return 'Списание'
     }
   }
   const toKind = (kind) => {
@@ -130,15 +132,21 @@ const transformInvoices = (invs: any[]): any[] => invs.map((inv) => {
         return 'Операция вручную'
       case 'CREDIT_COMPANY_PREMIUM':
         return 'Приоритетное размещение'
+      case 'CREDIT_DATA_PREMIUM':
+        return 'Расш. доступ к данным'
     }
   }
   const toDetails = (inv) => {
-    if (inv?.debitRobokassa?.invoiceId) {
+    if (inv?.debitRobokassa) {
       return `Счет #${inv.debitRobokassa.invoiceId}`
     }
 
-    if (inv?.creditCompanyPremium?.companySlug) {
+    if (inv?.creditCompanyPremium) {
       return `${inv.creditCompanyPremium.companySlug} (${inv?.creditCompanyPremium?.monthAmount} мес)`
+    }
+
+    if (inv?.creditDataPremium) {
+      return `${inv.creditDataPremium.monthAmount} мес`
     }
   }
   const toAmount = (am) => {

@@ -140,7 +140,8 @@ export default {
       'BDropdownDivider',
       'BMedia',
       'BTooltip',
-      'BTable'
+      'BTable',
+      'BProgress'
     ],
     directives: [
       'VBTooltip'

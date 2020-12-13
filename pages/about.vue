@@ -27,7 +27,7 @@
     <p>
       Также мы не забыли про B2C компаниии, для них будет полезна возможность
 
-      <b-link to="/plans">
+      <b-link to="/plans#company">
         бесплатного или платного
       </b-link>
 
@@ -40,7 +40,7 @@
     <p>
       Доступно
       <a
-        href="https://api.leaq.ru/docs"
+        href="https://api.leaq.ru/docs/"
         target="_blank"
       >
         API
@@ -54,7 +54,7 @@
     <p>
       Использование сервиса бесплатно. Для владельцев компаний предусмотрены варианты
 
-      <b-link to="/plans">
+      <b-link to="/plans#company">
         бесплатного или платного
       </b-link>
 

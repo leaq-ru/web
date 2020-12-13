@@ -63,7 +63,7 @@
     <b-row class="mb-3" />
 
     <p>
-      <b-link to="/plans">
+      <b-link to="/plans#company">
         Приоритетное размещение
       </b-link>
 

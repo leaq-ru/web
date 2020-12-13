@@ -49,7 +49,7 @@
         </b-nav-item>
         <b-nav-item
           target="_blank"
-          href="https://api.leaq.ru/docs"
+          href="https://api.leaq.ru/docs/"
         >
           API
         </b-nav-item>
@@ -77,6 +77,10 @@
 
           <b-dropdown-item to="/account/companies">
             Компании
+          </b-dropdown-item>
+
+          <b-dropdown-item to="/account/exports">
+            Выгрузки
           </b-dropdown-item>
 
           <b-dropdown-item to="/account/billing">

@@ -69,7 +69,7 @@ const loadMyCompaniesFirstPage = async (token: string): Promise<any[]> => {
   query.append('opts.limit', '20')
 
   const raw = await fetch([
-    process.env.API_HOST,
+    apiAddr,
     '/v1/company/getMy?',
     query.toString()
   ].join(''), {

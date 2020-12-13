@@ -96,6 +96,7 @@ export default {
       'BIconReceipt',
       'BIconWallet',
       'BIconLightningFill',
+      'BIconFileText',
 
       'BContainer',
       'BRow',
@@ -139,7 +140,14 @@ export default {
       'BDropdownDivider',
       'BMedia',
       'BTooltip',
-      'BTable'
+      'BTable',
+      'BTableSimple',
+      'BThead',
+      'BTbody',
+      'BTr',
+      'BTd',
+      'BTh',
+      'BProgress'
     ],
     directives: [
       'VBTooltip'

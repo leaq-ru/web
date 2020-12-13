@@ -23,6 +23,14 @@
 
     <b-row />
 
+    <b-link to="/account/exports">
+      <b-icon-file-text />
+
+      Выгрузки
+    </b-link>
+
+    <b-row />
+
     <b-link to="/account/billing">
       <b-icon-receipt />
 

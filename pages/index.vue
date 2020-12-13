@@ -4,17 +4,17 @@
     <Breadcrumb :items="breadcrumb" />
 
     <b-jumbotron
-      id="search"
       header="Каталог компаний России"
       :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
     >
       <p>
         Город, сфера деятельности, телефон, email, и многое другое в карточках компаний. Все данные доступны по
-        <b-link href="https://api.leaq.ru/docs" target="_blank">
+        <b-link href="https://api.leaq.ru/docs/" target="_blank">
           API
         </b-link>
         для интеграции с вашим бизнесом
       </p>
+      <span id="search" />
     </b-jumbotron>
     <b-card
       border-variant="primary"
@@ -169,42 +169,6 @@
             </b-row>
           </b-form-group>
         </b-card>
-
-        <b-card
-          header="Наличие реквизитов"
-          class="mb-4"
-        >
-          <b-form-group>
-            <b-row>
-              <b-col md="4">
-                <b-form-group label="ИНН">
-                  <b-form-select
-                    v-model="query.hasInn"
-                    :options="selectOptions"
-                  />
-                </b-form-group>
-              </b-col>
-
-              <b-col md="4">
-                <b-form-group label="КПП">
-                  <b-form-select
-                    v-model="query.hasKpp"
-                    :options="selectOptions"
-                  />
-                </b-form-group>
-              </b-col>
-
-              <b-col md="4">
-                <b-form-group label="ОГРН">
-                  <b-form-select
-                    v-model="query.hasOgrn"
-                    :options="selectOptions"
-                  />
-                </b-form-group>
-              </b-col>
-            </b-row>
-          </b-form-group>
-        </b-card>
       </b-col>
 
       <b-col md="6">
@@ -303,8 +267,51 @@
             </b-row>
           </b-form-group>
         </b-card>
+      </b-col>
+    </b-row>
 
+    <b-row>
+      <b-col md="6">
         <b-card
+          header="Наличие реквизитов"
+          class="mb-4"
+        >
+          <b-form-group>
+            <b-row>
+              <b-col md="4">
+                <b-form-group label="ИНН">
+                  <b-form-select
+                    v-model="query.hasInn"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="4">
+                <b-form-group label="КПП">
+                  <b-form-select
+                    v-model="query.hasKpp"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+
+              <b-col md="4">
+                <b-form-group label="ОГРН">
+                  <b-form-select
+                    v-model="query.hasOgrn"
+                    :options="selectOptions"
+                  />
+                </b-form-group>
+              </b-col>
+            </b-row>
+          </b-form-group>
+        </b-card>
+      </b-col>
+
+      <b-col md="6">
+        <b-card
+          id="search-buttons"
           header="Сайт онлайн"
           class="mb-4"
         >
@@ -324,8 +331,8 @@
       </b-col>
     </b-row>
 
-    <b-row>
-      <b-col md="4" class="mb-4">
+    <b-row class="mb-2">
+      <b-col md="3" class="mb-3">
         <b-button
           v-if="loading.search"
           disabled
@@ -349,7 +356,31 @@
         </b-button>
       </b-col>
 
-      <b-col md="4" class="mb-4">
+      <b-col md="3" class="mb-3">
+        <b-button
+          v-if="loading.downloadCsv"
+          disabled
+          pill
+          block
+          variant="outline-primary"
+          @click="methodDownloadCsv"
+        >
+          <b-icon-arrow-clockwise animation="spin" />
+          Скачать csv базу
+        </b-button>
+        <b-button
+          v-else
+          pill
+          block
+          variant="outline-primary"
+          @click="methodDownloadCsv"
+        >
+          <b-icon-file-text />
+          Скачать csv базу
+        </b-button>
+      </b-col>
+
+      <b-col md="3" class="mb-3">
         <b-button
           v-if="loading.downloadEmails"
           disabled
@@ -369,11 +400,11 @@
           @click="methodDownloadEmails"
         >
           <b-icon-envelope />
-          Скачать emails
+          Скачать email
         </b-button>
       </b-col>
 
-      <b-col md="4" class="mb-4">
+      <b-col md="3" class="mb-3">
         <b-button
           v-if="loading.downloadPhones"
           disabled
@@ -398,6 +429,31 @@
       </b-col>
 
       <b-alert
+        v-if="dataPremium"
+        fade
+        :show="downloadAlertCountDown"
+        dismissible
+        variant="success"
+        class="w-100"
+        @dismissed="downloadAlertCountDown=0"
+      >
+        <h6 class="alert-heading">
+          Скачивание началось
+        </h6>
+
+        <p v-if="csvClick">
+          База будет доступна в разделе
+          <b-link to="/account/exports">
+            выгрузки
+          </b-link>
+          в личном кабинете
+        </p>
+        <p v-else>
+          Пожалуйста не покидайте страницу, собираем список для вас, затем начнется скачивание. Обычно занимает 30-60 секунд
+        </p>
+      </b-alert>
+      <b-alert
+        v-else
         fade
         :show="downloadAlertCountDown"
         dismissible
@@ -410,7 +466,30 @@
         </h6>
 
         <p>
-          Наберитесь терпения, скачивание может идти ~1 минуту. Кстати, файл уже очищен от дубликатов
+          Будет скачано не более 1000 результатов. Данные без ограничений доступны на
+          <b-link to="/plans#data">
+            расширенном тарифе
+          </b-link>
+        </p>
+      </b-alert>
+
+      <b-alert
+        fade
+        :show="errConcExports"
+        dismissible
+        variant="danger"
+        class="w-100"
+      >
+        <h6 class="alert-heading">
+          Ошибка
+        </h6>
+
+        <p>
+          Пожалуйста, дождитесь пока одна из ваших
+          <b-link to="/account/exports">
+            выгрузок
+          </b-link>
+          завершится, и затем попробуйте снова
         </p>
       </b-alert>
     </b-row>
@@ -447,18 +526,60 @@
 import Vue from 'vue'
 // @ts-ignore - no types for this module
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import { Context } from '@nuxt/types'
 import select from '~/helpers/const/select'
 import getCompanies from '~/helpers/company/getCompanies'
 import findRule from '~/helpers/const/findRule'
 import hints from '~/helpers/hints'
 import debounce from '~/helpers/debounce'
+import apiAddr from '~/helpers/const/apiAddr'
+import makePrettyNumber from '~/helpers/makePrettyNumber'
 
 enum downloadType {
   email = 'email',
   phone = 'phone',
+  csv = 'csv',
 }
 
-const download = async (querystring: string, type: downloadType): Promise<void> => {
+enum downloadRes {
+  ok = 0,
+  errUnknown = 1,
+  errConcExports = 2,
+}
+
+const download = async (querystring: string, type: downloadType, premium: boolean, token: string): Promise<downloadRes> => {
+  if (type === downloadType.csv) {
+    const path = premium ? 'exportCompaniesAsync' : 'exportCompanies'
+
+    const opts:RequestInit = {}
+    if (token) {
+      opts.headers = new Headers({
+        Authorization: `Bearer ${token}`
+      })
+    }
+
+    const raw = await fetch([
+      apiAddr,
+      `/v1/exporter/${path}?`,
+      querystring
+    ].join(''), opts)
+
+    if (!raw.ok) {
+      const res = await raw.json()
+      if (res?.error === 'too many concurrent exports. Wait for old export succeeded, and try again') {
+        return downloadRes.errConcExports
+      }
+
+      return downloadRes.errUnknown
+    }
+
+    if (!premium) {
+      const res = await raw.json()
+      window.open(res.url, '_self')
+    }
+    return downloadRes.ok
+  }
+
   let apiPath
   switch (type) {
     case downloadType.email:
@@ -472,7 +593,7 @@ const download = async (querystring: string, type: downloadType): Promise<void> 
   }
 
   const raw = await fetch([
-    process.env.API_HOST,
+    apiAddr,
     `/v1/company/${apiPath}?`,
     querystring
   ].join(''))
@@ -506,20 +627,6 @@ const removeTag = (ctx, type) => {
   }
 }
 
-const toTitleCompaniesCount = (num: number): string => {
-  if (!num) {
-    return '—'
-  }
-
-  const str = String(num).split('').reverse()
-  str.forEach((elem, i) => {
-    if (i % 3 === 0 && i !== 0) {
-      str[i] = elem + ','
-    }
-  })
-  return str.reverse().join('')
-}
-
 const makeTitle = (companiesCount: string) => {
   return `Более ${companiesCount} фирм из разных городов России и категорий. Бесплатное скачивание базы email и телефонов / Каталог компаний LEAQ`
 }
@@ -528,30 +635,56 @@ export default Vue.extend({
   components: {
     VueBootstrapTypeahead
   },
-  async asyncData (): Promise<object> {
-    const [resComps, rawTotalCount] = await Promise.all([
+  async asyncData (ctx: Context): Promise<object> {
+    const promises = [
       getCompanies({
         querystring: new URLSearchParams({
           'opts.limit': '20'
         }).toString()
       }),
       fetch([
-        process.env.API_HOST,
+        apiAddr,
         '/v1/company/getTotalCount'
       ].join(''))
-    ])
+    ]
+
+    const token = ctx.store.state?.user?.self?.token
+    if (token) {
+      promises.push(fetch([
+        apiAddr,
+        '/v1/billing/getMyDataPlan'
+      ].join(''), {
+        headers: new Headers({
+          Authorization: `Bearer ${token}`
+        })
+      }))
+    }
+
+    const [
+      resComps,
+      rawTotalCount,
+      rawMyDataPlan
+    ] = await Promise.all(promises)
 
     const resTotalCount = await rawTotalCount.json()
 
-    const countWithCommas = toTitleCompaniesCount(resTotalCount.totalCount)
+    const countWithCommas = makePrettyNumber(resTotalCount.totalCount, ',')
 
-    return {
+    const data = {
       company: {
         items: resComps.companies
       },
       titleCompaniesCount: countWithCommas,
-      title: makeTitle(countWithCommas)
+      title: makeTitle(countWithCommas),
+      dataPremium: false
     }
+
+    if (rawMyDataPlan) {
+      const resMyDataPlan = await rawMyDataPlan.json()
+      data.dataPremium = resMyDataPlan.premium
+    }
+
+    return data
   },
   data (): any {
     return {
@@ -621,11 +754,14 @@ export default Vue.extend({
       loading: {
         search: false,
         downloadEmails: false,
-        downloadPhones: false
+        downloadPhones: false,
+        downloadCsv: false
       },
       downloadAlertCountDown: 0,
-      downloadAlertDismissSecs: 10,
-      scrollDone: false
+      downloadAlertDismissSecs: 30,
+      scrollDone: false,
+      csvClick: false,
+      errConcExports: false
     }
   },
   computed: {
@@ -717,18 +853,37 @@ export default Vue.extend({
       $state.loaded()
     },
     async methodDownloadEmails () {
+      this.csvClick = false
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
+      const token = this.$store.state?.user?.self?.token
       this.loading.downloadEmails = true
-      await download(this.buildSearchQuery(false), downloadType.email)
+      await download(this.buildSearchQuery(false), downloadType.email, this.dataPremium, token)
       this.loading.downloadEmails = false
     },
     async methodDownloadPhones () {
+      this.csvClick = false
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
+      const token = this.$store.state?.user?.self?.token
       this.loading.downloadPhones = true
-      await download(this.buildSearchQuery(false), downloadType.phone)
+      await download(this.buildSearchQuery(false), downloadType.phone, this.dataPremium, token)
       this.loading.downloadPhones = false
+    },
+    async methodDownloadCsv () {
+      this.csvClick = true
+      this.errConcExports = false
+
+      const token = this.$store.state?.user?.self?.token
+      this.loading.downloadCsv = true
+      const resDl = await download(this.buildSearchQuery(false), downloadType.csv, this.dataPremium, token)
+      this.loading.downloadCsv = false
+      if (resDl === downloadRes.errConcExports) {
+        this.errConcExports = true
+        return
+      }
+
+      this.downloadAlertCountDown = this.downloadAlertDismissSecs
     },
     makeTechnologyTagName (name: any): string {
       return name.version ? `${name.name} ${name.version}` : name.name

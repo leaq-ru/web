@@ -236,7 +236,7 @@
           <b-list-group flush>
             <b-list-group-item>
               <span class="font-weight-bold">
-                1 468 187
+                1 041 414
               </span>
               элементов (все) в
               <b-link to="/#search-buttons">
@@ -246,7 +246,7 @@
 
             <b-list-group-item>
               <span class="font-weight-bold">
-                1 795 433
+                1 214 161
               </span>
               элементов (все) в
               <b-link to="/#search-buttons">

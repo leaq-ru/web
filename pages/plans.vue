@@ -223,7 +223,7 @@
         <b-list-group flush>
           <b-list-group-item>
             <span class="font-weight-bold">
-              1 990
+              1990
             </span>
 
             <span class="text-muted">

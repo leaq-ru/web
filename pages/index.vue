@@ -548,15 +548,15 @@ enum downloadRes {
 }
 
 const download = async (querystring: string, type: downloadType, premium: boolean, token: string): Promise<downloadRes> => {
+  const opts:RequestInit = {}
+  if (token) {
+    opts.headers = new Headers({
+      Authorization: `Bearer ${token}`
+    })
+  }
+
   if (type === downloadType.csv) {
     const path = premium ? 'exportCompaniesAsync' : 'exportCompanies'
-
-    const opts:RequestInit = {}
-    if (token) {
-      opts.headers = new Headers({
-        Authorization: `Bearer ${token}`
-      })
-    }
 
     const raw = await fetch([
       apiAddr,
@@ -596,7 +596,7 @@ const download = async (querystring: string, type: downloadType, premium: boolea
     apiAddr,
     `/v1/company/${apiPath}?`,
     querystring
-  ].join(''))
+  ].join(''), opts)
 
   const res = await raw.json()
 

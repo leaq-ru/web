@@ -14,7 +14,7 @@
     <b-button
       pill
       variant="primary"
-      :to="`${breadcrumb[2].to.path}/download`"
+      :to="downloadBtnLink"
     >
       <b-icon-cloud-download />
       Скачать базу компаний
@@ -140,7 +140,8 @@ export default Vue.extend({
           items: []
         },
         title: '',
-        description: ''
+        description: '',
+        downloadBtnLink: `/${city?.slug || 'all'}/${category?.slug || 'all'}/download`
       }
 
       if (city) {

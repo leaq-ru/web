@@ -150,11 +150,6 @@ export default Vue.extend({
         data.city.description = `в городе ${city.title}`
 
         data.breadcrumb[1].text = city.title
-
-        const toElems = data.breadcrumb[1].to.path.split('/')
-        toElems[1] = city.slug
-
-        data.breadcrumb[1].to.path = toElems.join('/')
       }
       if (category) {
         data.category.id = category.id
@@ -162,13 +157,18 @@ export default Vue.extend({
         data.category.description = `в категории «${category.title}»`
 
         data.breadcrumb[2].text = category.title
-
-        const toElems = data.breadcrumb[1].to.path.split('/')
-        toElems[1] = city?.slug || 'all'
-        toElems[2] = category.slug
-
-        data.breadcrumb[2].to.path = toElems.join('/')
       }
+
+      const cityToElems = ['']
+      cityToElems.push(city?.slug || 'all')
+      cityToElems.push('all')
+      data.breadcrumb[1].to.path = cityToElems.join('/')
+
+      const categoryToElems = ['']
+      categoryToElems.push(city?.slug || 'all')
+      categoryToElems.push(category?.slug || 'all')
+      data.breadcrumb[2].to.path = categoryToElems.join('/')
+
       data.title = `${data.category.header} в ${data.city.header} / Каталог компаний LEAQ`
       data.description = `Список всех сайтов компаний в ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска и скачивания базы email и телефонов`
 

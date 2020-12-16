@@ -131,180 +131,7 @@
       Доступ к данным
     </h3>
 
-    <b-card-group deck>
-      <b-card
-        class="mt-3"
-        no-body
-      >
-        <b-card-header>
-          Стандартный доступ
-        </b-card-header>
-
-        <b-list-group flush>
-          <b-list-group-item>
-            <span class="font-weight-bold">
-              Бесплатно
-            </span>
-          </b-list-group-item>
-        </b-list-group>
-
-        <b-card-body>
-          <b-list-group flush>
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                1 000
-              </span>
-              элементов в
-              <b-link to="/#search-buttons">
-                списке email
-              </b-link>
-            </b-list-group-item>
-
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                1 000
-              </span>
-              элементов в
-              <b-link to="/#search-buttons">
-                списке телефонов
-              </b-link>
-            </b-list-group-item>
-
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                1 000
-              </span>
-              компаний в
-              <b-link to="/#search">
-                конструкторе csv
-              </b-link>
-              баз
-            </b-list-group-item>
-
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                1
-              </span>
-              запрос в секунду к
-              <b-link
-                target="_blank"
-                href="https://api.leaq.ru/docs/"
-              >
-                API
-              </b-link>
-            </b-list-group-item>
-          </b-list-group>
-        </b-card-body>
-
-        <b-card-footer footer-bg-variant="white">
-          <b-button
-            variant="outline-secondary"
-            disabled
-          >
-            Уже активировано
-          </b-button>
-        </b-card-footer>
-      </b-card>
-
-      <b-card
-        class="mt-3"
-        border-variant="success"
-        body-border-variant="success"
-        no-body
-      >
-        <b-card-header
-          header-bg-variant="success"
-          header-text-variant="white"
-        >
-          <b-icon-lightning-fill />
-          Расширенный доступ
-        </b-card-header>
-
-        <b-list-group flush>
-          <b-list-group-item>
-            <span class="font-weight-bold">
-              1990
-            </span>
-
-            <span class="text-muted">
-              руб / мес
-            </span>
-          </b-list-group-item>
-        </b-list-group>
-
-        <b-card-body>
-          <b-list-group flush>
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                1 041 414
-              </span>
-              элементов (все) в
-              <b-link to="/#search-buttons">
-                списке email
-              </b-link>
-            </b-list-group-item>
-
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                1 214 161
-              </span>
-              элементов (все) в
-              <b-link to="/#search-buttons">
-                списке телефонов
-              </b-link>
-            </b-list-group-item>
-
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                {{ makePrettyNumber(totalCompaniesCount, " ") }}
-              </span>
-              компаний (все) в
-              <b-link to="/#search">
-                конструкторе csv
-              </b-link>
-              баз
-            </b-list-group-item>
-
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                30
-              </span>
-              запросов в секунду к
-              <b-link
-                target="_blank"
-                href="https://api.leaq.ru/docs/"
-              >
-                API
-              </b-link>
-            </b-list-group-item>
-
-            <b-list-group-item>
-              <span class="font-weight-bold">
-                3
-              </span>
-              дня хранятся
-              <b-link to="/account/exports">
-                выгрузки csv
-              </b-link>
-              в личном кабинете
-            </b-list-group-item>
-          </b-list-group>
-        </b-card-body>
-
-        <b-card-footer footer-bg-variant="white">
-          <b-row>
-            <b-col md="6">
-              <b-button
-                to="/account/exports"
-                variant="success"
-              >
-                Активировать
-              </b-button>
-            </b-col>
-          </b-row>
-        </b-card-footer>
-      </b-card>
-    </b-card-group>
+    <Plans :companies-total-count="companiesTotalCount" />
 
     <div class="d-flex justify-content-center mt-5">
       <img class="max-50-px" src="/payment-logos/cards.png" alt="Оплата картой">
@@ -320,7 +147,6 @@
 <script lang="ts">
 import Vue from 'vue'
 import apiAddr from '~/helpers/const/apiAddr'
-import makePrettyNumber from '~/helpers/makePrettyNumber'
 
 export default Vue.extend({
   async asyncData (): Promise<object> {
@@ -332,7 +158,7 @@ export default Vue.extend({
     const res = await raw.json()
 
     return {
-      totalCompaniesCount: res.totalCount
+      companiesTotalCount: res.totalCount
     }
   },
   data () {
@@ -351,9 +177,6 @@ export default Vue.extend({
         }
       }]
     }
-  },
-  methods: {
-    makePrettyNumber
   },
   head () {
     return {

@@ -1,4 +1,5 @@
 import unifyDate from '~/helpers/unifyDate'
+import download, { downloadRes, downloadType } from '~/helpers/company/download'
 
 const safeString = (val) => {
   if (!val) {

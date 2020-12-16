@@ -97,6 +97,7 @@ export default {
       'BIconWallet',
       'BIconLightningFill',
       'BIconFileText',
+      'BIconCloudDownload',
 
       'BContainer',
       'BRow',

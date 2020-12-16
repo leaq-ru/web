@@ -8,11 +8,17 @@
     </h1>
 
     <p>
-      Список организаций {{ category.description }} {{ city.description }}. Это подборка, изменить условия поиска и скачать список email и телефонов можно на
-      <b-link to="/">
-        главной странице
-      </b-link>
+      Список организаций {{ category.description }} {{ city.description }}
     </p>
+
+    <b-button
+      pill
+      variant="primary"
+      :to="`${breadcrumb[2].to.path}/download`"
+    >
+      <b-icon-cloud-download />
+      Скачать базу компаний
+    </b-button>
 
     <h3 class="pt-3 pb-3">
       Всего
@@ -91,10 +97,10 @@ export default Vue.extend({
         null,
         null
       ]
-      if (rawCity?.ok) {
+      if (rawCity) {
         unmarshal[0] = rawCity.json()
       }
-      if (rawCategory?.ok) {
+      if (rawCategory) {
         unmarshal[1] = rawCategory.json()
       }
 

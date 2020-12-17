@@ -1,34 +1,41 @@
 <template>
-  <b-breadcrumb
-    itemscope
-    itemtype="https://schema.org/BreadcrumbList"
-  >
-    <b-breadcrumb-item
-      v-for="(item, index) in items"
-      :key="item.id"
-      itemprop="itemListElement"
+  <span>
+    <b-breadcrumb
       itemscope
-      itemtype="https://schema.org/ListItem"
-      :to="item.to.path"
-      :active="item.active === false || index === items.length - 1"
+      itemtype="https://schema.org/BreadcrumbList"
     >
-      <span itemprop="name">
-        {{ item.text }}
-      </span>
-
-      <meta
-        itemprop="item"
+      <b-breadcrumb-item
+        v-for="(item, index) in items"
+        :key="item.id"
+        itemprop="itemListElement"
         itemscope
-        itemtype="https://schema.org/WebPage"
-        :itemid="`https://leaq.ru${index === 0 ? '' : item.to.path}`"
+        itemtype="https://schema.org/ListItem"
+        :to="item.to.path"
+        :active="item.active === false || index === items.length - 1"
       >
+        <span itemprop="name">
+          {{ item.text }}
+        </span>
 
-      <meta
-        itemprop="position"
-        :content="item.id"
-      >
-    </b-breadcrumb-item>
-  </b-breadcrumb>
+        <meta
+          itemprop="item"
+          itemscope
+          itemtype="https://schema.org/WebPage"
+          :itemid="`https://leaq.ru${index === 0 ? '' : item.to.path}`"
+        >
+
+        <meta
+          itemprop="position"
+          :content="item.id"
+        >
+      </b-breadcrumb-item>
+    </b-breadcrumb>
+
+    <div
+      id="yandex_rtb_R-A-673451-2"
+      class="mt-1 mb-1"
+    />
+  </span>
 </template>
 
 <script lang="ts">
@@ -42,6 +49,25 @@ export default Vue.extend({
         return []
       }
     }
+  },
+  mounted () {
+    (function (w, d, n, s, t) {
+      w[n] = w[n] || []
+      w[n].push(function () {
+        const w = window as any
+        w.Ya.Context.AdvManager.render({
+          blockId: 'R-A-673451-2',
+          renderTo: 'yandex_rtb_R-A-673451-2',
+          async: true
+        })
+      })
+      t = d.getElementsByTagName('script')[0]
+      s = d.createElement('script')
+      s.type = 'text/javascript'
+      s.src = '//an.yandex.ru/system/context.js'
+      s.async = true
+      t.parentNode.insertBefore(s, t)
+    })(this, this.document, 'yandexContextAsyncCallbacks')
   }
 })
 </script>

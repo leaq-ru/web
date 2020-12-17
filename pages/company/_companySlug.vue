@@ -1121,10 +1121,9 @@ export default Vue.extend({
     }
   },
   mounted () {
-    (function (w, d, n, s, t) {
+    (function (w: any, d, n, s, t) {
       w[n] = w[n] || []
       w[n].push(function () {
-        const w = window as any
         w.Ya.Context.AdvManager.render({
           blockId: 'R-A-673451-1',
           renderTo: 'yandex_rtb_R-A-673451-1',
@@ -1137,7 +1136,7 @@ export default Vue.extend({
       s.src = '//an.yandex.ru/system/context.js'
       s.async = true
       t.parentNode.insertBefore(s, t)
-    })(this, this.document, 'yandexContextAsyncCallbacks')
+    })(window, window.document, 'yandexContextAsyncCallbacks')
   },
   methods: {
     ...companyGetters,

@@ -33,7 +33,7 @@
 
     <div
       id="yandex_rtb_R-A-673451-2"
-      class="mt-1 mb-1"
+      class="mb-3"
     />
   </span>
 </template>

@@ -48,25 +48,33 @@ export default Vue.extend({
       default () {
         return []
       }
+    },
+    ads: {
+      type: Boolean,
+      default () {
+        return true
+      }
     }
   },
   mounted () {
-    (function (w: any, d, n, s, t) {
-      w[n] = w[n] || []
-      w[n].push(function () {
-        w.Ya.Context.AdvManager.render({
-          blockId: 'R-A-673451-2',
-          renderTo: 'yandex_rtb_R-A-673451-2',
-          async: true
+    if (this.ads) {
+      (function (w: any, d, n, s, t) {
+        w[n] = w[n] || []
+        w[n].push(function () {
+          w.Ya.Context.AdvManager.render({
+            blockId: 'R-A-673451-2',
+            renderTo: 'yandex_rtb_R-A-673451-2',
+            async: true
+          })
         })
-      })
-      t = d.getElementsByTagName('script')[0]
-      s = d.createElement('script')
-      s.type = 'text/javascript'
-      s.src = '//an.yandex.ru/system/context.js'
-      s.async = true
-      t.parentNode.insertBefore(s, t)
-    })(window, window.document, 'yandexContextAsyncCallbacks')
+        t = d.getElementsByTagName('script')[0]
+        s = d.createElement('script')
+        s.type = 'text/javascript'
+        s.src = '//an.yandex.ru/system/context.js'
+        s.async = true
+        t.parentNode.insertBefore(s, t)
+      })(window, window.document, 'yandexContextAsyncCallbacks')
+    }
   }
 })
 </script>

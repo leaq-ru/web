@@ -304,7 +304,7 @@ export default Vue.extend({
       const w = window as any
       if (w.ym) {
         w.ym(66609163, 'reachGoal', 'balance-income', {
-          order_price: parseInt(this.num),
+          order_price: parseInt(this.sum),
           currency: 'RUB'
         })
       }

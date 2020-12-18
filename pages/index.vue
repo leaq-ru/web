@@ -1,14 +1,19 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <Breadcrumb :items="breadcrumb" />
+    <Breadcrumb
+      :ads="false"
+      :items="breadcrumb"
+    />
 
     <b-jumbotron
       header="Каталог компаний России"
       :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
     >
       <p>
-        Город, сфера деятельности, телефон, email, и многое другое в карточках компаний. Все данные доступны по
+        Город, сфера деятельности, телефон, email, и многое другое в карточках компаний.
+        Сформируйте поисковый запрос в форме ниже и скачайте csv базу, список email и телефонов.
+        Все данные доступны по
         <b-link href="https://api.leaq.ru/docs/" target="_blank">
           API
         </b-link>

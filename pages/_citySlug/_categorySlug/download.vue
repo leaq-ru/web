@@ -4,7 +4,7 @@
     <Breadcrumb :items="breadcrumb" />
 
     <h1>
-      Скачать базу компаний {{ city.header }} ({{ category.header }})
+      Скачать базу компаний {{ city.header }} {{ category.header }}
     </h1>
 
     <p>
@@ -288,7 +288,7 @@ export default Vue.extend({
         },
         category: {
           id: '',
-          header: 'все категории',
+          header: '',
           description: 'во всех категориях'
         },
         company: {
@@ -308,9 +308,11 @@ export default Vue.extend({
         data.breadcrumb[1].text = city.title
       }
       if (category) {
+        const cat = `в категории «${category.title}»`
+
         data.category.id = category.id
-        data.category.header = category.title
-        data.category.description = `в категории «${category.title}»`
+        data.category.header = cat
+        data.category.description = cat
 
         data.breadcrumb[2].text = category.title
       }
@@ -325,7 +327,7 @@ export default Vue.extend({
       categoryToElems.push(category?.slug || 'all')
       data.breadcrumb[2].to.path = categoryToElems.join('/')
 
-      data.title = `Скачать базу компаний ${data.city.header} (${data.category.header}) / Каталог компаний LEAQ`
+      data.title = `Скачать базу компаний ${data.city.header}${data.category.header ? ' ' + data.category.header : ''} / Каталог компаний LEAQ`
       data.description = `Скачать csv базу, email и телефоны организаций ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска`
 
       return data

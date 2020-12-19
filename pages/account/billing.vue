@@ -301,14 +301,6 @@ export default Vue.extend({
       })
       const res = await raw.json()
 
-      const w = window as any
-      if (w.ym) {
-        w.ym(66609163, 'reachGoal', 'balance-income', {
-          order_price: parseInt(this.sum),
-          currency: 'RUB'
-        })
-      }
-
       window.open(res.url, '_self')
     }
   },

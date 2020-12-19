@@ -145,6 +145,8 @@
 import Vue from 'vue'
 import unifyDate from '~/helpers/unifyDate'
 import apiAddr from '~/helpers/const/apiAddr'
+import goal from '~/helpers/const/goal'
+import yandexMetrika from '~/helpers/const/yandexMetrika'
 
 export default Vue.extend({
   props: {
@@ -199,6 +201,13 @@ export default Vue.extend({
         })
       }
 
+      const w = window as any
+      if (w.ym) {
+        w.ym(yandexMetrika.counter, 'reachGoal', goal.moneySpent, {
+          order_price: this.amount,
+          currency: 'RUB'
+        })
+      }
       this.$emit('paymentOk')
     },
     rotateMonths () {

@@ -170,6 +170,8 @@ import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeAuthUrl from '~/helpers/makeAuthUrl'
 import unifyDate from '~/helpers/unifyDate'
+import goal from '~/helpers/const/goal'
+import yandexMetrika from '~/helpers/const/yandexMetrika'
 
 export default Vue.extend({
   async asyncData (ctx: Context): Promise<object | void> {
@@ -310,6 +312,14 @@ export default Vue.extend({
 
         return this.$nuxt.context.error({
           statusCode: 500
+        })
+      }
+
+      const w = window as any
+      if (w.ym) {
+        w.ym(yandexMetrika.counter, 'reachGoal', goal.moneySpent, {
+          order_price: parseInt(this.amount),
+          currency: 'RUB'
         })
       }
 

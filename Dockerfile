@@ -5,7 +5,7 @@ RUN npm i
 RUN npm run build
 RUN npm prune --production
 
-FROM node:12-alpine
+FROM node:lts-alpine
 WORKDIR /app
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/static /app/static

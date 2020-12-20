@@ -1,10 +1,7 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <Breadcrumb
-      :ads="false"
-      :items="breadcrumb"
-    />
+    <Breadcrumb :items="breadcrumb" />
 
     <b-jumbotron
       header="База компаний России"

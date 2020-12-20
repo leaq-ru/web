@@ -6,7 +6,10 @@
     <b-jumbotron header="База компаний России">
       <template #lead>
         Более
-        <b-spinner v-if="$fetchState.pending" />
+        <b-spinner
+          v-if="$fetchState.pending"
+          small
+        />
         <template v-else>
           {{ titleCompaniesCount }}
         </template>
@@ -510,7 +513,10 @@
         более
       </template>
       <span class="text-muted">
-        <b-spinner v-if="$fetchState.pending" />
+        <b-spinner
+          v-if="$fetchState.pending"
+          small
+        />
         <template v-else>
           {{ company.items.length }}
         </template>

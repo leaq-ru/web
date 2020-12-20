@@ -3,10 +3,7 @@
     <Header />
     <Breadcrumb :items="breadcrumb" />
 
-    <b-jumbotron
-      header="База компаний России"
-      :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
-    >
+    <b-jumbotron header="База компаний России">
       <template #lead>
         Более
         <b-spinner v-if="$fetchState.pending" />

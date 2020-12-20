@@ -820,7 +820,7 @@
 
             Также предлагаем рассмотреть вариант
 
-            <b-link to="/plans">
+            <b-link to="/plans#company">
               приоритетного размещения
             </b-link>
           </p>
@@ -992,7 +992,7 @@ const makeDescription = (company: any): string => {
     desc = company.description
   }
   if (!desc) {
-    desc = 'самая подробная информация о компании, сотрудниках, адрес и контакты'
+    desc = 'Самая подробная информация о компании, сотрудниках, адрес и контакты'
   }
 
   return result.concat(contacts.join(', '), '. ', `${desc}`)

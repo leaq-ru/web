@@ -23,7 +23,6 @@
         <b-link href="https://api.leaq.ru/docs/" target="_blank">
           API
         </b-link>
-        для интеграции с вашим бизнесом
       </p>
       <span id="search" />
     </b-jumbotron>

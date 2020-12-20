@@ -3,11 +3,10 @@
     <Header />
     <Breadcrumb :items="breadcrumb" />
 
-    <b-jumbotron header="База компаний России">
-      <template #lead>
-        Более 2 134 667 фирм доступно для поиска
-      </template>
-
+    <b-jumbotron
+      header="База компаний России"
+      :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
+    >
       <p>
         Сформируйте поисковый запрос в форме ниже и скачайте csv базу, список email и телефонов.
         Фильтровать можно по городу, категории, технологиям на сайте, и многому другому.
@@ -336,7 +335,7 @@
     <b-row class="mb-2">
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.search || $fetchState.pending"
+          v-if="loading.search"
           disabled
           pill
           block
@@ -360,7 +359,7 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadCsv || $fetchState.pending"
+          v-if="loading.downloadCsv"
           disabled
           pill
           block
@@ -384,7 +383,7 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadEmails || $fetchState.pending"
+          v-if="loading.downloadEmails"
           disabled
           pill
           block
@@ -408,7 +407,7 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadPhones || $fetchState.pending"
+          v-if="loading.downloadPhones"
           disabled
           pill
           block
@@ -505,13 +504,7 @@
         более
       </template>
       <span class="text-muted">
-        <b-spinner
-          v-if="$fetchState.pending"
-          small
-        />
-        <template v-else>
-          {{ company.items.length }}
-        </template>
+        {{ (company.items && company.items.length) || 0 }}
       </span>
       компаний
     </h3>
@@ -534,6 +527,7 @@
 import Vue from 'vue'
 // @ts-ignore - no types for this module
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
+import { Context } from '@nuxt/types'
 import select from '~/helpers/const/select'
 import getCompanies from '~/helpers/company/getCompanies'
 import findRule from '~/helpers/const/findRule'
@@ -569,11 +563,15 @@ const removeTag = (ctx, type) => {
   }
 }
 
+const makeCountTitle = (companiesCount: string) => {
+  return makeTitle(`Более ${companiesCount} фирм из разных городов России и категорий. Бесплатное скачивание базы email и телефонов`)
+}
+
 export default Vue.extend({
   components: {
     VueBootstrapTypeahead
   },
-  async fetch (): Promise<void> {
+  async asyncData (ctx: Context): Promise<object> {
     const promises = [
       getCompanies({
         querystring: new URLSearchParams({
@@ -586,7 +584,7 @@ export default Vue.extend({
       ].join(''))
     ]
 
-    const token = this.$store.state?.user?.self?.token
+    const token = ctx.store.state?.user?.self?.token
     if (token) {
       promises.push(fetch([
         apiAddr,
@@ -608,14 +606,21 @@ export default Vue.extend({
 
     const countWithCommas = makePrettyNumber(resTotalCount.totalCount, ',')
 
-    this.$data.company.items = resComps.companies
-    this.$data.titleCompaniesCount = countWithCommas
-    this.$data.dataPremium = false
+    const data = {
+      company: {
+        items: resComps.companies
+      },
+      titleCompaniesCount: countWithCommas,
+      title: makeCountTitle(countWithCommas),
+      dataPremium: false
+    }
 
     if (rawMyDataPlan) {
       const resMyDataPlan = await rawMyDataPlan.json()
-      this.$data.dataPremium = resMyDataPlan.premium || false
+      data.dataPremium = resMyDataPlan.premium
     }
+
+    return data
   },
   data (): any {
     return {
@@ -661,7 +666,6 @@ export default Vue.extend({
         hasFacebook: select.any,
         technologyFindRule: findRule.oneOf
       },
-      company: {},
       city: {
         list: [],
         tags: [],
@@ -829,7 +833,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: makeTitle('База организаций России. Более 2 млн компаний, 1000 городов и 500 категорий доступно для выгрузки. Бесплатное скачивание csv базы, списка email и телефонов'),
+      title: this.title,
       meta: [{
         hid: 'yandex-verification',
         name: 'yandex-verification',
@@ -837,7 +841,7 @@ export default Vue.extend({
       }, {
         hid: 'description',
         name: 'description',
-        content: 'База компаний из разных городов от Москвы до Владивостока, из категорий от Создания и продвижения сайтов до Черной и цветной металлургии. Доступно бесплатное скачивание csv базы, email и телефонов компаний с учетом фильтров поиска'
+        content: 'База компаний из разных городов от Москвы до Владивостока, из категорий от Создания и продвижения сайтов до Черной и цветной металлургии. Доступно бесплатное скачивание базы email и телефонов компаний с учетом фильтров поиска'
       }]
     }
   }

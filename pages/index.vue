@@ -538,6 +538,7 @@ import apiAddr from '~/helpers/const/apiAddr'
 import makePrettyNumber from '~/helpers/makePrettyNumber'
 import download, { downloadRes, downloadType } from '~/helpers/company/download'
 import makeTitle from '~/helpers/makeTitle'
+import metrics from '~/helpers/metrics'
 
 const addTag = (ctx, type, inputRefName) => {
   return (val) => {
@@ -796,6 +797,8 @@ export default Vue.extend({
       this.loading.downloadEmails = true
       await download(this.buildSearchQuery(false), downloadType.email, this.dataPremium, token)
       this.loading.downloadEmails = false
+
+      await metrics.emailDownload()
     },
     async methodDownloadPhones () {
       this.csvClick = false
@@ -805,6 +808,8 @@ export default Vue.extend({
       this.loading.downloadPhones = true
       await download(this.buildSearchQuery(false), downloadType.phone, this.dataPremium, token)
       this.loading.downloadPhones = false
+
+      await metrics.phoneDownload()
     },
     async methodDownloadCsv () {
       this.csvClick = true
@@ -820,6 +825,8 @@ export default Vue.extend({
       }
 
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
+
+      await metrics.csvDownload()
     },
     makeTechnologyTagName (name: any): string {
       return name.version ? `${name.name} ${name.version}` : name.name

@@ -168,7 +168,8 @@ import Vue from 'vue'
 import { cityFrom } from 'lvovich'
 import apiAddr from '~/helpers/const/apiAddr'
 import download, { downloadRes, downloadType } from '~/helpers/company/download'
-import makeTitle from "~/helpers/makeTitle";
+import makeTitle from '~/helpers/makeTitle'
+import metrics from '~/helpers/metrics'
 
 export default Vue.extend({
   async asyncData ({ error, params, store }): Promise<any> {
@@ -370,6 +371,8 @@ export default Vue.extend({
       this.loading.downloadEmails = true
       await download(this.buildDownloadQuery(), downloadType.email, this.dataPremium, token)
       this.loading.downloadEmails = false
+
+      await metrics.emailDownload()
     },
     async methodDownloadPhones () {
       this.csvClick = false
@@ -379,6 +382,8 @@ export default Vue.extend({
       this.loading.downloadPhones = true
       await download(this.buildDownloadQuery(), downloadType.phone, this.dataPremium, token)
       this.loading.downloadPhones = false
+
+      await metrics.phoneDownload()
     },
     async methodDownloadCsv () {
       this.csvClick = true
@@ -394,6 +399,8 @@ export default Vue.extend({
       }
 
       this.downloadAlertCountDown = this.downloadAlertDismissSecs
+
+      await metrics.csvDownload()
     }
   },
   head () {

@@ -1,5 +1,6 @@
 enum goal {
-  moneySpent = 'money-spent'
+  dataPremium = 'data-premium',
+  companyPremium = 'company-premium',
 }
 
 export default goal

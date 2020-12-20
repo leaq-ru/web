@@ -203,10 +203,11 @@ export default Vue.extend({
 
       const w = window as any
       if (w.ym) {
-        w.ym(yandexMetrika.counter, 'reachGoal', goal.moneySpent, {
-          order_price: this.amount,
-          currency: 'RUB'
-        })
+        const promises = []
+        for (let i = 0; i < this.monthAmount; i += 1) {
+          promises.push(w.ym(yandexMetrika.counter, 'reachGoal', goal.companyPremium))
+        }
+        await Promise.all(promises)
       }
       this.$emit('paymentOk')
     },

@@ -5,15 +5,7 @@
 
     <b-jumbotron header="База компаний России">
       <template #lead>
-        Более
-        <b-spinner
-          v-if="$fetchState.pending"
-          small
-        />
-        <template v-else>
-          {{ titleCompaniesCount }}
-        </template>
-        фирм доступно для поиска
+        Более 2 134 667 фирм доступно для поиска
       </template>
 
       <p>

@@ -72,6 +72,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import makeTitle from '~/helpers/makeTitle'
 
 export default Vue.extend({
   data (): any {
@@ -93,7 +94,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'О сервисе / Каталог компаний LEAQ',
+      title: makeTitle('О сервисе'),
       meta: [{
         hid: 'description',
         name: 'description',

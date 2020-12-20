@@ -43,6 +43,7 @@
 import Vue from 'vue'
 import getCompanies from '~/helpers/company/getCompanies'
 import apiAddr from '~/helpers/const/apiAddr'
+import makeTitle from '~/helpers/makeTitle'
 
 const makeCategoryName = (resTech: any): string => {
   if (resTech.categories && resTech.categories[0]?.name) {
@@ -66,7 +67,7 @@ const makeTechnologyName = (resTech: any): string => {
   return name
 }
 
-const makeTitle = (resTech: any):string => {
+const makeTechCatTitle = (resTech: any): string => {
   if (!resTech) {
     return ''
   }
@@ -74,7 +75,7 @@ const makeTitle = (resTech: any):string => {
   let name = makeTechnologyName(resTech)
   name += makeCategoryName(resTech)
 
-  return `Все сайты на ${name} / Каталог компаний LEAQ`
+  return makeTitle(`Все сайты на ${name}`)
 }
 
 const makeDescription = (resTech: any):string => {
@@ -145,7 +146,7 @@ export default Vue.extend({
         company: {
           items: []
         },
-        title: makeTitle(tech),
+        title: makeTechCatTitle(tech),
         description: makeDescription(tech),
         technologyId: tech.id,
         technologyName,

@@ -7,7 +7,7 @@
     />
 
     <b-jumbotron
-      header="Каталог компаний России"
+      header="База компаний России"
       :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
     >
       <p>
@@ -540,6 +540,7 @@ import debounce from '~/helpers/debounce'
 import apiAddr from '~/helpers/const/apiAddr'
 import makePrettyNumber from '~/helpers/makePrettyNumber'
 import download, { downloadRes, downloadType } from '~/helpers/company/download'
+import makeTitle from '~/helpers/makeTitle'
 
 const addTag = (ctx, type, inputRefName) => {
   return (val) => {
@@ -565,8 +566,8 @@ const removeTag = (ctx, type) => {
   }
 }
 
-const makeTitle = (companiesCount: string) => {
-  return `Более ${companiesCount} фирм из разных городов России и категорий. Бесплатное скачивание базы email и телефонов / Каталог компаний LEAQ`
+const makeCountTitle = (companiesCount: string) => {
+  return makeTitle(`Более ${companiesCount} фирм из разных городов России и категорий. Бесплатное скачивание базы email и телефонов`)
 }
 
 export default Vue.extend({
@@ -613,7 +614,7 @@ export default Vue.extend({
         items: resComps.companies
       },
       titleCompaniesCount: countWithCommas,
-      title: makeTitle(countWithCommas),
+      title: makeCountTitle(countWithCommas),
       dataPremium: false
     }
 
@@ -837,7 +838,7 @@ export default Vue.extend({
       }, {
         hid: 'description',
         name: 'description',
-        content: 'Каталог компаний из разных городов от Москвы до Владивостока, из категорий от Создания и продвижения сайтов до Черной и цветной металлургии. Доступно бесплатное скачивание базы email и телефонов компаний с учетом фильтров поиска'
+        content: 'База компаний из разных городов от Москвы до Владивостока, из категорий от Создания и продвижения сайтов до Черной и цветной металлургии. Доступно бесплатное скачивание базы email и телефонов компаний с учетом фильтров поиска'
       }]
     }
   }

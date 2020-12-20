@@ -50,6 +50,7 @@ import Vue from 'vue'
 import { cityIn } from 'lvovich'
 import getCompanies from '~/helpers/company/getCompanies'
 import apiAddr from '~/helpers/const/apiAddr'
+import makeTitle from '~/helpers/makeTitle'
 
 export default Vue.extend({
   async asyncData ({ error, params }): Promise<any> {
@@ -169,7 +170,7 @@ export default Vue.extend({
       categoryToElems.push(category?.slug || 'all')
       data.breadcrumb[2].to.path = categoryToElems.join('/')
 
-      data.title = `${data.category.header} в ${data.city.header} / Каталог компаний LEAQ`
+      data.title = makeTitle(`${data.category.header} в ${data.city.header}`)
       data.description = `Список всех сайтов компаний в ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска и скачивания базы email и телефонов`
 
       const query: any = {

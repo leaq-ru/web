@@ -961,7 +961,7 @@ const makeTitle = (company: any): string => {
     elems.push(companyGetters.safeCategoryTitle(company))
   }
 
-  elems.push('Каталог компаний LEAQ')
+  elems.push('База компаний LEAQ')
   return elems.join(' / ')
 }
 

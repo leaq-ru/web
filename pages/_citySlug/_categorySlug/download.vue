@@ -168,6 +168,7 @@ import Vue from 'vue'
 import { cityFrom } from 'lvovich'
 import apiAddr from '~/helpers/const/apiAddr'
 import download, { downloadRes, downloadType } from '~/helpers/company/download'
+import makeTitle from "~/helpers/makeTitle";
 
 export default Vue.extend({
   async asyncData ({ error, params, store }): Promise<any> {
@@ -327,7 +328,7 @@ export default Vue.extend({
       categoryToElems.push(category?.slug || 'all')
       data.breadcrumb[2].to.path = categoryToElems.join('/')
 
-      data.title = `Скачать базу компаний ${data.city.header}${data.category.header ? ' ' + data.category.header : ''} / Каталог компаний LEAQ`
+      data.title = makeTitle(`Скачать базу компаний ${data.city.header}${data.category.header ? ' ' + data.category.header : ''}`)
       data.description = `Скачать csv базу, email и телефоны организаций ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска`
 
       return data

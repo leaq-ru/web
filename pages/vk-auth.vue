@@ -20,6 +20,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
+import makeTitle from '~/helpers/makeTitle'
 
 export default Vue.extend({
   async fetch (): Promise<void> {
@@ -77,7 +78,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'Войти / Каталог компаний LEAQ',
+      title: makeTitle('Войти'),
       meta: [{
         hid: 'description',
         name: 'description',

@@ -38,6 +38,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import apiAddr from '~/helpers/const/apiAddr'
+import makeTitle from '~/helpers/makeTitle'
 
 export default Vue.extend({
   async asyncData () {
@@ -89,7 +90,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'Все категории / Каталог компаний LEAQ',
+      title: makeTitle('Все категории'),
       meta: [{
         hid: 'description',
         name: 'description',

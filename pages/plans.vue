@@ -7,7 +7,13 @@
       Тарифы
     </h2>
 
-    <h3 id="company">
+    <h3 id="data">
+      Доступ к данным
+    </h3>
+
+    <Plans :companies-total-count="companiesTotalCount" />
+
+    <h3 id="company" class="mt-5">
       Размещение компаний
     </h3>
 
@@ -127,12 +133,6 @@
       </b-card>
     </b-card-group>
 
-    <h3 id="data" class="mt-5">
-      Доступ к данным
-    </h3>
-
-    <Plans :companies-total-count="companiesTotalCount" />
-
     <div class="d-flex justify-content-center mt-5">
       <img class="max-50-px" src="/payment-logos/cards.png" alt="Оплата картой">
       <img class="max-50-px" src="/payment-logos/qiwi.png" alt="Оплата Qiwi">
@@ -147,6 +147,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import apiAddr from '~/helpers/const/apiAddr'
+import makeTitle from '~/helpers/makeTitle'
 
 export default Vue.extend({
   async asyncData (): Promise<object> {
@@ -180,7 +181,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: 'Тарифы / Каталог компаний LEAQ',
+      title: makeTitle('Тарифы'),
       meta: [{
         hid: 'description',
         name: 'description',

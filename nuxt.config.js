@@ -148,7 +148,8 @@ export default {
       'BTr',
       'BTd',
       'BTh',
-      'BProgress'
+      'BProgress',
+      'BSpinner'
     ],
     directives: [
       'VBTooltip'

@@ -7,10 +7,19 @@
       header="База компаний России"
       :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
     >
+      <template #lead>
+        Более
+        <b-spinner v-if="$fetchState.pending" />
+        <template v-else>
+          {{ titleCompaniesCount }}
+        </template>
+        фирм доступно для поиска
+      </template>
+
       <p>
         Сформируйте поисковый запрос в форме ниже и скачайте csv базу, список email и телефонов.
-        Город, сфера деятельности, телефон, email, и многое другое в карточках компаний.
-        Все данные доступны по
+        Фильтровать можно по городу, категории, технологиям на сайте, и многому другому.
+        Также все данные доступны по
         <b-link href="https://api.leaq.ru/docs/" target="_blank">
           API
         </b-link>
@@ -336,7 +345,7 @@
     <b-row class="mb-2">
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.search"
+          v-if="loading.search || $fetchState.pending"
           disabled
           pill
           block
@@ -360,7 +369,7 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadCsv"
+          v-if="loading.downloadCsv || $fetchState.pending"
           disabled
           pill
           block
@@ -384,7 +393,7 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadEmails"
+          v-if="loading.downloadEmails || $fetchState.pending"
           disabled
           pill
           block
@@ -408,7 +417,7 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadPhones"
+          v-if="loading.downloadPhones || $fetchState.pending"
           disabled
           pill
           block
@@ -505,7 +514,10 @@
         более
       </template>
       <span class="text-muted">
-        {{ (company.items && company.items.length) || 0 }}
+        <b-spinner v-if="$fetchState.pending" />
+        <template v-else>
+          {{ company.items.length }}
+        </template>
       </span>
       компаний
     </h3>
@@ -528,7 +540,6 @@
 import Vue from 'vue'
 // @ts-ignore - no types for this module
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
-import { Context } from '@nuxt/types'
 import select from '~/helpers/const/select'
 import getCompanies from '~/helpers/company/getCompanies'
 import findRule from '~/helpers/const/findRule'
@@ -564,15 +575,11 @@ const removeTag = (ctx, type) => {
   }
 }
 
-const makeCountTitle = (companiesCount: string) => {
-  return makeTitle(`Более ${companiesCount} фирм из разных городов России и категорий. Бесплатное скачивание базы email и телефонов`)
-}
-
 export default Vue.extend({
   components: {
     VueBootstrapTypeahead
   },
-  async asyncData (ctx: Context): Promise<object> {
+  async fetch (): Promise<void> {
     const promises = [
       getCompanies({
         querystring: new URLSearchParams({
@@ -585,7 +592,7 @@ export default Vue.extend({
       ].join(''))
     ]
 
-    const token = ctx.store.state?.user?.self?.token
+    const token = this.$store.state?.user?.self?.token
     if (token) {
       promises.push(fetch([
         apiAddr,
@@ -607,21 +614,14 @@ export default Vue.extend({
 
     const countWithCommas = makePrettyNumber(resTotalCount.totalCount, ',')
 
-    const data = {
-      company: {
-        items: resComps.companies
-      },
-      titleCompaniesCount: countWithCommas,
-      title: makeCountTitle(countWithCommas),
-      dataPremium: false
-    }
+    this.$data.company.items = resComps.companies
+    this.$data.titleCompaniesCount = countWithCommas
+    this.$data.dataPremium = false
 
     if (rawMyDataPlan) {
       const resMyDataPlan = await rawMyDataPlan.json()
-      data.dataPremium = resMyDataPlan.premium
+      this.$data.dataPremium = resMyDataPlan.premium || false
     }
-
-    return data
   },
   data (): any {
     return {
@@ -667,6 +667,7 @@ export default Vue.extend({
         hasFacebook: select.any,
         technologyFindRule: findRule.oneOf
       },
+      company: {},
       city: {
         list: [],
         tags: [],
@@ -834,7 +835,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: this.title,
+      title: makeTitle('База организаций России. Более 2 млн компаний, 1000 городов и 500 категорий доступно для выгрузки. Бесплатное скачивание csv базы, списка email и телефонов'),
       meta: [{
         hid: 'yandex-verification',
         name: 'yandex-verification',
@@ -842,7 +843,7 @@ export default Vue.extend({
       }, {
         hid: 'description',
         name: 'description',
-        content: 'База компаний из разных городов от Москвы до Владивостока, из категорий от Создания и продвижения сайтов до Черной и цветной металлургии. Доступно бесплатное скачивание базы email и телефонов компаний с учетом фильтров поиска'
+        content: 'База компаний из разных городов от Москвы до Владивостока, из категорий от Создания и продвижения сайтов до Черной и цветной металлургии. Доступно бесплатное скачивание csv базы, email и телефонов компаний с учетом фильтров поиска'
       }]
     }
   }

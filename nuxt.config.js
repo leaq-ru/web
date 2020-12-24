@@ -202,8 +202,8 @@ export default {
     }
   },
   env: {
-    HOST: isProd('https://leaq.ru', 'http://leaq.local'),
-    API_HOST: isProd('https://api.leaq.ru', 'http://localhost:1111'),
+    HOST: isProd('https://leaq.ru', 'http://leaq.local:1100'),
+    API_HOST: isProd('https://api.leaq.ru', 'http://localhost:1101'),
     VK_APPID: isProd('7649529', '7654813')
   },
   router: {

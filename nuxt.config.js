@@ -148,7 +148,9 @@ export default {
       'BTr',
       'BTd',
       'BTh',
-      'BProgress'
+      'BProgress',
+      'BSpinner',
+      'BFormInvalidFeedback'
     ],
     directives: [
       'VBTooltip'

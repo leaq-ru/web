@@ -3,10 +3,19 @@
     <Header />
     <Breadcrumb :items="breadcrumb" />
 
-    <b-jumbotron
-      header="База компаний России"
-      :lead="`Более ${titleCompaniesCount} фирм доступно для поиска`"
-    >
+    <b-jumbotron header="База компаний России">
+      <template #lead>
+        Более
+        <b-spinner
+          v-if="$fetchState.pending"
+          small
+          class="text-muted"
+        />
+        <template v-else>
+          {{ titleCompaniesCount }}
+        </template>
+        фирм доступно для поиска
+      </template>
       <p>
         Сформируйте поисковый запрос в форме ниже и скачайте csv базу, список email и телефонов.
         Фильтровать можно по городу, категории, технологиям на сайте, и многому другому.
@@ -43,9 +52,12 @@
               placeholder="Например «Москва», «Бор», «Владивосток» ..."
               @hit="city.addTag($event)"
             />
-            <b-form-text v-if="city.tags.length === 0">
+            <b-form-text v-if="cityInputState && city.tags.length === 0">
               Все города
             </b-form-text>
+            <b-form-invalid-feedback :state="cityInputState">
+              Необходимо выбрать город из подсказок, или оставить пустым
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
 
@@ -70,9 +82,12 @@
               placeholder="Например «Создание сайтов», «Металлургия», «Фитнес» ..."
               @hit="category.addTag($event)"
             />
-            <b-form-text v-if="category.tags.length === 0">
+            <b-form-text v-if="categoryInputState && category.tags.length === 0">
               Все категории
             </b-form-text>
+            <b-form-invalid-feedback :state="categoryInputState">
+              Необходимо выбрать категорию из подсказок, или оставить пустой
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
       </b-row>
@@ -83,7 +98,7 @@
             <b-form-tag
               v-for="tag in technology.tags"
               :key="tag.id"
-              :title="tag"
+              :title="tag.name"
               pill
               variant="primary"
               class="mr-1 mb-2"
@@ -104,12 +119,15 @@
               v-model="technology.search"
               :data="technology.list"
               :serializer="s => makeTechnologyTagName(s)"
-              placeholder="Например «Интернет-магазин», «1C-Bitrix», «Vue.js» ..."
+              placeholder="Например «1C-Bitrix», «Интернет-магазин», «PHP» ..."
               @hit="technology.addTag($event)"
             />
-            <b-form-text v-if="technology.tags.length === 0">
+            <b-form-text v-if="technologyInputState && technology.tags.length === 0">
               Все технологии
             </b-form-text>
+            <b-form-invalid-feedback :state="technologyInputState">
+              Необходимо выбрать технологию из подсказок, или оставить пустой
+            </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
       </b-row>
@@ -332,99 +350,79 @@
       </b-col>
     </b-row>
 
+    <b-row v-if="!formState">
+      <b-col>
+        <p class="text-danger">
+          Одно из введеных значений некорректно, пожалуйста проверьте данные
+        </p>
+      </b-col>
+    </b-row>
+
     <b-row class="mb-2">
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.search"
-          disabled
+          :disabled="loading.search || $fetchState.pending || !formState"
           pill
           block
           variant="primary"
           @click="methodSearchCompanies"
         >
-          <b-icon-arrow-clockwise animation="spin" />
-          Найти
-        </b-button>
-        <b-button
-          v-else
-          pill
-          block
-          variant="primary"
-          @click="methodSearchCompanies"
-        >
-          <b-icon-search />
+          <b-spinner
+            v-if="loading.search"
+            small
+          />
+          <b-icon-search v-else />
           Найти
         </b-button>
       </b-col>
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadCsv"
-          disabled
+          :disabled="loading.downloadCsv || $fetchState.pending || !formState"
           pill
           block
           variant="outline-primary"
           @click="methodDownloadCsv"
         >
-          <b-icon-arrow-clockwise animation="spin" />
-          Скачать csv базу
-        </b-button>
-        <b-button
-          v-else
-          pill
-          block
-          variant="outline-primary"
-          @click="methodDownloadCsv"
-        >
-          <b-icon-file-text />
+          <b-spinner
+            v-if="loading.downloadCsv"
+            small
+          />
+          <b-icon-file-text v-else />
           Скачать csv базу
         </b-button>
       </b-col>
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadEmails"
-          disabled
+          :disabled="loading.downloadEmails || $fetchState.pending || !formState"
           pill
           block
           variant="outline-primary"
           @click="methodDownloadEmails"
         >
-          <b-icon-arrow-clockwise animation="spin" />
+          <b-spinner
+            v-if="loading.downloadEmails"
+            small
+          />
+          <b-icon-envelope v-else />
           Скачать emails
         </b-button>
-        <b-button
-          v-else
-          pill
-          block
-          variant="outline-primary"
-          @click="methodDownloadEmails"
-        >
-          <b-icon-envelope />
-          Скачать email
-        </b-button>
       </b-col>
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-if="loading.downloadPhones"
-          disabled
+          :disabled="loading.downloadPhones || $fetchState.pending || !formState"
           pill
           block
           variant="outline-primary"
           @click="methodDownloadPhones"
         >
-          <b-icon-arrow-clockwise animation="spin" />
-          Скачать телефоны
-        </b-button>
-        <b-button
-          v-else
-          pill
-          block
-          variant="outline-primary"
-          @click="methodDownloadPhones"
-        >
-          <b-icon-telephone />
+          <b-spinner
+            v-if="loading.downloadPhones"
+            small
+          />
+          <b-icon-telephone v-else />
           Скачать телефоны
         </b-button>
       </b-col>
@@ -500,18 +498,24 @@
       class="pt-3 pb-3"
     >
       Найдено
-      <template v-if="company.items && company.items.length >= 20">
+      <template v-if="company.items.length >= 20">
         более
       </template>
       <span class="text-muted">
-        {{ (company.items && company.items.length) || 0 }}
+        <b-spinner
+          v-if="$fetchState.pending"
+          small
+        />
+        <template v-else>
+          {{ company.items.length }}
+        </template>
       </span>
       компаний
     </h3>
 
     <CardDeck :items="company.items" />
 
-    <client-only v-if="company.items && company.items.length >= 20 && !scrollDone">
+    <client-only v-if="!$fetchState.pending && company.items.length >= 20 && !scrollDone">
       <infinite-loading
         spinner="spiral"
         :distance="2000"
@@ -527,7 +531,6 @@
 import Vue from 'vue'
 // @ts-ignore - no types for this module
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
-import { Context } from '@nuxt/types'
 import select from '~/helpers/const/select'
 import getCompanies from '~/helpers/company/getCompanies'
 import findRule from '~/helpers/const/findRule'
@@ -536,12 +539,12 @@ import debounce from '~/helpers/debounce'
 import apiAddr from '~/helpers/const/apiAddr'
 import makePrettyNumber from '~/helpers/makePrettyNumber'
 import download, { downloadRes, downloadType } from '~/helpers/company/download'
-import makeTitle from '~/helpers/makeTitle'
 import metrics from '~/helpers/metrics'
 
 const addTag = (ctx, type, inputRefName) => {
   return (val) => {
     ctx.$refs[inputRefName].inputValue = ''
+    ctx[type].search = ''
     for (const tag of ctx[type].tags) {
       if (tag.id === val.id) {
         return
@@ -563,15 +566,11 @@ const removeTag = (ctx, type) => {
   }
 }
 
-const makeCountTitle = (companiesCount: string) => {
-  return makeTitle(`Более ${companiesCount} фирм из разных городов России и категорий. Бесплатное скачивание базы email и телефонов`)
-}
-
 export default Vue.extend({
   components: {
     VueBootstrapTypeahead
   },
-  async asyncData (ctx: Context): Promise<object> {
+  async fetch (): Promise<void> {
     const promises = [
       getCompanies({
         querystring: new URLSearchParams({
@@ -584,7 +583,7 @@ export default Vue.extend({
       ].join(''))
     ]
 
-    const token = ctx.store.state?.user?.self?.token
+    const token = this.$store.state?.user?.self?.token
     if (token) {
       promises.push(fetch([
         apiAddr,
@@ -606,21 +605,14 @@ export default Vue.extend({
 
     const countWithCommas = makePrettyNumber(resTotalCount.totalCount, ',')
 
-    const data = {
-      company: {
-        items: resComps.companies
-      },
-      titleCompaniesCount: countWithCommas,
-      title: makeCountTitle(countWithCommas),
-      dataPremium: false
-    }
+    this.company.items = resComps.companies
+    this.dataPremium = false
+    this.titleCompaniesCount = countWithCommas
 
     if (rawMyDataPlan) {
       const resMyDataPlan = await rawMyDataPlan.json()
-      data.dataPremium = resMyDataPlan.premium
+      this.dataPremium = resMyDataPlan.premium
     }
-
-    return data
   },
   data (): any {
     return {
@@ -693,6 +685,9 @@ export default Vue.extend({
         downloadPhones: false,
         downloadCsv: false
       },
+      company: {
+        items: []
+      },
       downloadAlertCountDown: 0,
       downloadAlertDismissSecs: 30,
       scrollDone: false,
@@ -703,6 +698,18 @@ export default Vue.extend({
   computed: {
     skip (): string | undefined {
       return this.company?.items?.length
+    },
+    cityInputState () {
+      return this.city.search === ''
+    },
+    categoryInputState () {
+      return this.category.search === ''
+    },
+    technologyInputState () {
+      return this.technology.search === ''
+    },
+    formState () {
+      return this.cityInputState && this.categoryInputState && this.technologyInputState
     }
   },
   watch: {
@@ -833,7 +840,7 @@ export default Vue.extend({
   },
   head () {
     return {
-      title: this.title,
+      title: 'База компаний России LEAQ — более 2 млн организаций, 1000 категорий и 500 городов',
       meta: [{
         hid: 'yandex-verification',
         name: 'yandex-verification',

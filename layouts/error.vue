@@ -26,7 +26,7 @@
       </div>
 
       <div>
-        <b-link to="/">
+        <b-link to="/" @click="away">
           <b-icon-arrow-left-circle />
           Вернуться на главную
         </b-link>
@@ -63,6 +63,13 @@ export default Vue.extend({
           path: '/'
         }
       }]
+    }
+  },
+  methods: {
+    away () {
+      if (this.$nuxt.$route.path === '/') {
+        window.document.location.reload()
+      }
     }
   },
   head () {

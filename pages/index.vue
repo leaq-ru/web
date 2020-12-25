@@ -433,9 +433,10 @@
     </b-row>
 
     <b-modal
-      v-model="showDownloadModal"
+      v-model="modalShow"
       ok-only
-      ok-title="Понятно"
+      :ok-title="modalTitle"
+      @ok="redirectCTA"
     >
       <template #modal-title>
         <template v-if="errConcExports">
@@ -477,9 +478,11 @@
       </template>
       <template v-else>
         <p>
-          Будет скачано не более 1000 результатов, собираем список для вас, затем начнется скачивание.
-          Обычно занимает 5-10 секунд. Данные без ограничений доступны на
-          <b-link to="/plans#data">
+          Будет скачано не более 1000 результатов, обычно занимает 5-10 секунд. Данные без ограничений доступны на
+          <b-link
+            target="_blank"
+            to="/plans#data"
+          >
             расширенном тарифе
           </b-link>
         </p>
@@ -681,13 +684,17 @@ export default Vue.extend({
       company: {
         items: []
       },
+      dataPremium: false,
       scrollDone: false,
       csvClick: false,
       errConcExports: false,
-      showDownloadModal: false
+      modalShow: false
     }
   },
   computed: {
+    modalTitle (): string {
+      return this.dataPremium ? 'Понятно' : 'Активировать тариф'
+    },
     skip (): string | undefined {
       return this.company?.items?.length
     },
@@ -723,6 +730,13 @@ export default Vue.extend({
   },
   methods: {
     ...hints,
+    redirectCTA (): void {
+      if (this.dataPremium) {
+        return
+      }
+
+      this.$nuxt.context.redirect('/account/exports')
+    },
     async methodSearchCompanies () {
       this.scrollDone = false
       this.loading.search = true
@@ -793,7 +807,7 @@ export default Vue.extend({
 
       const token = this.$store.state?.user?.self?.token
       this.loading.downloadEmails = true
-      this.showDownloadModal = true
+      this.modalShow = true
       await download(this.buildSearchQuery(false), downloadType.email, this.dataPremium, token)
       this.loading.downloadEmails = false
 
@@ -805,7 +819,7 @@ export default Vue.extend({
 
       const token = this.$store.state?.user?.self?.token
       this.loading.downloadPhones = true
-      this.showDownloadModal = true
+      this.modalShow = true
       await download(this.buildSearchQuery(false), downloadType.phone, this.dataPremium, token)
       this.loading.downloadPhones = false
 
@@ -817,7 +831,7 @@ export default Vue.extend({
 
       const token = this.$store.state?.user?.self?.token
       this.loading.downloadCsv = true
-      this.showDownloadModal = true
+      this.modalShow = true
       const resDl = await download(this.buildSearchQuery(false), downloadType.csv, this.dataPremium, token)
       this.loading.downloadCsv = false
       if (resDl === downloadRes.errConcExports) {

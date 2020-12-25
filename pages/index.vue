@@ -536,6 +536,7 @@ import apiAddr from '~/helpers/const/apiAddr'
 import makePrettyNumber from '~/helpers/makePrettyNumber'
 import download, { downloadRes, downloadType } from '~/helpers/company/download'
 import metrics from '~/helpers/metrics'
+import makeAuthUrl from '~/helpers/makeAuthUrl'
 
 const addTag = (ctx, type, inputRefName) => {
   return (val) => {
@@ -735,7 +736,14 @@ export default Vue.extend({
         return
       }
 
-      this.$nuxt.context.redirect('/account/exports')
+      let path = '/account/exports'
+      if (!this.$store.state?.user?.self?.token) {
+        path = makeAuthUrl({
+          fullPath: path
+        })
+      }
+
+      this.$nuxt.context.redirect(path)
     },
     async methodSearchCompanies () {
       this.scrollDone = false

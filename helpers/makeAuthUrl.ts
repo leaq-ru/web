@@ -1,6 +1,8 @@
-import { Vue } from 'vue/types/vue'
+type fullPath = {
+  fullPath?: string
+}
 
-export default (route: Vue['$route']): string => {
+export default (route: fullPath): string => {
   let path = '/'
   if (route.fullPath) {
     path = route.fullPath

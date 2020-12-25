@@ -150,10 +150,12 @@ export default {
       'BTh',
       'BProgress',
       'BSpinner',
-      'BFormInvalidFeedback'
+      'BFormInvalidFeedback',
+      'BModal'
     ],
     directives: [
-      'VBTooltip'
+      'VBTooltip',
+      'VBModal'
     ]
   },
   fontawesome: {

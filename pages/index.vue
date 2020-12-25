@@ -361,6 +361,7 @@
     <b-row class="mb-2">
       <b-col md="3" class="mb-3">
         <b-button
+          v-b-modal.modal-dl
           :disabled="loading.search || $fetchState.pending || !formState"
           pill
           block
@@ -378,6 +379,7 @@
 
       <b-col md="3" class="mb-3">
         <b-button
+          v-b-modal.modal-dl
           :disabled="loading.downloadCsv || $fetchState.pending || !formState"
           pill
           block
@@ -386,6 +388,7 @@
         >
           <b-spinner
             v-if="loading.downloadCsv"
+            class="text-primary"
             small
           />
           <b-icon-file-text v-else />
@@ -395,6 +398,7 @@
 
       <b-col md="3" class="mb-3">
         <b-button
+          v-b-modal.modal-dl
           :disabled="loading.downloadEmails || $fetchState.pending || !formState"
           pill
           block
@@ -403,15 +407,17 @@
         >
           <b-spinner
             v-if="loading.downloadEmails"
+            variant="primary"
             small
           />
           <b-icon-envelope v-else />
-          Скачать emails
+          Скачать email
         </b-button>
       </b-col>
 
       <b-col md="3" class="mb-3">
         <b-button
+          v-b-modal.modal-dl
           :disabled="loading.downloadPhones || $fetchState.pending || !formState"
           pill
           block
@@ -420,26 +426,33 @@
         >
           <b-spinner
             v-if="loading.downloadPhones"
+            variant="primary"
+            class="text-primary"
             small
           />
           <b-icon-telephone v-else />
           Скачать телефоны
         </b-button>
       </b-col>
+    </b-row>
 
-      <b-alert
-        v-if="dataPremium"
-        fade
-        :show="downloadAlertCountDown"
-        dismissible
-        variant="success"
-        class="w-100"
-        @dismissed="downloadAlertCountDown=0"
-      >
-        <h6 class="alert-heading">
-          Скачивание началось
-        </h6>
-
+    <b-modal
+      id="modal-dl"
+      ok-only
+      ok-title="Понятно"
+      class="d-block"
+      :title="errConcExports ? 'Ошибка' : 'Скачивание началось'"
+    >
+      <template v-if="errConcExports">
+        <p>
+          Пожалуйста, дождитесь пока одна из ваших
+          <b-link to="/account/exports">
+            выгрузок
+          </b-link>
+          завершится, и затем попробуйте снова
+        </p>
+      </template>
+      <template v-else-if="dataPremium">
         <p v-if="csvClick">
           База будет доступна в разделе
           <b-link to="/account/exports">
@@ -450,48 +463,21 @@
         <p v-else>
           Пожалуйста не покидайте страницу, собираем список для вас, затем начнется скачивание. Обычно занимает 30-60 секунд
         </p>
-      </b-alert>
-      <b-alert
-        v-else
-        fade
-        :show="downloadAlertCountDown"
-        dismissible
-        variant="success"
-        class="w-100"
-        @dismissed="downloadAlertCountDown=0"
-      >
-        <h6 class="alert-heading">
-          Скачивание началось
-        </h6>
-
+      </template>
+      <template v-else>
         <p>
           Будет скачано не более 1000 результатов. Данные без ограничений доступны на
           <b-link to="/plans#data">
             расширенном тарифе
           </b-link>
         </p>
-      </b-alert>
+      </template>
 
-      <b-alert
-        fade
-        :show="errConcExports"
-        dismissible
-        variant="danger"
-        class="w-100"
-      >
-        <h6 class="alert-heading">
-          Ошибка
-        </h6>
-
-        <p>
-          Пожалуйста, дождитесь пока одна из ваших
-          <b-link to="/account/exports">
-            выгрузок
-          </b-link>
-          завершится, и затем попробуйте снова
-        </p>
-      </b-alert>
-    </b-row>
+      <b-spinner
+        v-if="loading.downloadCsv || loading.downloadEmails || loading.downloadPhones"
+        class="text-center text-muted"
+      />
+    </b-modal>
 
     <h3
       id="results"

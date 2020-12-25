@@ -8,8 +8,8 @@
         Более
         <b-spinner
           v-if="$fetchState.pending"
+          variant="secondary"
           small
-          class="text-muted"
         />
         <template v-else>
           {{ titleCompaniesCount }}
@@ -361,7 +361,6 @@
     <b-row class="mb-2">
       <b-col md="3" class="mb-3">
         <b-button
-          v-b-modal.modal-dl
           :disabled="loading.search || $fetchState.pending || !formState"
           pill
           block
@@ -379,7 +378,6 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-b-modal.modal-dl
           :disabled="loading.downloadCsv || $fetchState.pending || !formState"
           pill
           block
@@ -398,7 +396,6 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-b-modal.modal-dl
           :disabled="loading.downloadEmails || $fetchState.pending || !formState"
           pill
           block
@@ -417,7 +414,6 @@
 
       <b-col md="3" class="mb-3">
         <b-button
-          v-b-modal.modal-dl
           :disabled="loading.downloadPhones || $fetchState.pending || !formState"
           pill
           block
@@ -437,12 +433,26 @@
     </b-row>
 
     <b-modal
-      id="modal-dl"
+      v-model="showDownloadModal"
       ok-only
       ok-title="Понятно"
-      class="d-block"
-      :title="errConcExports ? 'Ошибка' : 'Скачивание началось'"
     >
+      <template #modal-title>
+        <template v-if="errConcExports">
+          Ошибка
+        </template>
+        <template v-else-if="loading.downloadCsv || loading.downloadEmails || loading.downloadPhones">
+          Собираем список
+          <b-spinner
+            small
+            variant="secondary"
+          />
+        </template>
+        <template v-else>
+          Скачивание началось
+        </template>
+      </template>
+
       <template v-if="errConcExports">
         <p>
           Пожалуйста, дождитесь пока одна из ваших
@@ -461,22 +471,19 @@
           в личном кабинете
         </p>
         <p v-else>
-          Пожалуйста не покидайте страницу, собираем список для вас, затем начнется скачивание. Обычно занимает 30-60 секунд
+          Пожалуйста не покидайте страницу, собираем список для вас, затем начнется скачивание.
+          Обычно занимает 30-60 секунд
         </p>
       </template>
       <template v-else>
         <p>
-          Будет скачано не более 1000 результатов. Данные без ограничений доступны на
+          Будет скачано не более 1000 результатов, собираем список для вас, затем начнется скачивание.
+          Обычно занимает 5-10 секунд. Данные без ограничений доступны на
           <b-link to="/plans#data">
             расширенном тарифе
           </b-link>
         </p>
       </template>
-
-      <b-spinner
-        v-if="loading.downloadCsv || loading.downloadEmails || loading.downloadPhones"
-        class="text-center text-muted"
-      />
     </b-modal>
 
     <h3
@@ -674,11 +681,10 @@ export default Vue.extend({
       company: {
         items: []
       },
-      downloadAlertCountDown: 0,
-      downloadAlertDismissSecs: 30,
       scrollDone: false,
       csvClick: false,
-      errConcExports: false
+      errConcExports: false,
+      showDownloadModal: false
     }
   },
   computed: {
@@ -783,10 +789,11 @@ export default Vue.extend({
     },
     async methodDownloadEmails () {
       this.csvClick = false
-      this.downloadAlertCountDown = this.downloadAlertDismissSecs
+      this.errConcExports = false
 
       const token = this.$store.state?.user?.self?.token
       this.loading.downloadEmails = true
+      this.showDownloadModal = true
       await download(this.buildSearchQuery(false), downloadType.email, this.dataPremium, token)
       this.loading.downloadEmails = false
 
@@ -794,10 +801,11 @@ export default Vue.extend({
     },
     async methodDownloadPhones () {
       this.csvClick = false
-      this.downloadAlertCountDown = this.downloadAlertDismissSecs
+      this.errConcExports = false
 
       const token = this.$store.state?.user?.self?.token
       this.loading.downloadPhones = true
+      this.showDownloadModal = true
       await download(this.buildSearchQuery(false), downloadType.phone, this.dataPremium, token)
       this.loading.downloadPhones = false
 
@@ -809,14 +817,13 @@ export default Vue.extend({
 
       const token = this.$store.state?.user?.self?.token
       this.loading.downloadCsv = true
+      this.showDownloadModal = true
       const resDl = await download(this.buildSearchQuery(false), downloadType.csv, this.dataPremium, token)
       this.loading.downloadCsv = false
       if (resDl === downloadRes.errConcExports) {
         this.errConcExports = true
         return
       }
-
-      this.downloadAlertCountDown = this.downloadAlertDismissSecs
 
       await metrics.csvDownload()
     },

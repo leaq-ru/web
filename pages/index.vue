@@ -602,7 +602,7 @@ export default Vue.extend({
 
     const countWithCommas = makePrettyNumber(resTotalCount.totalCount, ',')
 
-    this.company.items = resComps.companies
+    this.company.items = resComps.companies || []
     this.dataPremium = false
     this.titleCompaniesCount = countWithCommas
 

@@ -715,13 +715,13 @@ export default Vue.extend({
   watch: {
     'city.search': debounce(function (title: string) {
       this.getCitiesHints(title)
-    }, 500),
+    }, 50),
     'category.search': debounce(function (title: string) {
       this.getCategoriesHints(title)
-    }, 500),
+    }, 50),
     'technology.search': debounce(function (title: string) {
       this.getTechnologiesHints(title)
-    }, 500),
+    }, 50),
     'query.hasVk' (val) {
       if (val !== select.yes) {
         this.query['vkMembersCount.from'] = ''

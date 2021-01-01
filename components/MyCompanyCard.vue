@@ -147,6 +147,7 @@ import unifyDate from '~/helpers/unifyDate'
 import apiAddr from '~/helpers/const/apiAddr'
 import goal from '~/helpers/const/goal'
 import yandexMetrika from '~/helpers/const/yandexMetrika'
+import price from '~/helpers/price'
 
 export default Vue.extend({
   props: {
@@ -166,7 +167,7 @@ export default Vue.extend({
   },
   computed: {
     amount () {
-      return this.monthAmount * 490
+      return this.monthAmount * price.companyPremium
     }
   },
   methods: {

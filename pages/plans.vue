@@ -78,7 +78,7 @@
         <b-list-group flush>
           <b-list-group-item>
             <span class="font-weight-bold">
-              490
+              {{ priceCompanyPremium }}
             </span>
 
             <span class="text-muted">
@@ -148,6 +148,7 @@
 import Vue from 'vue'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeTitle from '~/helpers/makeTitle'
+import price from '~/helpers/price'
 
 export default Vue.extend({
   async asyncData (): Promise<object> {
@@ -176,7 +177,8 @@ export default Vue.extend({
         to: {
           path: '/plans'
         }
-      }]
+      }],
+      priceCompanyPremium: price.companyPremium
     }
   },
   head () {

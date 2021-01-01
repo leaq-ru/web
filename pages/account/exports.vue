@@ -172,6 +172,7 @@ import makeAuthUrl from '~/helpers/makeAuthUrl'
 import unifyDate from '~/helpers/unifyDate'
 import goal from '~/helpers/const/goal'
 import yandexMetrika from '~/helpers/const/yandexMetrika'
+import price from '~/helpers/price'
 
 export default Vue.extend({
   async asyncData (ctx: Context): Promise<object | void> {
@@ -266,7 +267,7 @@ export default Vue.extend({
       return this.exports?.length
     },
     amount () {
-      return this.monthAmount * 1990
+      return this.monthAmount * price.dataPremium
     }
   },
   methods: {

@@ -91,7 +91,7 @@
       <b-list-group flush>
         <b-list-group-item>
           <span class="font-weight-bold">
-            1990
+            {{ priceDataPremium }}
           </span>
 
           <span class="text-muted">
@@ -178,6 +178,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import makePrettyNumber from '~/helpers/makePrettyNumber'
+import price from '~/helpers/price'
 
 export default Vue.extend({
   props: {
@@ -186,6 +187,11 @@ export default Vue.extend({
       default () {
         return 0
       }
+    }
+  },
+  data () {
+    return {
+      priceDataPremium: price.dataPremium
     }
   },
   methods: {

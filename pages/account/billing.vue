@@ -58,7 +58,7 @@
         v-if="!sumState"
         text-variant="danger"
       >
-        Минимум 490 руб
+        Минимум {{ priceCompanyPremium }} руб
       </b-form-text>
     </b-card>
 
@@ -102,6 +102,7 @@ import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeAuthUrl from '~/helpers/makeAuthUrl'
 import unifyDate from '~/helpers/unifyDate'
+import price from '~/helpers/price'
 
 const transformInvoices = (invs: any[]): any[] => invs.map((inv) => {
   const toStatus = (st) => {
@@ -236,7 +237,8 @@ export default Vue.extend({
           path: '/account/billing'
         }
       }],
-      sum: 490,
+      sum: price.companyPremium,
+      priceCompanyPremium: price.companyPremium,
       invoicesScrollDone: false,
       invoicesLoading: false,
       invoicesLoaded: true,
@@ -248,7 +250,7 @@ export default Vue.extend({
       return this.invoices?.length
     },
     sumState (): boolean {
-      return this.sum >= 490
+      return this.sum >= price.companyPremium
     }
   },
   methods: {

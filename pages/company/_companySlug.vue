@@ -851,10 +851,61 @@
       </b-card-group>
     </span>
 
-    <div
-      id="yandex_rtb_R-A-673451-1"
-      class="mt-3 mb-3"
-    />
+    <b-card
+      class="mt-5"
+      border-variant="primary"
+      no-body
+    >
+      <b-card-header
+        header-bg-variant="primary"
+        header-text-variant="white"
+      >
+        <b-icon-building />
+        Конструктор баз компаний России
+      </b-card-header>
+
+      <b-card-body>
+        <h3>
+          Скачать все компании
+          <transition
+            name="fade"
+            mode="out-in"
+          >
+            <span
+              :key="bannerCity"
+              class="text-muted"
+            >
+              {{ bannerCity }}
+            </span>
+          </transition>
+        </h3>
+
+        <h3>
+          в категории
+          <transition
+            name="fade"
+            mode="out-in"
+          >
+            <span
+              :key="bannerCategory"
+              class="text-muted"
+            >
+              {{ bannerCategory }}
+            </span>
+          </transition>
+        </h3>
+
+        <b-button
+          class="mt-3"
+          pill
+          variant="primary"
+          to="/"
+        >
+          <b-icon-search />
+          Попробовать бесплатно
+        </b-button>
+      </b-card-body>
+    </b-card>
 
     <template v-if="posts.length">
       <b-row class="mt-5 mb-2">
@@ -961,7 +1012,7 @@ const makeTitle = (company: any): string => {
     elems.push(companyGetters.safeCategoryTitle(company))
   }
 
-  elems.push('База компаний LEAQ')
+  elems.push('LEAQ')
   return elems.join(' / ')
 }
 
@@ -1109,7 +1160,9 @@ export default Vue.extend({
       showTipFoundOnLeaq: false,
       postsLoading: false,
       postsLoaded: true,
-      postsScrollDone: false
+      postsScrollDone: false,
+      bannerCity: 'Москвы',
+      bannerCategory: 'строительство'
     }
   },
   computed: {
@@ -1121,25 +1174,25 @@ export default Vue.extend({
     }
   },
   mounted () {
-    (function (w: any, d, n, s, t) {
-      w[n] = w[n] || []
-      w[n].push(function () {
-        w.Ya.Context.AdvManager.render({
-          blockId: 'R-A-673451-1',
-          renderTo: 'yandex_rtb_R-A-673451-1',
-          async: true
-        })
-      })
-      t = d.getElementsByTagName('script')[0]
-      s = d.createElement('script')
-      s.type = 'text/javascript'
-      s.src = '//an.yandex.ru/system/context.js'
-      s.async = true
-      t.parentNode.insertBefore(s, t)
-    })(window, window.document, 'yandexContextAsyncCallbacks')
+    this.initBannerRotate()
   },
   methods: {
     ...companyGetters,
+    initBannerRotate () {
+      const cities = ['Москвы', 'Санкт-Петербурга', 'Екатеринбурга', 'Перми', 'Нижнего Новгорода']
+      const categories = ['строительство', 'создание сайтов', 'металлургия', 'банки', 'недвижимость']
+      let cur = 0
+
+      setInterval(() => {
+        this.bannerCity = cities[cur]
+        this.bannerCategory = categories[cur]
+        if (cur === cities.length - 1) {
+          cur = 0
+        } else {
+          cur += 1
+        }
+      }, 2500)
+    },
     setTipFoundOnLeaq () {
       this.showTipFoundOnLeaq = true
     },
@@ -1207,5 +1260,13 @@ export default Vue.extend({
 .mw-mh-200 {
   max-width: 200px;
   max-height: 200px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: all .3s ease;
+}
+
+.fade-enter, .fade-leave-to {
+  opacity: 0;
 }
 </style>

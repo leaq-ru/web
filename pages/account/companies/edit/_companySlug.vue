@@ -378,7 +378,7 @@ import { Context } from '@nuxt/types'
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeTitle from '~/helpers/makeTitle'
-import makeAuthUrl from '~/helpers/makeAuthUrl'
+import makeLoginUrl from '~/helpers/makeLoginUrl'
 import companyGetters from '~/helpers/company/companyGetters'
 import hints from '~/helpers/hints'
 import debounce from '~/helpers/debounce'
@@ -404,7 +404,7 @@ export default Vue.extend({
   },
   async asyncData (ctx: Context): Promise<object> {
     if (!ctx.store.state?.user?.self?.token) {
-      ctx.redirect(makeAuthUrl(ctx.route))
+      ctx.redirect(makeLoginUrl(ctx.route))
       return
     }
 

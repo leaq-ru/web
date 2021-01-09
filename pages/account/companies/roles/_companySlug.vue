@@ -68,13 +68,13 @@ import Vue from 'vue'
 import { Context } from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
-import makeAuthUrl from '~/helpers/makeAuthUrl'
+import makeLoginUrl from '~/helpers/makeLoginUrl'
 import grant from '~/helpers/role/grant'
 
 export default Vue.extend({
   async asyncData (ctx: Context): Promise<object | void> {
     if (!ctx.store.state?.user?.self?.token) {
-      ctx.redirect(makeAuthUrl(ctx.route))
+      ctx.redirect(makeLoginUrl(ctx.route))
       return
     }
 

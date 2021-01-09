@@ -168,7 +168,7 @@ import Vue from 'vue'
 import { Context } from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
-import makeAuthUrl from '~/helpers/makeAuthUrl'
+import makeLoginUrl from '~/helpers/makeLoginUrl'
 import unifyDate from '~/helpers/unifyDate'
 import goal from '~/helpers/const/goal'
 import yandexMetrika from '~/helpers/const/yandexMetrika'
@@ -178,7 +178,7 @@ export default Vue.extend({
   async asyncData (ctx: Context): Promise<object | void> {
     try {
       if (!ctx.store.state?.user?.self?.token) {
-        ctx.redirect(makeAuthUrl(ctx.route))
+        ctx.redirect(makeLoginUrl(ctx.route))
         return
       }
 

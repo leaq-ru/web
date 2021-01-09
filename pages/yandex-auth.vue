@@ -40,7 +40,7 @@ export default Vue.extend({
 
       const raw = await fetch([
         process.env.API_HOST,
-        '/v1/user/vkAuth'
+        '/v1/user/yandexAuth'
       ].join(''), {
         method: 'POST',
         body: JSON.stringify({

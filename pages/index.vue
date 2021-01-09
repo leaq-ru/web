@@ -536,7 +536,7 @@ import apiAddr from '~/helpers/const/apiAddr'
 import makePrettyNumber from '~/helpers/makePrettyNumber'
 import download, { downloadRes, downloadType } from '~/helpers/company/download'
 import metrics from '~/helpers/metrics'
-import makeAuthUrl from '~/helpers/makeAuthUrl'
+import makeLoginUrl from '~/helpers/makeLoginUrl'
 
 const addTag = (ctx, type, inputRefName) => {
   return (val) => {
@@ -738,7 +738,7 @@ export default Vue.extend({
 
       let path = '/account/exports'
       if (!this.$store.state?.user?.self?.token) {
-        path = makeAuthUrl({
+        path = makeLoginUrl({
           fullPath: path
         })
       }

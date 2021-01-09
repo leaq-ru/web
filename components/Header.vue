@@ -28,24 +28,34 @@
     >
       <b-navbar-nav>
         <b-nav-item
+          :active="isPath('/about')"
           to="/about"
         >
           О сервисе
         </b-nav-item>
         <b-nav-item
+          :active="isPath('/plans')"
           to="/plans"
         >
           Тарифы
         </b-nav-item>
         <b-nav-item
+          :active="isPath('/cities')"
           to="/cities"
         >
           Города
         </b-nav-item>
         <b-nav-item
+          :active="isPath('/categories')"
           to="/categories"
         >
           Категории
+        </b-nav-item>
+        <b-nav-item
+          :active="isPath('/account/companies/apply')"
+          to="/account/companies/apply"
+        >
+          Добавить компанию
         </b-nav-item>
         <b-nav-item
           target="_blank"
@@ -56,10 +66,6 @@
       </b-navbar-nav>
 
       <b-navbar-nav class="ml-auto">
-        <b-nav-item to="/account/companies/apply">
-          Добавить компанию
-        </b-nav-item>
-
         <b-nav-item-dropdown v-if="$store.state.user.self.id">
           <template slot="button-content">
             <b-avatar
@@ -71,19 +77,31 @@
             {{ $store.state.user.self.firstName }}
           </template>
 
-          <b-dropdown-item to="/account/profile">
+          <b-dropdown-item
+            :active="isPath('/account/profile')"
+            to="/account/profile"
+          >
             Профиль
           </b-dropdown-item>
 
-          <b-dropdown-item to="/account/companies">
+          <b-dropdown-item
+            :active="isPath('/account/companies')"
+            to="/account/companies"
+          >
             Компании
           </b-dropdown-item>
 
-          <b-dropdown-item to="/account/exports">
+          <b-dropdown-item
+            :active="isPath('/account/exports')"
+            to="/account/exports"
+          >
             Выгрузки
           </b-dropdown-item>
 
-          <b-dropdown-item to="/account/billing">
+          <b-dropdown-item
+            :active="isPath('/account/billing')"
+            to="/account/billing"
+          >
             Платежи
           </b-dropdown-item>
 
@@ -95,10 +113,9 @@
         </b-nav-item-dropdown>
         <b-nav-item
           v-else
-          :href="methodMakeAuthUrl()"
+          :active="isPath('/login')"
+          @click="login"
         >
-          <fa :icon="['fab', 'vk']" />
-
           Войти
         </b-nav-item>
       </b-navbar-nav>
@@ -108,15 +125,22 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import makeAuthUrl from '~/helpers/makeAuthUrl'
+import makeLoginUrl from '~/helpers/makeLoginUrl'
 
 export default Vue.extend({
   methods: {
-    logout () {
+    isPath (p: string): boolean {
+      return this.$route.path === p
+    },
+    async logout () {
+      if (this.$route.path.startsWith('/account')) {
+        await this.$router.push('/')
+      }
+
       this.$store.commit('user/logout')
     },
-    methodMakeAuthUrl () {
-      return makeAuthUrl(this.$nuxt.$route)
+    async login () {
+      await this.$router.push(makeLoginUrl(this.$nuxt.$route))
     }
   }
 })

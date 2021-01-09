@@ -40,7 +40,7 @@ export default async (querystring: string, type: downloadType, premium: boolean,
 
     if (!premium) {
       const res = await raw.json()
-      window.open(res.url, '_self')
+      window.location.assign(res.url)
     }
     return downloadRes.ok
   }
@@ -65,5 +65,5 @@ export default async (querystring: string, type: downloadType, premium: boolean,
 
   const res = await raw.json()
 
-  window.open(res.downloadUrl, '_self')
+  window.location.assign(res.downloadUrl)
 }

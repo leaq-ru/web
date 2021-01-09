@@ -163,6 +163,7 @@ export default {
     icons: {
       brands: [
         'faVk',
+        'faYandex',
         'faInstagram',
         'faYoutube',
         'faFacebook',
@@ -208,7 +209,8 @@ export default {
   env: {
     HOST: isProd('https://leaq.ru', 'http://leaq.local:1100'),
     API_HOST: isProd('https://api.leaq.ru', 'http://localhost:1101'),
-    VK_APPID: isProd('7649529', '7654813')
+    VK_APPID: isProd('7649529', '7654813'),
+    YANDEX_APPID: isProd('4dbda8170ade4ab6bf5c3a7e9593db60', '9703caf752294e53b11da5bbe5809b47')
   },
   router: {
     prefetchLinks: false,

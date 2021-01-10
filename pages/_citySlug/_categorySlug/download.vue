@@ -15,7 +15,7 @@
     </p>
 
     <p>
-      Содержимое csv файла: город, категория компании, email, телефон, логотип, ссылки на соцсети, ИНН, КПП, ОГРН, контакты менеджеров и ЛПР (те кто указан администраторами группы компании ВКонтакте), технологии на сайте компании (например PHP, 1C-Bitrix, Vue.js), и многое другое. Скачайте бесплатно и посмотрите!
+      Содержимое CSV файла: город, категория компании, email, телефон, логотип, ссылки на соцсети, ИНН, КПП, ОГРН, контакты менеджеров и ЛПР (те кто указан администраторами группы компании ВКонтакте), технологии на сайте компании (например PHP, 1C-Bitrix, Vue.js), и многое другое. Скачайте бесплатно и посмотрите!
     </p>
 
     <b-row>
@@ -29,7 +29,7 @@
           @click="methodDownloadCsv"
         >
           <b-icon-arrow-clockwise animation="spin" />
-          Скачать csv базу
+          Скачать CSV базу
         </b-button>
         <b-button
           v-else
@@ -39,7 +39,7 @@
           @click="methodDownloadCsv"
         >
           <b-icon-file-text />
-          Скачать csv базу
+          Скачать CSV базу
         </b-button>
       </b-col>
 
@@ -330,7 +330,7 @@ export default Vue.extend({
       data.breadcrumb[2].to.path = categoryToElems.join('/')
 
       data.title = makeTitle(`Скачать базу компаний ${data.city.header}${data.category.header ? ' ' + data.category.header : ''}`)
-      data.description = `Скачать csv базу, email и телефоны организаций ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска`
+      data.description = `Скачать CSV базу, email и телефоны организаций ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска`
 
       return data
     } catch {

@@ -44,7 +44,7 @@
             </span>
             компаний в
             <b-link to="/#search">
-              конструкторе csv
+              конструкторе CSV
             </b-link>
             баз
           </b-list-group-item>
@@ -128,7 +128,7 @@
             </span>
             компаний (все) в
             <b-link to="/#search">
-              конструкторе csv
+              конструкторе CSV
             </b-link>
             баз
           </b-list-group-item>
@@ -152,7 +152,7 @@
             </span>
             дня хранятся
             <b-link to="/account/exports">
-              выгрузки csv
+              выгрузки CSV
             </b-link>
             в личном кабинете
           </b-list-group-item>

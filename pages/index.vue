@@ -104,7 +104,7 @@
               class="mr-1 mb-2"
               @remove="technology.removeTag(tag)"
             >
-              {{ makeTechnologyTagName(tag) }}
+              {{ tag.name }}
             </b-form-tag>
 
             <b-form-radio-group
@@ -118,8 +118,8 @@
               ref="technologyinput"
               v-model="technology.search"
               :data="technology.list"
-              :serializer="s => makeTechnologyTagName(s)"
-              placeholder="Например «1C-Bitrix», «Интернет-магазин», «PHP» ..."
+              :serializer="s => s.name"
+              placeholder="Например «PHP», «1C-Bitrix», «Интернет-магазин», ..."
               @hit="technology.addTag($event)"
             />
             <b-form-text v-if="technologyInputState && technology.tags.length === 0">
@@ -127,6 +127,36 @@
             </b-form-text>
             <b-form-invalid-feedback :state="technologyInputState">
               Необходимо выбрать технологию из подсказок, или оставить пустой
+            </b-form-invalid-feedback>
+          </b-form-group>
+        </b-col>
+
+        <b-col md="6">
+          <b-form-group label="DNS на сайте">
+            <b-form-tag
+              v-for="tag in dns.tags"
+              :key="tag.id"
+              :title="tag.name"
+              pill
+              variant="primary"
+              class="mr-1 mb-2"
+              @remove="dns.removeTag(tag)"
+            >
+              {{ tag.name }}
+            </b-form-tag>
+            <vue-bootstrap-typeahead
+              ref="dnsinput"
+              v-model="dns.search"
+              :data="dns.list"
+              :serializer="s => s.name"
+              placeholder="Например «ns1.mchost.ru.», «ns1.timeweb.ru», «ns3.insales.ru.» ..."
+              @hit="dns.addTag($event)"
+            />
+            <b-form-text v-if="dnsInputState && dns.tags.length === 0">
+              Все DNS
+            </b-form-text>
+            <b-form-invalid-feedback :state="dnsInputState">
+              Необходимо выбрать DNS из подсказок, или оставить пустым
             </b-form-invalid-feedback>
           </b-form-group>
         </b-col>
@@ -676,6 +706,13 @@ export default Vue.extend({
         addTag: addTag(this, 'technology', 'technologyinput'),
         removeTag: removeTag(this, 'technology')
       },
+      dns: {
+        list: [],
+        tags: [],
+        search: '',
+        addTag: addTag(this, 'dns', 'dnsinput'),
+        removeTag: removeTag(this, 'dns')
+      },
       loading: {
         search: false,
         downloadEmails: false,
@@ -708,8 +745,11 @@ export default Vue.extend({
     technologyInputState () {
       return this.technology.search === ''
     },
+    dnsInputState () {
+      return this.dns.search === ''
+    },
     formState () {
-      return this.cityInputState && this.categoryInputState && this.technologyInputState
+      return this.cityInputState && this.categoryInputState && this.technologyInputState && this.dnsInputState
     }
   },
   watch: {
@@ -721,6 +761,9 @@ export default Vue.extend({
     }, 50),
     'technology.search': debounce(function (title: string) {
       this.getTechnologiesHints(title)
+    }, 50),
+    'dns.search': debounce(function (title: string) {
+      this.getDnsHints(title)
     }, 50),
     'query.hasVk' (val) {
       if (val !== select.yes) {
@@ -794,6 +837,9 @@ export default Vue.extend({
       this.technology.tags.forEach(({ id }) => {
         params.append('technologyIds', id)
       })
+      this.dns.tags.forEach(({ id }) => {
+        params.append('dnsIds', id)
+      })
 
       return params.toString()
     },
@@ -848,9 +894,6 @@ export default Vue.extend({
       }
 
       await metrics.csvDownload()
-    },
-    makeTechnologyTagName (name: any): string {
-      return name.version ? `${name.name} ${name.version}` : name.name
     }
   },
   head () {

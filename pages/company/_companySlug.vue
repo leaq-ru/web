@@ -2,7 +2,6 @@
   <b-container fluid="xl">
     <Header />
     <Breadcrumb :items="breadcrumb" />
-
     <span
       itemscope
       itemtype="http://schema.org/Organization"
@@ -11,14 +10,11 @@
         <b-col>
           <h1 itemprop="name">
             <PatchLightning v-if="premium" />
-
             <PatchCheck v-if="verified" />
-
             {{ company.title || company.slug }}
           </h1>
         </b-col>
       </b-row>
-
       <b-row class="mb-3">
         <b-col cols="6">
           <template v-if="company.avatar">
@@ -33,7 +29,6 @@
               :content="company.avatar"
               itemprop="logo"
             >
-
             <span
               itemscope
               itemtype="http://schema.org/ImageObject"
@@ -57,13 +52,11 @@
             </span>
           </template>
         </b-col>
-
         <b-col cols="6">
           <span class="text-muted">
             <b-icon-building />
             Город
           </span>
-
           <div class="ml-21">
             <b-link
               v-if="safeLocationCityTitle(company)"
@@ -75,14 +68,11 @@
               {{ none }}
             </template>
           </div>
-
           <b-row class="mb-1" />
-
           <span class="text-muted">
             <b-icon-grid />
             Категория
           </span>
-
           <div class="ml-21">
             <b-link
               v-if="safeCategoryTitle(company)"
@@ -94,16 +84,12 @@
               {{ none }}
             </template>
           </div>
-
           <b-row class="mb-1" />
-
           <span class="text-muted">
             <b-icon-globe />
             Сайт
           </span>
-
           <b-row />
-
           <div class="ml-21">
             <b-link
               itemprop="url"
@@ -114,9 +100,7 @@
               {{ company.url }}
             </b-link>
           </div>
-
           <b-row class="mb-3" />
-
           <b-button
             pill
             :to="breadcrumb[2].to.path"
@@ -127,7 +111,6 @@
           </b-button>
         </b-col>
       </b-row>
-
       <b-card-group
         class="mb-3"
         deck
@@ -142,9 +125,7 @@
                 <b-icon-envelope />
                 Email
               </span>
-
               <b-row />
-
               <div
                 v-if="company.email"
                 class="ml-21"
@@ -168,7 +149,6 @@
                 {{ none }}
               </div>
             </b-col>
-
             <b-col
               md="6"
               class="mb-1"
@@ -177,9 +157,7 @@
                 <b-icon-telephone />
                 Телефон
               </span>
-
               <b-row />
-
               <div
                 v-if="company.phone"
                 class="ml-21"
@@ -201,7 +179,6 @@
               </div>
             </b-col>
           </b-row>
-
           <b-row>
             <b-col
               md="6"
@@ -211,9 +188,7 @@
                 <b-icon-map />
                 Адрес
               </span>
-
               <b-row />
-
               <div
                 class="ml-21"
                 itemprop="address"
@@ -227,13 +202,10 @@
                 <template v-else>
                   {{ none }},
                 </template>
-
                 {{ safeLocationAddress(company) || none }},
-
                 {{ safeLocationAddressTitle(company) || none }}
               </div>
             </b-col>
-
             <b-col
               md="6"
               class="mb-1"
@@ -242,18 +214,14 @@
                 <b-icon-clock />
                 Обновлено
               </span>
-
               <b-row />
-
               <div class="ml-21">{{ toShowedDate(company.updatedAt) }}</div>
             </b-col>
           </b-row>
-
           <template v-if="showTipFoundOnLeaq">
             <TipFoundOnLeaq />
           </template>
         </b-card>
-
         <b-card title="⌨️ Описание">
           <span
             v-if="company.description"
@@ -261,13 +229,11 @@
           >
             <TextSpoiler :text="company.description" />
           </span>
-
           <template v-else>
             {{ none }}
           </template>
         </b-card>
       </b-card-group>
-
       <b-card-group
         class="mb-3"
         deck
@@ -287,9 +253,7 @@
                     <b-icon-gear />
                     {{ technologyCategories[index].name }}
                   </span>
-
                   <b-row />
-
                   <div class="ml-21">
                     <span
                       v-for="(t, i) in technologyCategories[index].technologies"
@@ -304,7 +268,6 @@
                     </span>
                   </div>
                 </b-col>
-
                 <b-col
                   v-if="technologyCategories[index+1]"
                   sm="6"
@@ -314,9 +277,7 @@
                     <b-icon-gear />
                     {{ technologyCategories[index+1].name }}
                   </span>
-
                   <b-row />
-
                   <div class="ml-21">
                     <span
                       v-for="(t, i) in technologyCategories[index+1].technologies"
@@ -338,29 +299,33 @@
             {{ none }}
           </template>
         </b-card>
-
         <b-card title="🔗 Домен">
+          <b-row>
+            <IconHeader
+              icon="server"
+              header="DNS"
+              col="12"
+              :body="dns ? dns.map(({ name }) => name).join(', ') : none"
+            />
+          </b-row>
           <b-row>
             <IconHeader
               icon="cloud"
               header="Регистратор"
               :body="(company.domain && company.domain.registrar) || none"
             />
-
             <IconHeader
               icon="clock"
               header="Дата регистрации"
               :body="company.domain && company.domain.registrationDate ? toShowedDate(company.domain.registrationDate) : none"
             />
           </b-row>
-
           <b-row>
             <IconHeader
               icon="hdd"
               header="Адрес сервера"
               :body="(company.domain && company.domain.address) || none"
             />
-
             <b-col
               class="mb-1"
               md="6"
@@ -375,7 +340,6 @@
               </template>
             </b-col>
           </b-row>
-
           <b-row>
             <IconHeader
               icon="cloud-download"
@@ -385,7 +349,6 @@
           </b-row>
         </b-card>
       </b-card-group>
-
       <b-card-group
         class="mb-3"
         deck
@@ -404,28 +367,21 @@
                   class="mb-3"
                 />
               </b-col>
-
               <b-col md="7">
                 <span class="text-muted">
                   <b-icon-card-heading />
                   Название
                 </span>
-
                 <b-row />
-
                 <div class="ml-21">
                   {{ safeSocialVkName(company) }}
                 </div>
-
                 <b-row class="mt-1" />
-
                 <span class="text-muted">
                   <fa :icon="['fab', 'vk']" />
                   Группа
                 </span>
-
                 <b-row />
-
                 <div class="ml-21">
                   <b-link
                     :href="`https://vk.com/club${safeSocialVkId(company)}`"
@@ -435,30 +391,23 @@
                     https://vk.com/{{ safeSocialVkScreenName(company) }}
                   </b-link>
                 </div>
-
                 <b-row class="mt-1" />
-
                 <span class="text-muted">
                   <b-icon-people />
                   Подписчиков
                 </span>
-
                 <b-row />
-
                 <div class="ml-21">
                   {{ safeSocialVkMembersCount(company) || 0 }}
                 </div>
                 <b-row />
               </b-col>
             </b-row>
-
             <span class="text-muted">
               <b-icon-list />
               Описание
             </span>
-
             <b-row />
-
             <div class="ml-21">
               <TextSpoiler :text="company.social.vk.description || none" />
             </div>
@@ -467,7 +416,6 @@
             {{ none }}
           </template>
         </b-card>
-
         <b-card title="👨‍💻 Менеджеры">
           <template v-if="!company.people || !company.people.length">
             {{ none }}
@@ -489,7 +437,6 @@
                   target="_blank"
                   rel="nofollow"
                 />
-
                 <span
                   v-if="p.firstName"
                   itemprop="givenName"
@@ -499,7 +446,6 @@
                 <span v-else>
                   {{ none }}
                 </span>
-
                 <span
                   v-if="p.lastName"
                   itemprop="familyName"
@@ -510,9 +456,7 @@
                   {{ none }}
                 </span>
               </div>
-
               <b-row />
-
               <fa
                 class="text-muted"
                 :icon="['fab', 'vk']"
@@ -548,9 +492,7 @@
               <template v-else>
                 {{ none }}
               </template>
-
               <b-row />
-
               <b-icon-telephone class="text-muted" />
               <b-link
                 v-if="p.phone"
@@ -564,9 +506,7 @@
               <template v-else>
                 {{ none }}
               </template>
-
               <b-row />
-
               <b-icon-info-circle class="text-muted" />
               <span
                 v-if="p.description"
@@ -581,7 +521,6 @@
           </b-list-group>
         </b-card>
       </b-card-group>
-
       <b-card-group
         class="mb-3"
         deck
@@ -596,9 +535,7 @@
                 <fa :icon="['fab', 'instagram']" />
                 Instagram
               </span>
-
               <b-row />
-
               <div
                 v-if="safeSocialInstagramUrl(company)"
                 class="ml-21"
@@ -618,7 +555,6 @@
                 {{ none }}
               </div>
             </b-col>
-
             <b-col
               class="mb-1"
               md="6"
@@ -627,9 +563,7 @@
                 <fa :icon="['fab', 'youtube']" />
                 YouTube
               </span>
-
               <b-row />
-
               <div
                 v-if="safeSocialYoutubeUrl(company)"
                 class="ml-21"
@@ -650,7 +584,6 @@
               </div>
             </b-col>
           </b-row>
-
           <b-row>
             <b-col
               class="mb-1"
@@ -660,9 +593,7 @@
                 <fa :icon="['fab', 'facebook']" />
                 Facebook
               </span>
-
               <b-row />
-
               <div
                 v-if="safeSocialFacebookUrl(company)"
                 class="ml-21"
@@ -682,7 +613,6 @@
                 {{ none }}
               </div>
             </b-col>
-
             <b-col
               class="mb-1"
               md="6"
@@ -691,9 +621,7 @@
                 <fa :icon="['fab', 'twitter']" />
                 Twitter
               </span>
-
               <b-row />
-
               <div
                 v-if="safeSocialTwitterUrl(company)"
                 class="ml-21"
@@ -714,9 +642,7 @@
               </div>
             </b-col>
           </b-row>
-
         </b-card>
-
         <b-card title="📱 Приложения">
           <b-row>
             <b-col
@@ -727,9 +653,7 @@
                 <fa :icon="['fab', 'app-store']" />
                 App Store
               </span>
-
               <b-row />
-
               <div
                 v-if="safeAppStoreUrl(company)"
                 class="ml-21"
@@ -749,7 +673,6 @@
                 {{ none }}
               </div>
             </b-col>
-
             <b-col
               class="mb-1"
               md="6"
@@ -758,9 +681,7 @@
                 <fa :icon="['fab', 'google-play']" />
                 Google Play:
               </span>
-
               <b-row />
-
               <div
                 v-if="safeGooglePlayUrl(company)"
                 class="ml-21"
@@ -783,7 +704,6 @@
           </b-row>
         </b-card>
       </b-card-group>
-
       <b-card-group deck>
         <b-card title="🇷🇺 Реквизиты">
           <b-row>
@@ -792,14 +712,12 @@
               header="ИНН"
               :body="(company.inn || '').toString()"
             />
-
             <IconHeader
               icon="info-circle"
               header="КПП"
               :body="(company.kpp || '').toString()"
             />
           </b-row>
-
           <b-row>
             <IconHeader
               icon="info-circle"
@@ -808,23 +726,18 @@
             />
           </b-row>
         </b-card>
-
         <b-card
           v-if="!verified"
           title="🤔 Это ваша компания?"
         >
           <p class="text-muted">
             Подтверите права чтобы бесплатно управлять информацией о компании и получить знак
-
             <PatchCheck />.
-
             Также предлагаем рассмотреть вариант
-
             <b-link to="/plans#company">
               приоритетного размещения
             </b-link>
           </p>
-
           <b-button
             pill
             variant="outline-primary"
@@ -832,7 +745,6 @@
             :to="`/account/companies/apply?url=${company.url.slice(7)}`"
           >
             <b-icon-check2-circle />
-
             Подтвердить
           </b-button>
         </b-card>
@@ -850,7 +762,6 @@
         </b-card>
       </b-card-group>
     </span>
-
     <b-card
       class="mt-5"
       border-variant="primary"
@@ -863,7 +774,6 @@
         <b-icon-building />
         Конструктор баз компаний России
       </b-card-header>
-
       <b-card-body>
         <h3>
           Скачать все компании
@@ -879,7 +789,6 @@
             </span>
           </transition>
         </h3>
-
         <h3>
           в категории
           <transition
@@ -894,7 +803,6 @@
             </span>
           </transition>
         </h3>
-
         <b-button
           class="mt-3"
           pill
@@ -906,7 +814,6 @@
         </b-button>
       </b-card-body>
     </b-card>
-
     <template v-if="posts.length">
       <b-row class="mt-5 mb-2">
         <b-col>
@@ -915,7 +822,6 @@
           </h2>
         </b-col>
       </b-row>
-
       <PostCardDeck
         :avatar="safeSocialVkPhoto200(company)"
         :title="safeSocialVkName(company)"
@@ -932,11 +838,9 @@
           animation="spin"
         />
         <b-icon-arrow-down-circle v-else />
-
         Показать еще
       </b-button>
     </template>
-
     <b-row
       v-if="related && related.length"
       class="mt-5 mb-2"
@@ -947,9 +851,7 @@
         </h2>
       </b-col>
     </b-row>
-
     <CardDeck :items="related" />
-
     <client-only v-if="related && related.length >= 6 && !relatedScrollDone">
       <infinite-loading
         spinner="spiral"
@@ -957,7 +859,6 @@
         @infinite="collectionInfiniteScroll"
       />
     </client-only>
-
     <Footer />
   </b-container>
 </template>
@@ -1092,7 +993,8 @@ export default Vue.extend({
         related = [],
         posts = [],
         verified = false,
-        premium = false
+        premium = false,
+        dns = []
       } = await raw.json()
 
       const data = {
@@ -1129,7 +1031,8 @@ export default Vue.extend({
         technologyCategories,
         posts,
         verified,
-        premium
+        premium,
+        dns
       }
 
       if (fullCompany.location?.city) {
@@ -1222,7 +1125,7 @@ export default Vue.extend({
 
       this.postsLoading = true
       const raw = await fetch([
-        process.env.API_HOST,
+        apiAddr,
         '/v1/post/get?',
         query.toString()
       ].join(''))

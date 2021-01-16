@@ -17,6 +17,7 @@
 <script lang="ts">
 import Vue from 'vue'
 import makeTitle from '~/helpers/makeTitle'
+import apiAddr from '~/helpers/const/apiAddr'
 
 export default Vue.extend({
   data () {
@@ -39,7 +40,7 @@ export default Vue.extend({
       const query: any = this.$nuxt.context.route?.query
 
       const raw = await fetch([
-        process.env.API_HOST,
+        apiAddr,
         '/v1/user/yandexAuth'
       ].join(''), {
         method: 'POST',

@@ -1,7 +1,7 @@
 <template>
   <b-col
     class="mb-1"
-    md="6"
+    :md="col"
   >
     <span class="text-muted">
       <b-icon :icon="icon" aria-hidden="true" />
@@ -46,6 +46,12 @@ export default Vue.extend({
       type: String,
       default () {
         return ''
+      }
+    },
+    col: {
+      type: String,
+      default(){
+        return '6'
       }
     }
   },

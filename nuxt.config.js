@@ -98,6 +98,7 @@ export default {
       'BIconLightningFill',
       'BIconFileText',
       'BIconCloudDownload',
+      'BIconServer',
 
       'BContainer',
       'BRow',

@@ -54,6 +54,7 @@ import Vue from 'vue'
 import { Context } from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import makeLoginUrl from '~/helpers/makeLoginUrl'
+import apiAddr from '~/helpers/const/apiAddr'
 
 export default Vue.extend({
   asyncData (ctx: Context): object {
@@ -108,7 +109,7 @@ export default Vue.extend({
     async sendVerify () {
       this.sendVerifyLoading = true
       const raw = await fetch([
-        process.env.API_HOST,
+        apiAddr,
         '/v1/role/verifyCompanyOwner'
       ].join(''), {
         method: 'POST',

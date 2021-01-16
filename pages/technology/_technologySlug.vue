@@ -59,20 +59,12 @@ const makeRawCategoryName = (resTech: any): string => {
   return ''
 }
 
-const makeTechnologyName = (resTech: any): string => {
-  let name = resTech.name
-  if (resTech.version) {
-    name += ` ${resTech.version}`
-  }
-  return name
-}
-
 const makeTechCatTitle = (resTech: any): string => {
   if (!resTech) {
     return ''
   }
 
-  let name = makeTechnologyName(resTech)
+  let name = resTech.name
   name += makeCategoryName(resTech)
 
   return makeTitle(`Все сайты на ${name}`)
@@ -83,7 +75,7 @@ const makeDescription = (resTech: any):string => {
     return ''
   }
 
-  let name = makeTechnologyName(resTech)
+  let name = resTech.name
   name += makeCategoryName(resTech)
 
   return `Список всех сайтов на ${name} с возможностью уточнения поиска по городам и категориям и скачивания базы email и телефонов`
@@ -119,7 +111,7 @@ export default Vue.extend({
         })
       }
       const tech = resTech.technology
-      const technologyName = makeTechnologyName(tech)
+      const technologyName = tech.name
 
       const data = {
         breadcrumb: [{
@@ -193,7 +185,7 @@ export default Vue.extend({
       }
 
       const res = await getCompanies({
-        addr: process.env.API_HOST,
+        addr: apiAddr,
         querystring: new URLSearchParams(query).toString()
       })
 

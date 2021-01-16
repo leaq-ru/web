@@ -49,7 +49,7 @@
               v-model="city.search"
               :data="city.list"
               :serializer="s => s.title"
-              placeholder="Например «Москва», «Бор», «Владивосток» ..."
+              placeholder="Например «Москва», «Бор», «Владивосток», ..."
               @hit="city.addTag($event)"
             />
             <b-form-text v-if="cityInputState && city.tags.length === 0">
@@ -79,7 +79,7 @@
               v-model="category.search"
               :data="category.list"
               :serializer="s => s.title"
-              placeholder="Например «Создание сайтов», «Металлургия», «Фитнес» ..."
+              placeholder="Например «Создание сайтов», «Металлургия», «Фитнес», ..."
               @hit="category.addTag($event)"
             />
             <b-form-text v-if="categoryInputState && category.tags.length === 0">
@@ -149,7 +149,7 @@
               v-model="dns.search"
               :data="dns.list"
               :serializer="s => s.name"
-              placeholder="Например «ns1.mchost.ru.», «ns1.timeweb.ru», «ns3.insales.ru.» ..."
+              placeholder="Например «ns1.mchost.ru.», «ns1.timeweb.ru.», ..."
               @hit="dns.addTag($event)"
             />
             <b-form-text v-if="dnsInputState && dns.tags.length === 0">

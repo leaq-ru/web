@@ -837,7 +837,7 @@
           v-if="postsLoading"
           animation="spin"
         />
-        <b-icon-arrow-down-circle v-else />
+        <b-icon-arrow-down v-else />
         Показать еще
       </b-button>
     </template>

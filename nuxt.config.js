@@ -85,7 +85,7 @@ export default {
       'BIconList',
       'BIconGear',
       'BIconCloudDownload',
-      'BIconArrowDownCircle',
+      'BIconArrowDown',
       'BIconPlusCircle',
       'BIconPatchCheckFll',
       'BIconPencil',

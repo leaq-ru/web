@@ -1,7 +1,10 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <Breadcrumb :items="breadcrumb" />
+    <Breadcrumb
+      :items="breadcrumb"
+      :ads="true"
+    />
     <span
       itemscope
       itemtype="http://schema.org/Organization"
@@ -814,6 +817,10 @@
         </b-button>
       </b-card-body>
     </b-card>
+    <div
+      id="yandex_rtb_R-A-673451-1"
+      class="mt-1 mb-1"
+    />
     <template v-if="posts.length">
       <b-row class="mt-5 mb-2">
         <b-col>
@@ -1077,7 +1084,25 @@ export default Vue.extend({
     }
   },
   mounted () {
-    this.initBannerRotate()
+    this.initBannerRotate();
+
+    (function (w, d, n, s, t) {
+      w[n] = w[n] || []
+      w[n].push(function () {
+        const w = window as any
+        w.Ya.Context.AdvManager.render({
+          blockId: 'R-A-673451-1',
+          renderTo: 'yandex_rtb_R-A-673451-1',
+          async: true
+        })
+      })
+      t = d.getElementsByTagName('script')[0]
+      s = d.createElement('script')
+      s.type = 'text/javascript'
+      s.src = '//an.yandex.ru/system/context.js'
+      s.async = true
+      t.parentNode.insertBefore(s, t)
+    })(this, this.document, 'yandexContextAsyncCallbacks')
   },
   methods: {
     ...companyGetters,

@@ -819,7 +819,7 @@
     </b-card>
     <div
       id="yandex_rtb_R-A-673451-1"
-      class="mt-1 mb-1"
+      class="mt-5"
     />
     <template v-if="posts.length">
       <b-row class="mt-5 mb-2">

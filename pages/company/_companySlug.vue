@@ -1084,28 +1084,30 @@ export default Vue.extend({
     }
   },
   mounted () {
-    this.initBannerRotate();
-
-    (function (w, d, n, s, t) {
-      w[n] = w[n] || []
-      w[n].push(function () {
-        const w = window as any
-        w.Ya.Context.AdvManager.render({
-          blockId: 'R-A-673451-1',
-          renderTo: 'yandex_rtb_R-A-673451-1',
-          async: true
-        })
-      })
-      t = d.getElementsByTagName('script')[0]
-      s = d.createElement('script')
-      s.type = 'text/javascript'
-      s.src = '//an.yandex.ru/system/context.js'
-      s.async = true
-      t.parentNode.insertBefore(s, t)
-    })(this, this.document, 'yandexContextAsyncCallbacks')
+    this.initBannerRotate()
+    this.injectAds()
   },
   methods: {
     ...companyGetters,
+    injectAds () {
+      (function (w, d, n, s, t) {
+        w[n] = w[n] || []
+        w[n].push(function () {
+          const w = window as any
+          w.Ya.Context.AdvManager.render({
+            blockId: 'R-A-673451-1',
+            renderTo: 'yandex_rtb_R-A-673451-1',
+            async: true
+          })
+        })
+        t = d.getElementsByTagName('script')[0]
+        s = d.createElement('script')
+        s.type = 'text/javascript'
+        s.src = '//an.yandex.ru/system/context.js'
+        s.async = true
+        t.parentNode.insertBefore(s, t)
+      })(this, this.document, 'yandexContextAsyncCallbacks')
+    },
     initBannerRotate () {
       const cities = ['Москвы', 'Санкт-Петербурга', 'Екатеринбурга', 'Перми', 'Нижнего Новгорода']
       const categories = ['строительство', 'создание сайтов', 'металлургия', 'банки', 'недвижимость']

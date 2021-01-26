@@ -26,12 +26,6 @@ spec:
           command:
             - /app/node_modules/.bin/nuxt
             - start
-          lifecycle:
-            preStop:
-              exec:
-                command:
-                  - sleep
-                  - 5s
           livenessProbe:
             httpGet:
               path: /healthz

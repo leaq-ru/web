@@ -3,8 +3,9 @@
     <Header />
     <Breadcrumb
       :items="breadcrumb"
-      :ads="true"
+      :ads="!premium"
     />
+
     <span
       itemscope
       itemtype="http://schema.org/Organization"
@@ -765,62 +766,67 @@
         </b-card>
       </b-card-group>
     </span>
-    <b-card
-      class="mt-5"
-      border-variant="primary"
-      no-body
-    >
-      <b-card-header
-        header-bg-variant="primary"
-        header-text-variant="white"
+
+    <template v-if="!premium">
+      <b-card
+        class="mt-5"
+        border-variant="primary"
+        no-body
       >
-        <b-icon-building />
-        Конструктор баз компаний России
-      </b-card-header>
-      <b-card-body>
-        <h3>
-          Скачать все компании
-          <transition
-            name="fade"
-            mode="out-in"
-          >
-            <span
-              :key="bannerCity"
-              class="text-muted"
-            >
-              {{ bannerCity }}
-            </span>
-          </transition>
-        </h3>
-        <h3>
-          в категории
-          <transition
-            name="fade"
-            mode="out-in"
-          >
-            <span
-              :key="bannerCategory"
-              class="text-muted"
-            >
-              {{ bannerCategory }}
-            </span>
-          </transition>
-        </h3>
-        <b-button
-          class="mt-3"
-          pill
-          variant="primary"
-          to="/"
+        <b-card-header
+          header-bg-variant="primary"
+          header-text-variant="white"
         >
-          <b-icon-search />
-          Попробовать бесплатно
-        </b-button>
-      </b-card-body>
-    </b-card>
-    <div
-      id="yandex_rtb_R-A-673451-1"
-      class="mt-5"
-    />
+          <b-icon-building />
+          Конструктор баз компаний России
+        </b-card-header>
+        <b-card-body>
+          <h3>
+            Скачать все компании
+            <transition
+              name="fade"
+              mode="out-in"
+            >
+              <span
+                :key="bannerCity"
+                class="text-muted"
+              >
+                {{ bannerCity }}
+              </span>
+            </transition>
+          </h3>
+          <h3>
+            в категории
+            <transition
+              name="fade"
+              mode="out-in"
+            >
+              <span
+                :key="bannerCategory"
+                class="text-muted"
+              >
+                {{ bannerCategory }}
+              </span>
+            </transition>
+          </h3>
+          <b-button
+            class="mt-3"
+            pill
+            variant="primary"
+            to="/"
+          >
+            <b-icon-search />
+            Попробовать бесплатно
+          </b-button>
+        </b-card-body>
+      </b-card>
+
+      <div
+        id="yandex_rtb_R-A-673451-1"
+        class="mt-5"
+      />
+    </template>
+
     <template v-if="posts.length">
       <b-row class="mt-5 mb-2">
         <b-col>
@@ -1084,8 +1090,10 @@ export default Vue.extend({
     }
   },
   mounted () {
-    this.initBannerRotate()
-    this.injectAds()
+    if (!this.premium) {
+      this.initBannerRotate()
+      this.injectAds()
+    }
   },
   methods: {
     ...companyGetters,

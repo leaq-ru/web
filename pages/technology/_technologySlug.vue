@@ -1,7 +1,10 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <Breadcrumb :items="breadcrumb" />
+    <Breadcrumb
+      :ads="true"
+      :items="breadcrumb"
+    />
 
     <h1>
       Все сайты на {{ technologyName }} {{ categoryName }}

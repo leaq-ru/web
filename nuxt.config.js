@@ -219,5 +219,14 @@ export default {
   },
   serverMiddleware: [{
     handler: ssrBotsOnly
-  }]
+  }],
+  render: {
+    http2: {
+      push: true,
+      pushAssets: (_req, _res, publicPath, preloadFiles) =>
+        preloadFiles
+          .filter(f => f.asType !== 'image')
+          .map(f => `<${publicPath}${f.file}>; rel=preload; as=${f.asType}`)
+    }
+  }
 }

@@ -19,5 +19,11 @@ export default {
   },
   safeOkvedName (o) {
     return o?.okved?.name
+  },
+  safeManagerName (o) {
+    return o?.manager?.name
+  },
+  safeManagerSlug (o) {
+    return o?.manager?.slug
   }
 }

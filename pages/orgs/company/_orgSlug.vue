@@ -14,6 +14,14 @@
       <b-col md="6">
         <b-card>
           <span class="text-muted">
+            Тип компании
+          </span>
+          <b-row />
+          {{ kind }}
+
+          <b-row class="mt-1" />
+
+          <span class="text-muted">
             {{ capitalize(safeAreaTypeFull(org)) || 'Город' }}
           </span>
           <b-row />
@@ -47,7 +55,14 @@
             Руководитель
           </span>
           <b-row />
-          Действ
+          <template v-if="safeManagerSlug(org)">
+            <b-link :to="`/orgs/manager/${safeManagerSlug(org)}`">
+              {{ safeManagerName(org) }}
+            </b-link>
+          </template>
+          <template v-else>
+            {{ none }}
+          </template>
         </b-card>
       </b-col>
 
@@ -57,7 +72,16 @@
             Статус
           </span>
           <b-row />
-          Действ
+          <b-icon-circle-fill :variant="statusColor" />
+          {{ statusText }}
+
+          <b-row class="mt-1" />
+
+          <span class="text-muted">
+            Дата присвоения ОГРН
+          </span>
+          <b-row />
+          {{ safeEmptyDate(org.ogrnDate) }}
 
           <b-row class="mt-1" />
 
@@ -65,7 +89,7 @@
             Дата регистрации
           </span>
           <b-row />
-          {{ unifyDate(org.registrationDate).toLocaleDateString() }}
+          {{ safeEmptyDate(org.registrationDate) }}
 
           <b-row class="mt-1" />
 
@@ -73,7 +97,7 @@
             Дата ликвидации
           </span>
           <b-row />
-          Действ
+          {{ safeEmptyDate(org.liqudationDate) }}
         </b-card>
       </b-col>
     </b-row>
@@ -152,6 +176,35 @@
       <b-col md="6">
         <b-card class="mt-3">
           <span class="text-muted">
+            Ближайшие станции метро
+          </span>
+          <b-row />
+          <span
+            v-for="m in org.metros"
+            :key="m.id"
+          >
+            <b-link :to="`/orgs/metro/${m.slug}`">
+              {{ m.name }}
+            </b-link>{{ m.line ? ` (${m.line} линия)` : '' }}
+            <span
+              v-if="m.distance"
+              class="text-muted"
+            >
+              {{ m.distance.toFixed(2) }} км
+            </span>
+            <b-row />
+          </span>
+          <template v-if="!org.metros">
+            {{ none }}
+          </template>
+        </b-card>
+      </b-col>
+    </b-row>
+
+    <b-row>
+      <b-col md="12">
+        <b-card class="mt-3">
+          <span class="text-muted">
             Основной вид деятельности
           </span>
           <b-row />
@@ -166,19 +219,25 @@
 
           <b-row class="mt-1" />
 
-          <span class="text-muted">
-            Дополнительные
-          </span>
           <b-row />
-          <template v-for="okvedDop in org.okvedDop">
-            <b-row :key="okvedDop.id" />
-            <b-link
+          <b-link
+            v-if="!showOkvedDop"
+            @click="showOkvedDop = true"
+          >
+            <b-icon-arrow-down />
+            Показать дополнительные
+          </b-link>
+          <span v-else>
+            <span
+              v-for="okvedDop in org.okvedDop"
               :key="okvedDop.id"
-              :to="`/orgs/all/${okvedDop.slug}`"
             >
-              {{ okvedDop.name }}
-            </b-link>
-          </template>
+              <b-row />
+              <b-link :to="`/orgs/all/${okvedDop.slug}`">
+                {{ okvedDop.name }}
+              </b-link>
+            </span>
+          </span>
         </b-card>
       </b-col>
     </b-row>
@@ -309,7 +368,7 @@ export default Vue.extend({
         related = []
       } = await raw.json()
 
-      const data = {
+      const data: any = {
         breadcrumb: [{
           id: 1,
           text: '🏠',
@@ -342,6 +401,42 @@ export default Vue.extend({
         related
       }
 
+      switch (main.statusKind) {
+        case 'ACTIVE':
+          data.statusText = 'Действующая'
+          data.statusColor = 'success'
+          break
+        case 'LIQUIDATING':
+          data.statusText = 'Ликвидируется'
+          data.statusColor = 'warning'
+          break
+        case 'REORGANIZING':
+          data.statusText = 'В процессе присоединения к другому юрлицу, с последующей ликвидацией'
+          data.statusColor = 'warning'
+          break
+        case 'LIQUIDATED':
+          data.statusText = 'Ликвидирована'
+          data.statusColor = 'danger'
+          break
+        case 'BANKRUPT':
+          data.statusText = 'Банкротство'
+          data.statusColor = 'danger'
+          break
+        default:
+          data.statusText = '—'
+          data.statusColor = 'secondary'
+          break
+      }
+
+      switch (main.kind) {
+        case 'LEGAL':
+          data.kind = 'Юридическое лицо'
+          break
+        case 'INDIVIDUAL':
+          data.kind = 'Индивидуальный предприниматель'
+          break
+      }
+
       if (main.area) {
         data.breadcrumb[1].text = main.area.name
         const toElems = data.breadcrumb[1].to.path.split('/')
@@ -366,7 +461,8 @@ export default Vue.extend({
   data () {
     return {
       none: '—',
-      relatedScrollDone: false
+      relatedScrollDone: false,
+      showOkvedDop: false
     }
   },
   computed: {
@@ -381,6 +477,9 @@ export default Vue.extend({
     ...orgGetters,
     unifyDate,
     capitalize,
+    safeEmptyDate (d: string): string {
+      return d ? unifyDate(d).toLocaleDateString() : this.none
+    },
     injectAds () {
       (function (w: any, d, n, s, t) {
         w[n] = w[n] || []

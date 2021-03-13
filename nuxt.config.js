@@ -99,6 +99,7 @@ export default {
       'BIconFileText',
       'BIconCloudDownload',
       'BIconServer',
+      'BIconGeoAlt',
 
       'BContainer',
       'BRow',

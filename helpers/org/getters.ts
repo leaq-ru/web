@@ -20,10 +20,23 @@ export default {
   safeOkvedName (o) {
     return o?.okved?.name
   },
+  safeOkvedCode (o) {
+    return o?.okved?.code
+  },
   safeManagerName (o) {
     return o?.manager?.name
   },
   safeManagerSlug (o) {
     return o?.manager?.slug
+  },
+  relatedLink (o) {
+    const result = ['all', 'all']
+    if (this.safeAreaSlug(o)) {
+      result[0] = this.safeAreaSlug(o)
+    }
+    if (this.safeOkvedSlug(o)) {
+      result[1] = this.safeOkvedSlug(o)
+    }
+    return '/orgs/' + result.join('/')
   }
 }

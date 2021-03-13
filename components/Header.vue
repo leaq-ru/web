@@ -7,18 +7,9 @@
   >
     <ScrollToTop />
 
-    <b-navbar-brand to="/">
+    <b-navbar-brand :to="'/'">
       LEAQ
     </b-navbar-brand>
-
-    <b-button
-      to="/"
-      pill
-      variant="outline-primary"
-    >
-      <b-icon-search />
-      Поиск
-    </b-button>
 
     <b-navbar-toggle target="nav-collapse" />
 
@@ -27,6 +18,20 @@
       is-nav
     >
       <b-navbar-nav>
+        <b-nav-item-dropdown text="Базы" right>
+          <b-dropdown-item
+            :active="isPath('/')"
+            to="/"
+          >
+            Сайты
+          </b-dropdown-item>
+          <b-dropdown-item
+            :active="isPath('/orgs')"
+            to="/orgs"
+          >
+            Юрлица и ИП
+          </b-dropdown-item>
+        </b-nav-item-dropdown>
         <b-nav-item
           :active="isPath('/about')"
           to="/about"
@@ -40,18 +45,6 @@
           Тарифы
         </b-nav-item>
         <b-nav-item
-          :active="isPath('/cities')"
-          to="/cities"
-        >
-          Города
-        </b-nav-item>
-        <b-nav-item
-          :active="isPath('/categories')"
-          to="/categories"
-        >
-          Категории
-        </b-nav-item>
-        <b-nav-item
           :active="isPath('/account/companies/apply')"
           to="/account/companies/apply"
         >
@@ -62,6 +55,20 @@
           href="https://api.leaq.ru/docs/"
         >
           API
+        </b-nav-item>
+        <b-nav-item
+          :class="classPathStartsWithOrgs"
+          :active="isPath('/cities')"
+          to="/cities"
+        >
+          Города
+        </b-nav-item>
+        <b-nav-item
+          :class="classPathStartsWithOrgs"
+          :active="isPath('/categories')"
+          to="/categories"
+        >
+          Категории
         </b-nav-item>
       </b-navbar-nav>
 
@@ -128,6 +135,11 @@ import Vue from 'vue'
 import makeLoginUrl from '~/helpers/makeLoginUrl'
 
 export default Vue.extend({
+  computed: {
+    classPathStartsWithOrgs (): string {
+      return this.$route.path.startsWith('/orgs') ? 'd-none' : ''
+    }
+  },
   methods: {
     isPath (p: string): boolean {
       return this.$route.path === p

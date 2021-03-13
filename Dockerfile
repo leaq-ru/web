@@ -1,11 +1,11 @@
-FROM node:lts-alpine AS build
+FROM node:14-alpine AS build
 WORKDIR /app
 COPY / /app
 RUN npm i
 RUN npm run build
 RUN npm prune --production
 
-FROM node:lts-alpine
+FROM node:14-alpine
 WORKDIR /app
 COPY --from=build /app/node_modules /app/node_modules
 COPY --from=build /app/static /app/static

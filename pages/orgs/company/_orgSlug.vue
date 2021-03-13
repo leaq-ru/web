@@ -14,14 +14,6 @@
       <b-col md="6">
         <b-card>
           <span class="text-muted">
-            Тип компании
-          </span>
-          <b-row />
-          {{ kind }}
-
-          <b-row class="mt-1" />
-
-          <span class="text-muted">
             {{ capitalize(safeAreaTypeFull(org)) || 'Город' }}
           </span>
           <b-row />
@@ -63,6 +55,25 @@
           <template v-else>
             {{ none }}
           </template>
+
+          <b-row class="mt-1" />
+
+          <span class="text-muted">
+            Тип компании
+          </span>
+          <b-row />
+          {{ kind }}
+
+          <b-row class="mt-1" />
+
+          <span class="text-muted">
+            ОПФ
+          </span>
+          <b-row />
+          <span class="text-muted">
+            {{ org.opfCode || none }}
+          </span>
+          {{ org.opfFull || org.opfShort || none }}
         </b-card>
       </b-col>
 
@@ -210,6 +221,9 @@
           <b-row />
           <template v-if="safeOkvedSlug(org)">
             <b-link :to="`/orgs/all/${safeOkvedSlug(org)}`">
+              <span class="text-muted">
+                {{ safeOkvedCode(org) }}
+              </span>
               {{ safeOkvedName(org) }}
             </b-link>
           </template>
@@ -217,9 +231,8 @@
             {{ none }}
           </template>
 
-          <b-row class="mt-1" />
+          <b-row class="mt-3" />
 
-          <b-row />
           <b-link
             v-if="!showOkvedDop"
             @click="showOkvedDop = true"
@@ -242,24 +255,77 @@
       </b-col>
     </b-row>
 
-    <!--    <b-row-->
-    <!--      v-if="related && related.length"-->
-    <!--      class="mt-5 mb-2"-->
-    <!--    >-->
-    <!--      <b-col>-->
-    <!--        <h2>-->
-    <!--          Похожие компании-->
-    <!--        </h2>-->
-    <!--      </b-col>-->
-    <!--    </b-row>-->
-    <!--    <OrgCardDeck :items="related" />-->
-    <!--    <client-only v-if="related && related.length >= 6 && !relatedScrollDone">-->
-    <!--      <infinite-loading-->
-    <!--        spinner="spiral"-->
-    <!--        :distance="1000"-->
-    <!--        @infinite="collectionInfiniteScroll"-->
-    <!--      />-->
-    <!--    </client-only>-->
+    <template v-if="branches && branches.length">
+      <b-row class="mt-3" />
+
+      <h2>
+        Филиалы
+      </h2>
+
+      <b-card
+        v-for="(b, i) in branches"
+        :key="b.name+i"
+        :header="b.name"
+      >
+        <span class="text-muted">
+          Город
+        </span>
+        <b-row />
+        <template v-if="b.area">
+          <b-link :to="`/orgs/${b.area.slug}/all`">
+            {{ b.area.name }}
+          </b-link>
+        </template>
+        <template v-else>
+          {{ none }}
+        </template>
+
+        <b-row class="mt-1" />
+
+        <span class="text-muted">
+          Адрес регистрации
+        </span>
+        <b-row />
+        <template v-if="b.location">
+          <b-link :to="`/orgs/location/${b.location.slug}`">
+            {{ b.location.name }}
+          </b-link>
+        </template>
+        <template v-else>
+          {{ none }}
+        </template>
+
+        <b-row class="mt-1" />
+
+        <span class="text-muted">
+          Статус
+        </span>
+        <b-row />
+        <b-icon-circle-fill :variant="branchStatuses[i].color" />
+        {{ branchStatuses[i].text }}
+      </b-card>
+    </template>
+
+    <b-row
+      v-if="related && related.length"
+      class="mt-5"
+    >
+      <b-col>
+        <h2>
+          Похожие компании
+        </h2>
+      </b-col>
+    </b-row>
+    <OrgCardDeck :items="related" />
+    <client-only v-if="related && related.length >= 6 && !relatedScrollDone">
+      <infinite-loading
+        spinner="spiral"
+        :distance="1000"
+        @infinite="collectionInfiniteScroll"
+      />
+    </client-only>
+
+    <b-row class="mb-2" />
     <Footer />
   </b-container>
 </template>
@@ -270,6 +336,7 @@ import orgGetters from '~/helpers/org/getters'
 import apiAddr from '~/helpers/const/apiAddr'
 import unifyDate from '~/helpers/unifyDate'
 import capitalize from '~/helpers/capitalize'
+import getStatus from '~/helpers/org/getStatus'
 
 const getRelated = async ({
   addr = apiAddr,
@@ -368,12 +435,14 @@ export default Vue.extend({
         related = []
       } = await raw.json()
 
+      const st = getStatus(main.statusKind)
+
       const data: any = {
         breadcrumb: [{
           id: 1,
           text: '🏠',
           to: {
-            path: '/'
+            path: '/orgs'
           }
         }, {
           id: 2,
@@ -398,35 +467,42 @@ export default Vue.extend({
         description: makeDescription(main),
         org: main,
         branches,
-        related
+        branchStatuses: [],
+        related,
+        statusText: st.text,
+        statusColor: st.color
       }
 
-      switch (main.statusKind) {
-        case 'ACTIVE':
-          data.statusText = 'Действующая'
-          data.statusColor = 'success'
-          break
-        case 'LIQUIDATING':
-          data.statusText = 'Ликвидируется'
-          data.statusColor = 'warning'
-          break
-        case 'REORGANIZING':
-          data.statusText = 'В процессе присоединения к другому юрлицу, с последующей ликвидацией'
-          data.statusColor = 'warning'
-          break
-        case 'LIQUIDATED':
-          data.statusText = 'Ликвидирована'
-          data.statusColor = 'danger'
-          break
-        case 'BANKRUPT':
-          data.statusText = 'Банкротство'
-          data.statusColor = 'danger'
-          break
-        default:
-          data.statusText = '—'
-          data.statusColor = 'secondary'
-          break
-      }
+      branches.forEach((br) => {
+        let text = '—'
+        let color = 'secondary'
+        switch (br.statusKind) {
+          case 'ACTIVE':
+            text = 'Действующий'
+            color = 'success'
+            break
+          case 'LIQUIDATING':
+            text = 'Ликвидируется'
+            color = 'warning'
+            break
+          case 'REORGANIZING':
+            text = 'В процессе присоединения к другому юрлицу, с последующей ликвидацией'
+            color = 'warning'
+            break
+          case 'LIQUIDATED':
+            text = 'Ликвидирован'
+            color = 'danger'
+            break
+          case 'BANKRUPT':
+            text = 'Банкротство'
+            color = 'danger'
+            break
+        }
+        data.branchStatuses.push({
+          text,
+          color
+        })
+      })
 
       switch (main.kind) {
         case 'LEGAL':
@@ -440,14 +516,14 @@ export default Vue.extend({
       if (main.area) {
         data.breadcrumb[1].text = main.area.name
         const toElems = data.breadcrumb[1].to.path.split('/')
-        toElems[1] = main.area.name.slug
+        toElems[2] = main.area.slug
         data.breadcrumb[1].to.path = toElems.join('/')
       }
       if (main.okved) {
         data.breadcrumb[2].text = main.okved.name
         const toElems = data.breadcrumb[1].to.path.split('/')
-        toElems[1] = main.area?.name?.slug || 'all'
-        toElems[2] = main.okved.slug
+        toElems[2] = main.area?.slug || 'all'
+        toElems[3] = main.okved.slug
         data.breadcrumb[2].to.path = toElems.join('/')
       }
 

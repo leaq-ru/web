@@ -15,8 +15,10 @@ spec:
         app: web
       annotations:
         linkerd.io/inject: enabled
-        config.linkerd.io/proxy-cpu-request: 4m
-        config.linkerd.io/proxy-memory-request: 11Mi
+        config.linkerd.io/proxy-cpu-request: 10m
+        config.linkerd.io/proxy-memory-request: 10Mi
+        config.linkerd.io/proxy-cpu-limit: 30m
+        config.linkerd.io/proxy-memory-limit: 30Mi
     spec:
       imagePullSecrets:
         - name: ghcr
@@ -43,8 +45,8 @@ spec:
               cpu: 250m
               memory: 90Mi
             limits:
-              cpu: "1"
-              memory: 1Gi
+              cpu: 250m
+              memory: 120Mi
           env:
             - name: NUXT_HOST
               value: 0.0.0.0
@@ -72,7 +74,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 100
+          averageUtilization: 80
 
 ---
 apiVersion: v1

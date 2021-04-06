@@ -42,10 +42,10 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 350m
+              cpu: 500m
               memory: 100Mi
             limits:
-              cpu: 350m
+              cpu: 500m
               memory: 100Mi
           env:
             - name: NUXT_HOST
@@ -74,7 +74,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 60
+          averageUtilization: 50
 
 ---
 apiVersion: v1

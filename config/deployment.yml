@@ -45,8 +45,8 @@ spec:
               cpu: 350m
               memory: 100Mi
             limits:
-              cpu: 500m
-              memory: 125Mi
+              cpu: 350m
+              memory: 100Mi
           env:
             - name: NUXT_HOST
               value: 0.0.0.0
@@ -74,7 +74,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 70
+          averageUtilization: 60
 
 ---
 apiVersion: v1

@@ -43,9 +43,9 @@ spec:
           resources:
             requests:
               cpu: 250m
-              memory: 125Mi
+              memory: 100Mi
             limits:
-              cpu: 250m
+              cpu: 300m
               memory: 120Mi
           env:
             - name: NUXT_HOST

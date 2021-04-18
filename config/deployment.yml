@@ -66,7 +66,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: web
-  minReplicas: 1
+  minReplicas: 3
   maxReplicas: 15
   metrics:
     - type: Resource
@@ -74,7 +74,7 @@ spec:
         name: cpu
         target:
           type: Utilization
-          averageUtilization: 50
+          averageUtilization: 40
 
 ---
 apiVersion: v1

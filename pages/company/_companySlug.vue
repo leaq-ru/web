@@ -752,18 +752,7 @@
             Подтвердить
           </b-button>
         </b-card>
-        <b-card
-          v-else
-          title="🤔 Не нашли что искали?"
-        >
-          <a
-            href="https://vk.me/leaq_ru"
-            rel="nofollow"
-            target="_blank"
-          >
-            Напишите нам
-          </a>
-        </b-card>
+        <b-card v-else />
       </b-card-group>
     </span>
 

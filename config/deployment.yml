@@ -43,10 +43,10 @@ spec:
           resources:
             requests:
               cpu: 500m
-              memory: 100Mi
+              memory: 120Mi
             limits:
               cpu: 500m
-              memory: 100Mi
+              memory: 120Mi
           env:
             - name: NUXT_HOST
               value: 0.0.0.0
@@ -66,7 +66,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: web
-  minReplicas: 3
+  minReplicas: 4
   maxReplicas: 15
   metrics:
     - type: Resource

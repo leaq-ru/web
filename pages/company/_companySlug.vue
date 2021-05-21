@@ -756,67 +756,21 @@
       </b-card-group>
     </span>
 
-    <VKReviews />
+    <b-row class="mt-5 mb-2">
+      <b-col>
+        <h2>
+          Отзывы
+        </h2>
 
-    <template v-if="!premium">
-      <b-card
-        class="mt-5"
-        border-variant="primary"
-        no-body
-      >
-        <b-card-header
-          header-bg-variant="primary"
-          header-text-variant="white"
-        >
-          <b-icon-building />
-          Конструктор баз компаний России
-        </b-card-header>
-        <b-card-body>
-          <h3>
-            Скачать все компании
-            <transition
-              name="fade"
-              mode="out-in"
-            >
-              <span
-                :key="bannerCity"
-                class="text-muted"
-              >
-                {{ bannerCity }}
-              </span>
-            </transition>
-          </h3>
-          <h3>
-            в категории
-            <transition
-              name="fade"
-              mode="out-in"
-            >
-              <span
-                :key="bannerCategory"
-                class="text-muted"
-              >
-                {{ bannerCategory }}
-              </span>
-            </transition>
-          </h3>
-          <b-button
-            class="mt-3"
-            pill
-            variant="primary"
-            to="/"
-          >
-            <b-icon-search />
-            Попробовать бесплатно
-          </b-button>
-        </b-card-body>
-      </b-card>
+        <div id="vk_comments" />
+      </b-col>
+    </b-row>
 
-      <div
-        id="yandex_rtb_R-A-673451-1"
-        class="mt-5"
-      />
-    </template>
+    <div
+      v-if="!premium"
+      id="yandex_rtb_R-A-673451-1"
+      class="mt-5"
+    />
 
     <template v-if="posts.length">
       <b-row class="mt-5 mb-2">
@@ -1081,6 +1035,12 @@ export default Vue.extend({
     }
   },
   mounted () {
+    const w = window as any
+    w.VK.Widgets.Comments('vk_comments', {
+      limit: 20,
+      attach: '*'
+    })
+
     if (!this.premium) {
       this.initBannerRotate()
       this.injectAds()

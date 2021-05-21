@@ -306,6 +306,8 @@
       </b-card>
     </template>
 
+    <VKReviews />
+
     <b-row
       v-if="related && related.length"
       class="mt-5"

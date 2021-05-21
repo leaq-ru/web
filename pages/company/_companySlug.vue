@@ -756,6 +756,8 @@
       </b-card-group>
     </span>
 
+    <VKReviews />
+
     <template v-if="!premium">
       <b-card
         class="mt-5"

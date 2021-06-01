@@ -4,18 +4,15 @@
     <Breadcrumb :items="breadcrumb" />
 
     <h1>
-      Скачать базу компаний {{ city.header }} {{ category.header }}
+      Скачать базу компаний {{ city.header }} {{ category.description }}
     </h1>
 
     <p>
-      Список организаций {{ category.description }} {{ city.description }}. Это подборка, изменить условия поиска можно в
+      Список организаций {{ category.description }} {{ city.description }}. Это подборка, изменить условия поиска
+      можно в
       <b-link to="/#search">
         конструкторе баз
       </b-link>
-    </p>
-
-    <p>
-      Содержимое CSV файла: город, категория компании, email, телефон, логотип, ссылки на соцсети, ИНН, КПП, ОГРН, контакты менеджеров и ЛПР (те кто указан администраторами группы компании ВКонтакте), технологии на сайте компании (например PHP, 1C-Bitrix, Vue.js), DNS, и многое другое. Скачайте бесплатно и посмотрите!
     </p>
 
     <b-row>
@@ -91,6 +88,193 @@
         </b-button>
       </b-col>
     </b-row>
+
+    <hr>
+
+    <h2>
+      Что в файле?
+    </h2>
+
+    <p>
+      Сейчас пройдемся по всем полям таблицы
+    </p>
+
+    <div class="mt-3 mb-3">
+      <b-link href="https://static.leaq.ru/csv-preview.png" target="_blank">
+        <b-img-lazy fluid src="https://static.leaq.ru/csv-preview.png" />
+      </b-link>
+    </div>
+
+    <ol>
+      <li>
+        <span class="font-weight-bold">
+          Ссылка на сайт
+        </span>
+        <p>
+          Сайт компании это точка входа для нашего робота. Получаем HTML код, далее алгоритм в нем ищет данные — email,
+          телефон, ссылки на соцсети и т.д. В нашей базе есть все домены .ru, .рф, .su и данные регулярно обновляются
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Название категории
+        </span>
+        <p>
+          У карточки компании может быть одна из 579 категорий. Полный их список представлен
+          <b-link to="/categories">
+            здесь.
+          </b-link> Категория присваивается алгоритмом машинного обучения на основе содержимого сайта
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Slug
+        </span>
+        <p>
+          Так называют короткое читаемое имя в адресе сайта. Оно уникально, и с помощью этого идентификатора можно
+          зайти в карточку компании. Например slug
+          <span class="font-italic">
+            dress4car-ru
+          </span>
+          означает что можно попасть в карточку компании по адресу
+          <b-link to="/company/dress4car-ru">
+            https://leaq.ru/company/dress4car-ru
+          </b-link>
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Название компании
+        </span>
+        <p>
+          Название присваиваем из тэга title на сайте, или из группы ВКонтакте
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Email
+        </span>
+        <p>
+          На страницах сайта ищем текст по формату электронной почты. Email удается определить в ~53% случаев
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Телефон
+        </span>
+        <p>
+          На страницах сайта смотрим текст по формату телефона. Ищем со скобками и без, но приводим в единый формат
+          7XXXXXXXXXX. Телефон удается определить для ~62% компаний
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Описание
+        </span>
+        <p>
+          Берем из тэга description на сайте, или из группы ВКонтакте
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Сайт онлайн
+        </span>
+        <p>
+          Ответил ли сайт компании корректно при последнем обходе. Если нет, ставится одноименное значение,
+          но данные не удаляем
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          ИНН
+        </span>
+      </li>
+      <li>
+        <span class="font-weight-bold">
+          КПП
+        </span>
+      </li>
+      <li>
+        <span class="font-weight-bold">
+          ОГРН
+        </span>
+        <p>
+          Определяем по содержимому сайта. Немногие компании указывают эти данные, поэтому совсем нечасто удается
+          определить
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          IP сервера
+        </span>
+        <p>
+          Внешний IP адрес, на который нас направляет домен компании. Сохранено для большинства карточек компаний
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Регистратор домена
+        </span>
+        <p>
+          В какой компании было зарегистрировано доменное имя сайта фирмы. Указано для 100% карточек компаний
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Дата регистрации домена
+        </span>
+        <p>
+          Дата когда было впервые зарегистрировано доменное имя
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Логотип
+        </span>
+        <p>
+          Первая картинка с сайта сохраняется как логотип. Или ававар группы ВКонтакте
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Город
+        </span>
+        <p>
+          Один из городов из
+          <b-link to="/cities">
+            списка.
+          </b-link>
+          Определяется по совпадению, например «г. Москва» и другим частым сочетаниям. Если не найден на сайте, берем из группы ВКонтакте. Указан для ~30% компаний
+        </p>
+      </li>
+
+      <li>
+        <span class="font-weight-bold">
+          Адрес улица
+        </span>
+      </li>
+      <li>
+        <span class="font-weight-bold">
+          Адрес дом/офис
+        </span>
+        <p>
+          Определяем по соответствующему полю из адреса в группе компании ВКонтакте
+        </p>
+      </li>
+    </ol>
 
     <b-alert
       v-if="dataPremium"
@@ -310,11 +494,9 @@ export default Vue.extend({
         data.breadcrumb[1].text = city.title
       }
       if (category) {
-        const cat = `в категории «${category.title}»`
-
         data.category.id = category.id
-        data.category.header = cat
-        data.category.description = cat
+        data.category.header = category.title
+        data.category.description = `в категории «${category.title}»`
 
         data.breadcrumb[2].text = category.title
       }
@@ -329,7 +511,7 @@ export default Vue.extend({
       categoryToElems.push(category?.slug || 'all')
       data.breadcrumb[2].to.path = categoryToElems.join('/')
 
-      data.title = makeTitle(`Скачать базу компаний ${data.city.header}${data.category.header ? ' ' + data.category.header : ''}`)
+      data.title = makeTitle(`${data.category.header ? data.category.header + ' ' : ''}${data.city.header} — база компаний`)
       data.description = `Скачать CSV базу, email и телефоны организаций ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска`
 
       return data

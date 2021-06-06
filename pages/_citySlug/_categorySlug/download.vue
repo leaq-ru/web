@@ -89,6 +89,70 @@
       </b-col>
     </b-row>
 
+    <b-alert
+        v-if="dataPremium"
+        fade
+        :show="downloadAlertCountDown"
+        dismissible
+        variant="success"
+        class="w-100"
+        @dismissed="downloadAlertCountDown=0"
+    >
+      <h6 class="alert-heading">
+        Скачивание началось
+      </h6>
+
+      <p v-if="csvClick">
+        База будет доступна в разделе
+        <b-link to="/account/exports">
+          выгрузки
+        </b-link>
+        в личном кабинете
+      </p>
+      <p v-else>
+        Пожалуйста не покидайте страницу, собираем список для вас, затем начнется скачивание. Обычно занимает 30-60 секунд
+      </p>
+    </b-alert>
+    <b-alert
+        v-else
+        fade
+        :show="downloadAlertCountDown"
+        dismissible
+        variant="success"
+        class="w-100"
+        @dismissed="downloadAlertCountDown=0"
+    >
+      <h6 class="alert-heading">
+        Скачивание началось
+      </h6>
+
+      <p>
+        Будет скачано не более 100 результатов. Данные без ограничений доступны на
+        <b-link to="/plans#data">
+          расширенном тарифе
+        </b-link>
+      </p>
+    </b-alert>
+    <b-alert
+        fade
+        :show="errConcExports"
+        dismissible
+        variant="danger"
+        class="w-100"
+    >
+      <h6 class="alert-heading">
+        Ошибка
+      </h6>
+
+      <p>
+        Пожалуйста, дождитесь пока одна из ваших
+        <b-link to="/account/exports">
+          выгрузок
+        </b-link>
+        завершится, и затем попробуйте снова
+      </p>
+    </b-alert>
+
     <hr>
 
     <h2>
@@ -523,71 +587,6 @@
         </p>
       </li>
     </ol>
-
-    <b-alert
-      v-if="dataPremium"
-      fade
-      :show="downloadAlertCountDown"
-      dismissible
-      variant="success"
-      class="w-100"
-      @dismissed="downloadAlertCountDown=0"
-    >
-      <h6 class="alert-heading">
-        Скачивание началось
-      </h6>
-
-      <p v-if="csvClick">
-        База будет доступна в разделе
-        <b-link to="/account/exports">
-          выгрузки
-        </b-link>
-        в личном кабинете
-      </p>
-      <p v-else>
-        Пожалуйста не покидайте страницу, собираем список для вас, затем начнется скачивание. Обычно занимает 30-60 секунд
-      </p>
-    </b-alert>
-    <b-alert
-      v-else
-      fade
-      :show="downloadAlertCountDown"
-      dismissible
-      variant="success"
-      class="w-100"
-      @dismissed="downloadAlertCountDown=0"
-    >
-      <h6 class="alert-heading">
-        Скачивание началось
-      </h6>
-
-      <p>
-        Будет скачано не более 100 результатов. Данные без ограничений доступны на
-        <b-link to="/plans#data">
-          расширенном тарифе
-        </b-link>
-      </p>
-    </b-alert>
-
-    <b-alert
-      fade
-      :show="errConcExports"
-      dismissible
-      variant="danger"
-      class="w-100"
-    >
-      <h6 class="alert-heading">
-        Ошибка
-      </h6>
-
-      <p>
-        Пожалуйста, дождитесь пока одна из ваших
-        <b-link to="/account/exports">
-          выгрузок
-        </b-link>
-        завершится, и затем попробуйте снова
-      </p>
-    </b-alert>
 
     <h2>
       Хочу больше данных, что дальше?

@@ -735,7 +735,7 @@ export default Vue.extend({
         }],
         city: {
           id: '',
-          header: 'России',
+          header: category ? 'России' : 'Россия',
           description: 'во всех городах России'
         },
         category: {

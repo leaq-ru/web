@@ -780,7 +780,7 @@ export default Vue.extend({
       if (data.category.header) {
         data.title = makeTitle(`${data.category.header} ${data.city.header} — база компаний`)
       } else {
-        data.title = makeTitle(`${data.city.description} — база компаний`)
+        data.title = makeTitle(`${city?.title || 'Россия'} — база компаний`)
       }
       data.description = `Скачать CSV базу, email и телефоны организаций ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска`
 

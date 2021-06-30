@@ -777,7 +777,11 @@ export default Vue.extend({
       categoryToElems.push(category?.slug || 'all')
       data.breadcrumb[2].to.path = categoryToElems.join('/')
 
-      data.title = makeTitle(`${data.category.header ? data.category.header + ' ' : ''}${data.city.header} — база компаний`)
+      if (data.category.header) {
+        data.title = makeTitle(`${data.category.header} ${data.city.header} — база компаний`)
+      } else {
+        data.title = makeTitle(`${data.city.description} — база компаний`)
+      }
       data.description = `Скачать CSV базу, email и телефоны организаций ${data.city.header} из категории ${data.category.header} с возможностью уточнения поиска`
 
       return data

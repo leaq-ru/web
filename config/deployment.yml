@@ -13,12 +13,6 @@ spec:
     metadata:
       labels:
         app: web
-      annotations:
-        linkerd.io/inject: enabled
-        config.linkerd.io/proxy-cpu-request: 5m
-        config.linkerd.io/proxy-memory-request: 10Mi
-        config.linkerd.io/proxy-cpu-limit: 50m
-        config.linkerd.io/proxy-memory-limit: 50Mi
     spec:
       imagePullSecrets:
         - name: ghcr

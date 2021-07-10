@@ -32,8 +32,8 @@
         type="submit"
         variant="primary"
       >
-        <b-icon-hand-thumbs-up v-if="positiveComputed"/>
-        <b-icon-hand-thumbs-down v-else/>
+        <b-icon-hand-thumbs-up v-if="positiveComputed" />
+        <b-icon-hand-thumbs-down v-else />
 
         Отправить
       </b-button>
@@ -59,7 +59,7 @@
       </b-modal>
     </b-form>
 
-    <b-row class="mt-3"/>
+    <b-row class="mt-3" />
 
     <b-card
       v-for="r in reviews"
@@ -98,7 +98,7 @@
                 variant="light"
                 @click="delSureTrue"
               >
-                <b-icon-x/>
+                <b-icon-x />
               </b-button>
             </template>
           </b-col>
@@ -119,7 +119,7 @@
             Не рекомендует
           </b-badge>
 
-          <b-row class="mt-1"/>
+          <b-row class="mt-1" />
           <p
             v-if="!r.text"
             class="text-muted"
@@ -153,7 +153,7 @@
         v-if="reviewsLoading"
         animation="spin"
       />
-      <b-icon-arrow-down v-else/>
+      <b-icon-arrow-down v-else />
       Показать еще
     </b-button>
   </div>
@@ -168,18 +168,18 @@ export default Vue.extend({
   props: {
     reviews: {
       type: Array,
-      default() {
+      default () {
         return []
       }
     },
     companyId: {
       type: String,
-      default() {
+      default () {
         return ''
       }
     }
   },
-  data() {
+  data () {
     return {
       form: {
         text: '',
@@ -203,22 +203,22 @@ export default Vue.extend({
     }
   },
   computed: {
-    valid() {
+    valid () {
       return this.form.text.length <= 3000 ? null : false
     },
-    delSureComputed() {
+    delSureComputed () {
       return this.delSure
     },
-    positiveComputed() {
+    positiveComputed () {
       return this.form.positive
     },
-    reviewsSkip(): number | undefined {
+    reviewsSkip (): number | undefined {
       return this.reviews?.length
     }
   },
   methods: {
     unifyDate,
-    async create(e) {
+    async create (e) {
       e.preventDefault()
 
       this.createDisable = true
@@ -246,7 +246,7 @@ export default Vue.extend({
       this.createOk = true
       this.resetForm()
     },
-    async del(reviewId: string) {
+    async del (reviewId: string) {
       this.delDisable = true
       const raw = await fetch([
         apiAddr,
@@ -263,23 +263,23 @@ export default Vue.extend({
       this.delDisable = false
 
       if (raw.ok) {
-        this.reviews = this.reviews.filter(({id}) => id !== reviewId)
+        this.reviews = this.reviews.filter(({ id }) => id !== reviewId)
       }
     },
-    delSureTrue() {
+    delSureTrue () {
       this.delSure = true
     },
-    delSureFalse() {
+    delSureFalse () {
       this.delSure = false
     },
-    isMe(userId: string): boolean {
+    isMe (userId: string): boolean {
       return this.$store.state?.user?.self?.id === userId
     },
-    resetForm() {
+    resetForm () {
       this.form.text = ''
       this.form.positive = true
     },
-    async getReviews(): Promise<void> {
+    async getReviews (): Promise<void> {
       const limit = 20
 
       const query = new URLSearchParams()

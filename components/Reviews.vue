@@ -1,63 +1,76 @@
 <template>
-  <div>
+  <div class="mb-5">
     <p class="text-muted">
       Пользовались услугами этой компании?
     </p>
 
-    <b-form @submit="create">
-      <b-form-group class="mt-3">
-        <b-form-radio-group
-          v-model="form.positive"
-          :options="options"
-        />
-      </b-form-group>
+    <b-overlay
+      rounded="sm"
+      :show="!isAuth"
+    >
+      <b-form @submit="create">
+        <b-form-group class="mt-3">
+          <b-form-radio-group
+            v-model="form.positive"
+            :options="options"
+          />
+        </b-form-group>
 
-      <b-form-group>
-        <b-form-textarea
-          id="form-text"
-          v-model="form.text"
-          :state="valid"
-          placeholder="Напишите подробнее, так вы поможете другим пользователям сделать выбор"
-          rows="5"
-        />
-        <b-form-invalid-feedback
-          :state="valid"
+        <b-form-group>
+          <b-form-textarea
+            id="form-text"
+            v-model="form.text"
+            :state="valid"
+            placeholder="Напишите подробнее, так вы поможете другим пользователям сделать выбор"
+            rows="5"
+          />
+          <b-form-invalid-feedback
+            :state="valid"
+          >
+            {{ form.text.length }}/3000 символов
+          </b-form-invalid-feedback>
+        </b-form-group>
+
+        <b-button
+          :disabled="createDisable || valid === false"
+          type="submit"
+          variant="primary"
         >
-          {{ form.text.length }}/3000 символов
-        </b-form-invalid-feedback>
-      </b-form-group>
+          <b-icon-hand-thumbs-up v-if="positiveComputed" />
+          <b-icon-hand-thumbs-down v-else />
 
-      <b-button
-        :disabled="createDisable || valid === false"
-        type="submit"
-        variant="primary"
-      >
-        <b-icon-hand-thumbs-up v-if="positiveComputed" />
-        <b-icon-hand-thumbs-down v-else />
+          Отправить
+        </b-button>
 
-        Отправить
-      </b-button>
+        <b-alert
+          :show="createErr"
+          class="mt-3"
+          dismissible
+          variant="danger"
+        >
+          Произошла ошибка. Попробуйте позднее
+        </b-alert>
 
-      <b-alert
-        :show="createErr"
-        class="mt-3"
-        dismissible
-        variant="danger"
-      >
-        Произошла ошибка. Попробуйте позднее
-      </b-alert>
-
-      <b-modal
-        v-model="createOk"
-        ok-only
-        ok-title="Понятно"
-        title="Отправлено"
-      >
-        <p class="my-4">
-          Спасибо! Отзыв будет опубликован после антиспам проверки
-        </p>
-      </b-modal>
-    </b-form>
+        <b-modal
+          v-model="createOk"
+          ok-only
+          ok-title="Понятно"
+          title="Отправлено"
+        >
+          <p class="my-4">
+            Спасибо! Отзыв будет опубликован после антиспам проверки
+          </p>
+        </b-modal>
+      </b-form>
+      <template #overlay>
+        <div class="text-center">
+          <b-link @click="redirectToLogin">
+            Войдите на сайт,
+          </b-link>
+          чтобы оставить отзыв
+        </div>
+      </template>
+    </b-overlay>
 
     <b-row class="mt-3" />
 
@@ -69,38 +82,13 @@
     >
       <b-card-header>
         <b-row align-v="center">
-          <b-col cols="6">
+          <b-col cols="12">
             <b-avatar
               :src="r.user.photo"
               class="mr-2"
             />
 
             {{ r.user.firstName }} {{ r.user.lastName }}
-          </b-col>
-          <b-col class="text-right" cols="6">
-            <template :v-if="isMe(r.user.id)">
-              <b-button
-                v-if="delSureComputed"
-                variant="light"
-                @click="delSureFalse"
-              >
-                Отменить
-              </b-button>
-              <b-button
-                v-if="delSureComputed"
-                variant="danger"
-                @click="del(r.id)"
-              >
-                Удалить отзыв
-              </b-button>
-              <b-button
-                v-else
-                variant="light"
-                @click="delSureTrue"
-              >
-                <b-icon-x />
-              </b-button>
-            </template>
           </b-col>
         </b-row>
       </b-card-header>
@@ -134,12 +122,48 @@
       </b-card-body>
 
       <b-card-footer
-        class="text-right"
         footer-bg-variant="white"
       >
-        <span class="text-muted">
-          {{ unifyDate(r.createdAt).toLocaleDateString() }}
-        </span>
+        <b-row align-v="center">
+          <b-col
+            class="text-left"
+            cols="6"
+          >
+            <span v-if="isMe(r.user.id)">
+              <b-button
+                v-show="!delSureComputed"
+                variant="light"
+                @click="delSureTrue"
+              >
+                <b-icon-x />
+              </b-button>
+              <b-button
+                v-show="delSureComputed"
+                variant="danger"
+                @click="del(r.id)"
+              >
+                Удалить
+              </b-button>
+              <b-button
+                v-show="delSureComputed"
+                class="mt-md-0 mt-2"
+                variant="light"
+                @click="delSureFalse"
+              >
+                Отменить
+              </b-button>
+            </span>
+          </b-col>
+
+          <b-col
+            cols="6"
+            class="text-right"
+          >
+            <span class="text-muted">
+              {{ unifyDate(r.createdAt).toLocaleDateString() }}
+            </span>
+          </b-col>
+        </b-row>
       </b-card-footer>
     </b-card>
 
@@ -163,6 +187,7 @@
 import Vue from 'vue'
 import apiAddr from '~/helpers/const/apiAddr'
 import unifyDate from '~/helpers/unifyDate'
+import makeLoginUrl from '~/helpers/makeLoginUrl'
 
 export default Vue.extend({
   props: {
@@ -214,10 +239,19 @@ export default Vue.extend({
     },
     reviewsSkip (): number | undefined {
       return this.reviews?.length
+    },
+    isAuth (): boolean {
+      return Boolean(this.$store?.state?.user?.self?.token)
     }
   },
   methods: {
     unifyDate,
+    isMe (userId: string): boolean {
+      return this.$store?.state?.user?.self?.id === userId
+    },
+    redirectToLogin () {
+      this.$nuxt.context.redirect(makeLoginUrl(this.$route))
+    },
     async create (e) {
       e.preventDefault()
 
@@ -271,9 +305,6 @@ export default Vue.extend({
     },
     delSureFalse () {
       this.delSure = false
-    },
-    isMe (userId: string): boolean {
-      return this.$store.state?.user?.self?.id === userId
     },
     resetForm () {
       this.form.text = ''

@@ -158,7 +158,8 @@ export default {
       'BSpinner',
       'BFormInvalidFeedback',
       'BModal',
-      'BBadge'
+      'BBadge',
+      'BOverlay'
     ],
     directives: [
       'VBTooltip',

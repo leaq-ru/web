@@ -119,20 +119,17 @@
         class="mb-3"
         deck
       >
-        <b-card
-          border-variant="light"
-          title="📍 Контакты"
-        >
+        <b-card title="📍 Контакты">
           <b-row>
             <b-col
               md="6"
               class="mb-1"
             >
               <span class="text-muted">
-                <b-icon-envelope/>
+                <b-icon-envelope />
                 Email
               </span>
-              <b-row/>
+              <b-row />
               <div
                 v-if="company.email"
                 class="ml-21"
@@ -221,23 +218,20 @@
                 <b-icon-clock />
                 Обновлено
               </span>
-              <b-row/>
+              <b-row />
               <div class="ml-21">{{ toShowedDate(company.updatedAt) }}</div>
             </b-col>
           </b-row>
           <template v-if="showTipFoundOnLeaq">
-            <TipFoundOnLeaq/>
+            <TipFoundOnLeaq />
           </template>
         </b-card>
-        <b-card
-          border-variant="light"
-          title="⌨️ Описание"
-        >
+        <b-card title="⌨️ Описание">
           <span
             v-if="company.description"
             itemprop="description"
           >
-            <TextSpoiler :text="company.description"/>
+            <TextSpoiler :text="company.description" />
           </span>
           <template v-else>
             {{ none }}
@@ -245,19 +239,13 @@
         </b-card>
       </b-card-group>
 
-      <b-row class="mb-3">
-        <b-col cols="12">
-          <b-card
-            border-variant="light"
-            title="📔 Отзывы"
-          >
-            <Reviews
-              :company-id="company.id"
-              :reviews="reviews"
-            />
-          </b-card>
-        </b-col>
-      </b-row>
+      <h2>
+        📔 Отзывы
+      </h2>
+      <Reviews
+        :company-id="company.id"
+        :reviews="reviews"
+      />
 
       <b-card-group
         class="mb-3"

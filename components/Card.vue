@@ -3,23 +3,28 @@
     :border-variant="company.premium ? 'success' : ''"
     no-body
   >
-    <b-card-header
-      :class="company.premium ? 'text-light' : ''"
-      :header-bg-variant="company.premium ? 'success' : ''"
-      :header-border-variant="company.premium ? 'success' : ''"
+    <b-link
+      class="text-decoration-none text-dark"
+      :to="`/company/${company.slug}`"
     >
-      <PatchLightning
-        v-if="company.premium"
-        text-class="text-light"
-      />
+      <b-card-header
+        :class="company.premium ? 'text-light' : ''"
+        :header-bg-variant="company.premium ? 'success' : ''"
+        :header-border-variant="company.premium ? 'success' : ''"
+      >
+        <PatchLightning
+          v-if="company.premium"
+          text-class="text-light"
+        />
 
-      <PatchCheck
-        v-if="company.verified"
-        :text-class="company.premium ? 'text-light' : 'text-primary'"
-      />
+        <PatchCheck
+          v-if="company.verified"
+          :text-class="company.premium ? 'text-light' : 'text-primary'"
+        />
 
-      {{ company.title || company.slug }}
-    </b-card-header>
+        {{ company.title || company.slug }}
+      </b-card-header>
+    </b-link>
 
     <b-card-body
       itemscope

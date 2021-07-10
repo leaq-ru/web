@@ -9,7 +9,7 @@
       </h1>
 
       <p class="text-muted">
-        Управляйте аккаунтом, компаниями, выгрузками CSV
+        Управляйте аккаунтом, отзывами, компаниями, выгрузками CSV
       </p>
 
       <b-button
@@ -46,9 +46,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
+import {Context} from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
-import makeAuthRedirect, { authKind } from '~/helpers/makeAuthRedirect'
+import makeAuthRedirect, {authKind} from '~/helpers/makeAuthRedirect'
 
 export default Vue.extend({
   asyncData (ctx: Context): object {

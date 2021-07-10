@@ -306,16 +306,6 @@
       </b-card>
     </template>
 
-    <b-row class="mt-5 mb-2">
-      <b-col>
-        <h2>
-          Отзывы
-        </h2>
-
-        <div id="vk_comments" />
-      </b-col>
-    </b-row>
-
     <b-row
       v-if="related && related.length"
       class="mt-5"
@@ -557,12 +547,6 @@ export default Vue.extend({
     }
   },
   mounted () {
-    const w = window as any
-    w.VK.Widgets.Comments('vk_comments', {
-      limit: 20,
-      attach: '*'
-    })
-
     this.injectAds()
   },
   methods: {

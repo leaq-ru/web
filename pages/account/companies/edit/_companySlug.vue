@@ -337,7 +337,6 @@
 
     <b-input-group>
       <b-button
-        pill
         variant="primary"
         :disabled="sendEditLoading || !stateValid"
         @click="sendEdit"
@@ -373,7 +372,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
+import {Context} from '@nuxt/types'
 // @ts-ignore - no types for this module
 import VueBootstrapTypeahead from 'vue-bootstrap-typeahead'
 import apiAddr from '~/helpers/const/apiAddr'

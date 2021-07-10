@@ -2,12 +2,12 @@
   <span>
     <template v-if="!showFull && text.length > 217">
       <p>
-        {{ text.slice(0, 217) }}
+        {{ text.slice(0, 217) }}...
+        <br>
+        <b-link @click="showFull = true">
+          Показать полностью...
+        </b-link>
       </p>
-
-      <b-link @click="showFull = true">
-        Показать полностью...
-      </b-link>
     </template>
     <p v-else>
       {{ text }}

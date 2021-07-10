@@ -39,7 +39,6 @@
     <b-button
       v-if="companies.length >= 20 && !companiesScrollDone && companiesLoaded"
       class="mt-3"
-      pill
       variant="primary"
       @click="getCompanies"
     >
@@ -58,7 +57,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
+import {Context} from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeLoginUrl from '~/helpers/makeLoginUrl'

@@ -1,5 +1,5 @@
 <template>
-  <b-icon-patch-check-fll
+  <b-icon-patch-check-fill
     v-b-tooltip="'Информация подтверждена владельцем и регулярно обновляется'"
     :class="textClass"
   />

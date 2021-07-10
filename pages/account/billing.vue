@@ -54,7 +54,6 @@
 
     <b-button
       v-if="invoices.length >= 20 && !invoicesScrollDone && invoicesLoaded"
-      pill
       variant="primary"
       @click="getInvoices"
     >
@@ -73,7 +72,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
+import {Context} from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeLoginUrl from '~/helpers/makeLoginUrl'

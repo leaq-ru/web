@@ -87,7 +87,7 @@ export default {
       'BIconCloudDownload',
       'BIconArrowDown',
       'BIconPlusCircle',
-      'BIconPatchCheckFll',
+      'BIconPatchCheckFill',
       'BIconPencil',
       'BIconPersonCheck',
       'BIconPersonCircle',
@@ -100,6 +100,9 @@ export default {
       'BIconCloudDownload',
       'BIconServer',
       'BIconGeoAlt',
+      'BIconX',
+      'BIconHandThumbsUp',
+      'BIconHandThumbsDown',
 
       'BContainer',
       'BRow',
@@ -107,6 +110,7 @@ export default {
       'BButton',
       'BJumbotron',
       'BLink',
+      'BForm',
       'BFormGroup',
       'BFormTag',
       'BFormText',
@@ -153,7 +157,8 @@ export default {
       'BProgress',
       'BSpinner',
       'BFormInvalidFeedback',
-      'BModal'
+      'BModal',
+      'BBadge'
     ],
     directives: [
       'VBTooltip',

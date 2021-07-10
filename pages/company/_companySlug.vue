@@ -119,17 +119,20 @@
         class="mb-3"
         deck
       >
-        <b-card title="📍 Контакты">
+        <b-card
+          border-variant="light"
+          title="📍 Контакты"
+        >
           <b-row>
             <b-col
               md="6"
               class="mb-1"
             >
               <span class="text-muted">
-                <b-icon-envelope />
+                <b-icon-envelope/>
                 Email
               </span>
-              <b-row />
+              <b-row/>
               <div
                 v-if="company.email"
                 class="ml-21"
@@ -218,26 +221,44 @@
                 <b-icon-clock />
                 Обновлено
               </span>
-              <b-row />
+              <b-row/>
               <div class="ml-21">{{ toShowedDate(company.updatedAt) }}</div>
             </b-col>
           </b-row>
           <template v-if="showTipFoundOnLeaq">
-            <TipFoundOnLeaq />
+            <TipFoundOnLeaq/>
           </template>
         </b-card>
-        <b-card title="⌨️ Описание">
+        <b-card
+          border-variant="light"
+          title="⌨️ Описание"
+        >
           <span
             v-if="company.description"
             itemprop="description"
           >
-            <TextSpoiler :text="company.description" />
+            <TextSpoiler :text="company.description"/>
           </span>
           <template v-else>
             {{ none }}
           </template>
         </b-card>
       </b-card-group>
+
+      <b-row class="mb-3">
+        <b-col cols="12">
+          <b-card
+            border-variant="light"
+            title="📔 Отзывы"
+          >
+            <Reviews
+              :company-id="company.id"
+              :reviews="reviews"
+            />
+          </b-card>
+        </b-col>
+      </b-row>
+
       <b-card-group
         class="mb-3"
         deck
@@ -743,7 +764,6 @@
             </b-link>
           </p>
           <b-button
-            pill
             variant="outline-primary"
             rel="nofollow"
             :to="`/account/companies/apply?url=${company.url.slice(7)}`"
@@ -755,16 +775,6 @@
         <b-card v-else />
       </b-card-group>
     </span>
-
-    <b-row class="mt-5 mb-2">
-      <b-col>
-        <h2>
-          Отзывы
-        </h2>
-
-        <div id="vk_comments" />
-      </b-col>
-    </b-row>
 
     <div
       v-if="!premium"
@@ -787,7 +797,6 @@
       />
       <b-button
         v-if="posts.length >= 6 && !postsScrollDone && postsLoaded"
-        pill
         variant="primary"
         @click="getPosts"
       >
@@ -952,7 +961,8 @@ export default Vue.extend({
         posts = [],
         verified = false,
         premium = false,
-        dns = []
+        dns = [],
+        reviews = []
       } = await raw.json()
 
       const data = {
@@ -990,7 +1000,8 @@ export default Vue.extend({
         posts,
         verified,
         premium,
-        dns
+        dns,
+        reviews
       }
 
       if (fullCompany.location?.city) {
@@ -1021,9 +1032,7 @@ export default Vue.extend({
       showTipFoundOnLeaq: false,
       postsLoading: false,
       postsLoaded: true,
-      postsScrollDone: false,
-      bannerCity: 'Москвы',
-      bannerCategory: 'строительство'
+      postsScrollDone: false
     }
   },
   computed: {
@@ -1035,14 +1044,7 @@ export default Vue.extend({
     }
   },
   mounted () {
-    const w = window as any
-    w.VK.Widgets.Comments('vk_comments', {
-      limit: 20,
-      attach: '*'
-    })
-
     if (!this.premium) {
-      this.initBannerRotate()
       this.injectAds()
     }
   },
@@ -1065,21 +1067,6 @@ export default Vue.extend({
         s.async = true
         t.parentNode.insertBefore(s, t)
       })(window, window.document, 'yandexContextAsyncCallbacks')
-    },
-    initBannerRotate () {
-      const cities = ['Москвы', 'Санкт-Петербурга', 'Екатеринбурга', 'Перми', 'Нижнего Новгорода']
-      const categories = ['строительство', 'создание сайтов', 'металлургия', 'банки', 'недвижимость']
-      let cur = 0
-
-      setInterval(() => {
-        this.bannerCity = cities[cur]
-        this.bannerCategory = categories[cur]
-        if (cur === cities.length - 1) {
-          cur = 0
-        } else {
-          cur += 1
-        }
-      }, 2500)
     },
     setTipFoundOnLeaq () {
       this.showTipFoundOnLeaq = true

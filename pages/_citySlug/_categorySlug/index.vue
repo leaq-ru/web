@@ -15,7 +15,6 @@
     </p>
 
     <b-button
-      pill
       variant="primary"
       :to="downloadBtnLink"
     >
@@ -50,7 +49,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { cityIn } from 'lvovich'
+import {cityIn} from 'lvovich'
 import getCompanies from '~/helpers/company/getCompanies'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeTitle from '~/helpers/makeTitle'

@@ -146,7 +146,6 @@
 
     <b-button
       v-if="exports.length >= 20 && !exportsScrollDone && exportsLoaded"
-      pill
       variant="primary"
       @click="getExports"
     >
@@ -165,7 +164,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
+import {Context} from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import apiAddr from '~/helpers/const/apiAddr'
 import makeLoginUrl from '~/helpers/makeLoginUrl'

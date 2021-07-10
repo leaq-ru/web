@@ -24,7 +24,6 @@
     </p>
 
     <b-button
-      pill
       variant="primary"
       :disabled="sendVerifyLoading"
       @click="sendVerify"
@@ -51,7 +50,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
+import {Context} from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import makeLoginUrl from '~/helpers/makeLoginUrl'
 import apiAddr from '~/helpers/const/apiAddr'

@@ -239,7 +239,7 @@
         </b-card>
       </b-card-group>
 
-      <h2>
+      <h2 class="mt-5">
         📔 Отзывы
       </h2>
       <Reviews

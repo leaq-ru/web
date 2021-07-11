@@ -25,7 +25,7 @@
       <b-input-group-append>
         <b-button
           variant="primary"
-          :disabled="sendApplyLoading"
+          :disabled="sendApplyLoading || !url.length"
           @click="sendApply"
         >
           Добавить
@@ -60,7 +60,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
+import {Context} from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import makeLoginUrl from '~/helpers/makeLoginUrl'
 import apiAddr from '~/helpers/const/apiAddr'
@@ -126,7 +126,7 @@ export default Vue.extend({
       ].join(''), {
         method: 'POST',
         body: JSON.stringify({
-          companyUrl: this.url
+          companyUrl: this.url.replace(/http:\/\/|https:\/\/|http:\/\/www|https:\/\/www/, '')
         }),
         headers: new Headers({
           Authorization: `Bearer ${this.$store.state?.user?.self?.token}`

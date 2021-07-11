@@ -15,7 +15,13 @@ export default async ({
     ].join(''))
 
     const result = await rawCompanies.json()
-    return result
+    if (result?.companies) {
+      return result
+    }
+
+    return {
+      companies: []
+    }
   } catch {
     return {
       companies: []

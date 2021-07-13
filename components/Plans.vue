@@ -20,7 +20,7 @@
         <b-list-group flush>
           <b-list-group-item>
             <span class="font-weight-bold">
-              100
+              2500
             </span>
             элементов в
             <b-link to="/#search-buttons">
@@ -30,7 +30,7 @@
 
           <b-list-group-item>
             <span class="font-weight-bold">
-              100
+              2500
             </span>
             элементов в
             <b-link to="/#search-buttons">
@@ -40,7 +40,7 @@
 
           <b-list-group-item>
             <span class="font-weight-bold">
-              100
+              2500
             </span>
             компаний в
             <b-link to="/#search">
@@ -104,7 +104,7 @@
         <b-list-group flush>
           <b-list-group-item>
             <span class="font-weight-bold">
-              1 042 270
+              1 642 270
             </span>
             элементов (все) в
             <b-link to="/#search-buttons">
@@ -114,7 +114,7 @@
 
           <b-list-group-item>
             <span class="font-weight-bold">
-              1 209 381
+              1 852 626
             </span>
             элементов (все) в
             <b-link to="/#search-buttons">

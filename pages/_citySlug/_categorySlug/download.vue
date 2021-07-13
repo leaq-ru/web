@@ -127,7 +127,7 @@
       </h6>
 
       <p>
-        Будет скачано не более 100 результатов. Данные без ограничений доступны на
+        Будет скачано не более 2500 результатов. Данные без ограничений доступны на
         <b-link to="/plans#data">
           расширенном тарифе
         </b-link>
@@ -603,7 +603,7 @@
     </p>
 
     <p>
-      Все функции конструктора доступны бесплатно, но в выгрузке будет не более 100 элементов. Детали платного тарифа
+      Все функции конструктора доступны бесплатно, но в выгрузке будет не более 2500 элементов. Детали платного тарифа
       представлены ниже
     </p>
 
@@ -615,9 +615,9 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { cityFrom } from 'lvovich'
+import {cityFrom} from 'lvovich'
 import apiAddr from '~/helpers/const/apiAddr'
-import download, { downloadRes, downloadType } from '~/helpers/company/download'
+import download, {downloadRes, downloadType} from '~/helpers/company/download'
 import makeTitle from '~/helpers/makeTitle'
 import metrics from '~/helpers/metrics'
 

@@ -508,7 +508,7 @@
       </template>
       <template v-else>
         <p>
-          Будет скачано не более 100 результатов, обычно занимает 5-10 секунд. Данные без ограничений доступны на
+          Будет скачано не более 2500 результатов, обычно занимает 5-10 секунд. Данные без ограничений доступны на
           <b-link
             target="_blank"
             to="/plans#data"
@@ -564,7 +564,7 @@ import hints from '~/helpers/hints'
 import debounce from '~/helpers/debounce'
 import apiAddr from '~/helpers/const/apiAddr'
 import makePrettyNumber from '~/helpers/makePrettyNumber'
-import download, { downloadRes, downloadType } from '~/helpers/company/download'
+import download, {downloadRes, downloadType} from '~/helpers/company/download'
 import metrics from '~/helpers/metrics'
 import makeLoginUrl from '~/helpers/makeLoginUrl'
 

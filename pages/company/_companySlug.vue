@@ -764,12 +764,6 @@
       </b-card-group>
     </span>
 
-    <div
-      v-if="!premium"
-      id="yandex_rtb_R-A-1239340-1"
-      class="mt-5"
-    />
-
     <template v-if="posts.length">
       <b-row class="mt-5 mb-2">
         <b-col>
@@ -1031,31 +1025,8 @@ export default Vue.extend({
       return this.posts?.length
     }
   },
-  mounted () {
-    if (!this.premium) {
-      this.injectAds()
-    }
-  },
   methods: {
     ...companyGetters,
-    injectAds () {
-      (function (w: any, d, n, s, t) {
-        w[n] = w[n] || []
-        w[n].push(function () {
-          w.Ya.Context.AdvManager.render({
-            blockId: 'R-A-1239340-1',
-            renderTo: 'yandex_rtb_R-A-1239340-1',
-            async: true
-          })
-        })
-        t = d.getElementsByTagName('script')[0]
-        s = d.createElement('script')
-        s.type = 'text/javascript'
-        s.src = '//an.yandex.ru/system/context.js'
-        s.async = true
-        t.parentNode.insertBefore(s, t)
-      })(window, window.document, 'yandexContextAsyncCallbacks')
-    },
     setTipFoundOnLeaq () {
       this.showTipFoundOnLeaq = true
     },

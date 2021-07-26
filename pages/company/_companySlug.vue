@@ -766,7 +766,7 @@
 
     <div
       v-if="!premium"
-      id="yandex_rtb_R-A-673451-1"
+      id="yandex_rtb_R-A-1239340-1"
       class="mt-5"
     />
 
@@ -1043,8 +1043,8 @@ export default Vue.extend({
         w[n] = w[n] || []
         w[n].push(function () {
           w.Ya.Context.AdvManager.render({
-            blockId: 'R-A-673451-1',
-            renderTo: 'yandex_rtb_R-A-673451-1',
+            blockId: 'R-A-1239340-1',
+            renderTo: 'yandex_rtb_R-A-1239340-1',
             async: true
           })
         })

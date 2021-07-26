@@ -32,7 +32,7 @@
     </b-breadcrumb>
 
     <div
-      id="yandex_rtb_R-A-673451-2"
+      id="yandex_rtb_R-A-1239340-1"
       class="mb-3"
     />
   </span>
@@ -62,8 +62,8 @@ export default Vue.extend({
         w[n] = w[n] || []
         w[n].push(function () {
           w.Ya.Context.AdvManager.render({
-            blockId: 'R-A-673451-2',
-            renderTo: 'yandex_rtb_R-A-673451-2',
+            blockId: 'R-A-1239340-1',
+            renderTo: 'yandex_rtb_R-A-1239340-1',
             async: true
           })
         })

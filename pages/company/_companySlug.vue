@@ -766,7 +766,7 @@
 
     <div
       v-if="!premium"
-      id="yandex_rtb_R-A-673451-1"
+      id="yandex_rtb_R-A-1239340-2"
       class="mt-5"
     />
 
@@ -1039,22 +1039,13 @@ export default Vue.extend({
   methods: {
     ...companyGetters,
     injectAds () {
-      (function (w: any, d, n, s, t) {
-        w[n] = w[n] || []
-        w[n].push(function () {
-          w.Ya.Context.AdvManager.render({
-            blockId: 'R-A-673451-1',
-            renderTo: 'yandex_rtb_R-A-673451-1',
-            async: true
-          })
+      const w = window as any
+      w.yaContextCb.push(() => {
+        w.Ya.Context.AdvManager.render({
+          renderTo: 'yandex_rtb_R-A-1239340-2',
+          blockId: 'R-A-1239340-2'
         })
-        t = d.getElementsByTagName('script')[0]
-        s = d.createElement('script')
-        s.type = 'text/javascript'
-        s.src = '//an.yandex.ru/system/context.js'
-        s.async = true
-        t.parentNode.insertBefore(s, t)
-      })(window, window.document, 'yandexContextAsyncCallbacks')
+      })
     },
     setTipFoundOnLeaq () {
       this.showTipFoundOnLeaq = true

@@ -36,11 +36,11 @@ spec:
               protocol: TCP
           resources:
             requests:
-              cpu: 250m
-              memory: 95Mi
+              cpu: 200m
+              memory: 150Mi
             limits:
               cpu: "1"
-              memory: 250Mi
+              memory: 300Mi
           env:
             - name: NUXT_HOST
               value: 0.0.0.0
@@ -60,7 +60,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: web
-  minReplicas: 3
+  minReplicas: 2
   maxReplicas: 15
   metrics:
     - type: Resource

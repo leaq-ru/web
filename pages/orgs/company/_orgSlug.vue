@@ -3,7 +3,7 @@
     <Header />
     <Breadcrumb
       :items="breadcrumb"
-      :ads="false"
+      :ads="true"
     />
 
     <h1>

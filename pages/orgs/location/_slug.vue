@@ -2,7 +2,7 @@
   <b-container fluid="xl">
     <Header />
     <Breadcrumb
-      :ads="false"
+      :ads="true"
       :items="breadcrumb"
     />
 

@@ -1,10 +1,7 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <Breadcrumb
-      :items="breadcrumb"
-      :ads="!premium"
-    />
+    <Breadcrumb :items="breadcrumb" />
 
     <span
       itemscope

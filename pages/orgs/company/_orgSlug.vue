@@ -1,10 +1,7 @@
 <template>
   <b-container fluid="xl">
     <Header />
-    <Breadcrumb
-      :items="breadcrumb"
-      :ads="false"
-    />
+    <Breadcrumb :items="breadcrumb" />
 
     <h1>
       {{ org.name || org.slug }}

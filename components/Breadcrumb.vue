@@ -31,10 +31,58 @@
       </b-breadcrumb-item>
     </b-breadcrumb>
 
-    <div
-      id="yandex_rtb_R-A-1239340-1"
-      class="mb-3"
-    />
+    <b-card
+      v-if="ads"
+      class="mt-3 mb-3"
+      border-variant="success"
+      body-border-variant="success"
+      no-body
+    >
+      <b-card-header
+        header-bg-variant="success"
+        header-text-variant="white"
+      >
+        <b-icon-lightning-fill />
+        Скачать базу компаний России за
+        <span class="font-weight-bold">
+          990 руб
+        </span>
+      </b-card-header>
+
+      <b-card-body>
+        <p>
+          Контакты, город, категория, соцсети, ИНН, ОГРН, и многое другое.
+        </p>
+
+        <span class="font-weight-bold">
+          2 183 932
+        </span>
+        компаний,
+
+        <span class="font-weight-bold">
+          1 505 619
+        </span>
+        email,
+
+        <span class="font-weight-bold">
+          1 852 626
+        </span>
+        телефонов.
+      </b-card-body>
+
+      <b-card-footer footer-bg-variant="white">
+        <b-row>
+          <b-col md="6">
+            <b-button
+              to="/"
+              variant="success"
+            >
+              Попробовать бесплатно
+            </b-button>
+          </b-col>
+        </b-row>
+      </b-card-footer>
+    </b-card>
   </span>
 </template>
 

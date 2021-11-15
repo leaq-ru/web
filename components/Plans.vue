@@ -114,7 +114,7 @@
 
           <b-list-group-item>
             <span class="font-weight-bold">
-              1 852 626
+              1 906 955
             </span>
             элементов (все) в
             <b-link to="/#search-buttons">

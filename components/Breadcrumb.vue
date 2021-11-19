@@ -1,5 +1,5 @@
 <template>
-  <span>
+  <div>
     <b-breadcrumb
       itemscope
       itemtype="https://schema.org/BreadcrumbList"
@@ -35,7 +35,7 @@
       id="yandex_rtb_R-A-1239340-1"
       class="mb-3"
     />
-  </span>
+  </div>
 </template>
 
 <script lang="ts">

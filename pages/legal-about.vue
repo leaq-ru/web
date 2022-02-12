@@ -1,0 +1,71 @@
+<template>
+  <b-container fluid="xl">
+    <Header />
+    <Breadcrumb :items="breadcrumb" />
+
+    <h2>
+      Реквизиты
+    </h2>
+
+    <p>
+      ИП Аверьянов Денис Андреевич
+    </p>
+    <p>
+      603010, Россия, Нижегородская обл, Нижний Новгород, Климовская, 10, 23
+    </p>
+    <p>
+      ИНН 525718935165
+    </p>
+    <p>
+      ОГРНИП 321527500077390
+    </p>
+    <p>
+      Расчётный счёт 40802810501500199738
+    </p>
+    <p>
+      Корр. счёт 30101810845250000999
+    </p>
+    <p>
+      БИК 044525999 Точка ПАО Банка «ФК Открытие» г. Москва
+    </p>
+    <p>
+      E-mail denisomfg@gmail.com
+    </p>
+    <Footer />
+  </b-container>
+</template>
+
+<script lang="ts">
+import Vue from 'vue'
+import makeTitle from '~/helpers/makeTitle'
+
+export default Vue.extend({
+  data (): any {
+    return {
+      breadcrumb: [{
+        id: 1,
+        text: '🏠',
+        to: {
+          path: '/'
+        }
+      }, {
+        id: 2,
+        text: 'Реквизиты',
+        to: {
+          path: '/legal-about'
+        }
+      }]
+    }
+  },
+  head () {
+    return {
+      title: makeTitle('Реквизиты'),
+      meta: [{
+        hid: 'description',
+        name: 'description',
+        content: 'Реквизиты сервиса LEAQ'
+      }]
+    }
+  }
+})
+</script>

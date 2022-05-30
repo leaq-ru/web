@@ -61,7 +61,7 @@ spec:
     kind: Deployment
     name: web
   minReplicas: 2
-  maxReplicas: 15
+  maxReplicas: 5
   metrics:
     - type: Resource
       resource:

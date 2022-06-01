@@ -25,6 +25,6 @@ const isBot = (header) => {
 
 module.exports = (req, res, next) => {
 //   res.spa = !isBot(req.headers['user-agent'])
-  res.spa = false
+  res.spa = true
   next()
 }

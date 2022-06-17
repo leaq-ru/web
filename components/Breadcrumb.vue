@@ -31,10 +31,11 @@
       </b-breadcrumb-item>
     </b-breadcrumb>
 
-    <div
-      id="yandex_rtb_R-A-1239340-1"
-      class="mb-3"
-    />
+    <div v-if="ads" class="mb-3 text-center">
+      <a href="https://www.instagram.com/1avedenis/" rel="nofollow" target="_blank">
+        <img class="img-fluid" src="https://static.telq.org/inst-horizon.svg">
+      </a>
+    </div>
   </div>
 </template>
 
@@ -54,17 +55,6 @@ export default Vue.extend({
       default () {
         return false
       }
-    }
-  },
-  mounted () {
-    if (this.ads) {
-      const w = window as any
-      w.yaContextCb.push(() => {
-        w.Ya.Context.AdvManager.render({
-          renderTo: 'yandex_rtb_R-A-1239340-1',
-          blockId: 'R-A-1239340-1'
-        })
-      })
     }
   }
 })

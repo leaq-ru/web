@@ -33,7 +33,7 @@
 
     <div v-if="ads" class="mb-3 text-center">
       <a href="https://www.instagram.com/1avedenis/" rel="nofollow" target="_blank">
-        <img class="img-fluid" src="https://static.telq.org/inst-horizon.svg">
+        <img class="img-fluid" src="https://static.leaq.ru/inst-horizon.svg">
       </a>
     </div>
   </div>

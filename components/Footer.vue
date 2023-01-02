@@ -4,9 +4,6 @@
       <b-link to="/legal-doc">
         Оферта
       </b-link>
-      <b-link to="/legal-about" class="ml-3">
-        Реквизиты
-      </b-link>
     </b-col>
 
     <b-col class="text-right text-muted">

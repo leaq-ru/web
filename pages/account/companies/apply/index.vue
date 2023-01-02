@@ -12,7 +12,7 @@
 
       <span class="font-weight-bold">yourcompany.ru</span>.
 
-      Если его нет в каталоге, он будет добавлен автоматически
+      Если его нет в каталоге, сайт добавлен не будет
     </p>
 
     <b-input-group class="mt-3">

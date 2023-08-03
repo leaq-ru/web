@@ -57,7 +57,7 @@ export default Vue.extend({
     }
   },
   mounted () {
-    if (this.ads) {
+    if (this.ads && process.env.ADS) {
       const w = window as any
       w.yaContextCb.push(() => {
         w.Ya.Context.AdvManager.render({

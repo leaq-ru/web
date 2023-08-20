@@ -18,48 +18,49 @@
 
       <b-row />
 
-      <b-input-group class="mt-3">
-        <b-form-input
-          v-model="sum"
-          :state="sumState"
-          class="no-spin"
-          type="number"
-          placeholder="Сумма"
-        />
+      Для пополнения <a href="https://t.me/aveDenis" target="_blank">пишите в Telegram</a>
+      <!--      <b-input-group class="mt-3">-->
+      <!--        <b-form-input-->
+      <!--          v-model="sum"-->
+      <!--          :state="sumState"-->
+      <!--          class="no-spin"-->
+      <!--          type="number"-->
+      <!--          placeholder="Сумма"-->
+      <!--        />-->
 
-        <b-input-group-append>
-          <b-input-group-text>
-            руб
-          </b-input-group-text>
-        </b-input-group-append>
+      <!--        <b-input-group-append>-->
+      <!--          <b-input-group-text>-->
+      <!--            руб-->
+      <!--          </b-input-group-text>-->
+      <!--        </b-input-group-append>-->
 
-        <b-input-group-append>
-          <b-button
-            :disabled="!sumState || paymentRedirectLoading"
-            variant="primary"
-            @click="paymentRedirect"
-          >
-            Пополнить
-          </b-button>
-        </b-input-group-append>
+      <!--        <b-input-group-append>-->
+      <!--          &lt;!&ndash;          <b-button&ndash;&gt;-->
+      <!--          &lt;!&ndash;            :disabled="!sumState || paymentRedirectLoading"&ndash;&gt;-->
+      <!--          &lt;!&ndash;            variant="primary"&ndash;&gt;-->
+      <!--          &lt;!&ndash;            @click="paymentRedirect"&ndash;&gt;-->
+      <!--          &lt;!&ndash;          >&ndash;&gt;-->
+      <!--          &lt;!&ndash;            Пополнить&ndash;&gt;-->
+      <!--          &lt;!&ndash;          </b-button>&ndash;&gt;-->
+      <!--        </b-input-group-append>-->
 
-        <b-input-group-append v-if="paymentRedirectLoading">
-          <b-icon-arrow-clockwise
-            class="ml-2 mt-2 text-primary"
-            font-scale="1.5"
-            animation="spin"
-          />
-        </b-input-group-append>
-      </b-input-group>
+      <!--        <b-input-group-append v-if="paymentRedirectLoading">-->
+      <!--          <b-icon-arrow-clockwise-->
+      <!--            class="ml-2 mt-2 text-primary"-->
+      <!--            font-scale="1.5"-->
+      <!--            animation="spin"-->
+      <!--          />-->
+      <!--        </b-input-group-append>-->
+      <!--      </b-input-group>-->
 
-      <b-row />
+      <!--      <b-row />-->
 
-      <b-form-text
-        v-if="!sumState"
-        text-variant="danger"
-      >
-        Минимум {{ priceCompanyPremium }} руб
-      </b-form-text>
+      <!--      <b-form-text-->
+      <!--        v-if="!sumState"-->
+      <!--        text-variant="danger"-->
+      <!--      >-->
+      <!--        Минимум {{ priceCompanyPremium }} руб-->
+      <!--      </b-form-text>-->
     </b-card>
 
     <p

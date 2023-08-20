@@ -306,6 +306,11 @@
       </b-card>
     </template>
 
+    <div
+      id="horizontal-2"
+      class="mt-5 w-100"
+    />
+
     <b-row
       v-if="related && related.length"
       class="mt-5"
@@ -546,8 +551,23 @@ export default Vue.extend({
       return this.related?.length
     }
   },
+  mounted () {
+    this.injectAds()
+  },
   methods: {
     ...orgGetters,
+    injectAds () {
+      if (process.env.ADS) {
+        const w = window as any
+        w.yaContextCb.push(() => {
+          w.Ya.Context.AdvManager.render({
+            renderTo: 'horizontal-2',
+            blockId: 'R-A-2665526-2',
+            type: 'feed'
+          })
+        })
+      }
+    },
     unifyDate,
     capitalize,
     safeEmptyDate (d: string): string {

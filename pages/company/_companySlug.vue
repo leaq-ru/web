@@ -766,7 +766,7 @@
 
     <div
       v-if="!premium"
-      id="horizontal-1"
+      id="horizontal-2"
       class="mt-5 w-100"
     />
 
@@ -1043,7 +1043,7 @@ export default Vue.extend({
         const w = window as any
         w.yaContextCb.push(() => {
           w.Ya.Context.AdvManager.render({
-            renderTo: 'horizontal-1',
+            renderTo: 'horizontal-2',
             blockId: 'R-A-2665526-2',
             type: 'feed'
           })

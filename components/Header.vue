@@ -52,7 +52,7 @@
         </b-nav-item>
         <b-nav-item
           target="_blank"
-          href="http://api.leaq.ru/docs/"
+          href="https://api.leaq.ru/docs/"
         >
           API
         </b-nav-item>

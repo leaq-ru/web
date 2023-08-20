@@ -1044,7 +1044,7 @@ export default Vue.extend({
         w.yaContextCb.push(() => {
           w.Ya.Context.AdvManager.render({
             renderTo: 'horizontal-2',
-            blockId: 'R-A-2665526-3',
+            blockId: 'R-A-2665526-2',
             type: 'feed'
           })
         })

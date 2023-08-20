@@ -21,7 +21,7 @@
           itemprop="item"
           itemscope
           itemtype="https://schema.org/WebPage"
-          :itemid="`https://leaq.ru${index === 0 ? '' : item.to.path}`"
+          :itemid="`http://leaq.ru${index === 0 ? '' : item.to.path}`"
         >
 
         <meta

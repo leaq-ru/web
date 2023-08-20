@@ -6,7 +6,7 @@
     <b-jumbotron header="База юрлиц и ИП России">
       <p>
         Все данные доступны по
-        <b-link href="https://api.leaq.ru/docs/" target="_blank">
+        <b-link href="http://api.leaq.ru/docs/" target="_blank">
           API
         </b-link>
       </p>

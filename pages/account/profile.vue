@@ -28,7 +28,7 @@
         <span class="text-muted">
           Токен для доступа по
 
-          <a href="https://api.leaq.ru/docs/" target="_blank">
+          <a href="http://api.leaq.ru/docs/" target="_blank">
             API
           </a>
 
@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import Vue from 'vue'
-import { Context } from '@nuxt/types'
+import {Context} from '@nuxt/types'
 import makeTitle from '~/helpers/makeTitle'
 import makeLoginUrl from '~/helpers/makeLoginUrl'
 

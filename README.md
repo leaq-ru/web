@@ -1,1 +1,1 @@
-https://github.com/leaq-ru/about
+http://github.com/leaq-ru/about

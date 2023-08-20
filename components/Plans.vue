@@ -56,7 +56,7 @@
             запрос в секунду к
             <b-link
               target="_blank"
-              href="https://api.leaq.ru/docs/"
+              href="http://api.leaq.ru/docs/"
             >
               API
             </b-link>
@@ -140,7 +140,7 @@
             запросов в секунду к
             <b-link
               target="_blank"
-              href="https://api.leaq.ru/docs/"
+              href="http://api.leaq.ru/docs/"
             >
               API
             </b-link>

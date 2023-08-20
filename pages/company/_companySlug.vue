@@ -135,7 +135,7 @@
                 class="ml-21"
               >
                 <b-link
-                  :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
+                  :href="`mailto:${company.email}?Subject=Вопрос с сайта http://leaq.ru`"
                   target="_blank"
                   @click="setTipFoundOnLeaq"
                 >

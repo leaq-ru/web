@@ -232,7 +232,7 @@
           </span>
           означает что можно попасть в карточку компании по адресу
           <b-link to="/company/dress4car-ru">
-            https://leaq.ru/company/dress4car-ru
+            http://leaq.ru/company/dress4car-ru
           </b-link>
         </p>
       </li>

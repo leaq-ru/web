@@ -111,7 +111,7 @@
           <template v-if="company.email">
             <b-link
               :class="company.premium ? 'text-dark' : ''"
-              :href="`mailto:${company.email}?Subject=Вопрос с сайта https://leaq.ru`"
+              :href="`mailto:${company.email}?Subject=Вопрос с сайта http://leaq.ru`"
               target="_blank"
               @click="setTipFoundOnLeaq"
             >

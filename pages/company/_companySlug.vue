@@ -766,8 +766,8 @@
 
     <div
       v-if="!premium"
-      id="yandex_rtb_R-A-1239340-2"
-      class="mt-5"
+      id="horizontal-1"
+      class="mt-5 w-100"
     />
 
     <template v-if="posts.length">
@@ -1043,8 +1043,9 @@ export default Vue.extend({
         const w = window as any
         w.yaContextCb.push(() => {
           w.Ya.Context.AdvManager.render({
-            renderTo: 'yandex_rtb_R-A-1239340-2',
-            blockId: 'R-A-1239340-2'
+            renderTo: 'horizontal-1',
+            blockId: 'R-A-2665526-2',
+            type: 'feed'
           })
         })
       }
